@@ -251,6 +251,70 @@ Rules:
 
 ---
 
+## 🎨 Design & UX Direction
+
+The product design should **feel like a premium SaaS** — clean, modern, and conversion-optimized.
+
+### Reference Designs
+
+Use these as stylistic and UX benchmarks:
+
+- [https://linklyhq.com](https://linklyhq.com) — clear copy, friendly tone, smart whitespace, simple CTAs.
+- [https://www.rebrandly.com](https://www.rebrandly.com) — strong SaaS identity, dynamic hero layout, great feature storytelling.
+- [https://bitly.com](https://bitly.com) — concise interface, trust-driven design.
+- Optional inspiration: [https://posthog.com](https://posthog.com) (modern product dashboard aesthetics).
+
+---
+
+## 🖌️ Visual Design Rules
+
+- **Light and Dark themes** required from day one.
+- Keep layout **minimal** but **visually premium** — use gradients, smooth shadows, and subtle motion.
+- Use a **2–3 color palette**, primarily:
+  - `#2d5dc5` (Primary Blue)
+  - `#f26749` (Accent Coral)
+  - `#f1ede5` (Neutral background)
+- Typography: clean and geometric (Inter, Work Sans, or Poppins).
+- Use meaningful icons (Lucide, Heroicons) — not decoration for decoration’s sake.
+- Ensure accessibility: proper contrast, keyboard navigation, and semantic HTML.
+
+---
+
+## ✍️ Copywriting & Messaging Tone
+
+The UI copy, landing pages, and dashboard text must reflect:
+
+- **Clarity over cleverness**
+- **Confidence over complexity**
+- **Trust, privacy, and control**
+
+**Tone:**  
+Friendly, trustworthy, and slightly conversational — like you’re talking to a smart, busy user who values clarity.
+
+### Example Style
+
+> “Create links that expire when you want. Simple, safe, and beautiful.”
+
+> “Control your links — decide when they vanish.”
+
+> “The fastest way to share links that know when to stop working.”
+
+Keep microcopy short, sharp, and benefit-driven (like Linkly or Rebrandly).
+
+---
+
+## 🧭 Design Goals
+
+1. Feel **modern and startup-grade**, not corporate.
+2. Prioritize **user confidence and transparency**.
+3. Every view should answer one question instantly: _“What can I do here?”_
+4. Animate only where it improves clarity.
+5. Minimal friction from landing to action — maximum polish.
+
+---
+
+---
+
 ## 🧪 Testing Rules
 
 - All tests inside `/tests`.
@@ -291,11 +355,13 @@ STRIPE_WEBHOOK_SECRET=
 
 ## 💡 Development Workflow
 
+- Before finishing up a feature please run `pnpm dev` or `pnpm build` to check if there are any errors.
+- Create a **TODO list** for each feature that you're going to implement and as soon as that list is complete, commit the feature.
 - **Branch naming:** `feature/*`, `fix/*`, `chore/*`
 - Each feature should be committed
 - **Commits:** Must be atomic and descriptive.
 - **Pull Requests:** Always include purpose and screenshots for UI.
-- **Pre-deploy checks:** run `npm run lint && npm run test`.
+- **Pre-deploy checks:** run `pnpm run lint && pnpm run test`.
 - **No direct pushes** to `main`.
 
 ---
@@ -307,6 +373,25 @@ STRIPE_WEBHOOK_SECRET=
 - Simplicity is a feature.
 - Launch before perfection.
 - If you can explain it in one sentence — it’s good code.
+
+---
+
+# 👤 Developer Context & Design Philosophy
+
+## 👨‍💻 Developer Profile
+
+You are a **Senior Full-Stack Developer** with 10+ years of experience building SaaS products.  
+Your expertise includes **React, Next.js, TypeScript, Supabase, and Tailwind CSS**, as well as **marketing, copywriting, and conversion-driven UI/UX**.
+
+You understand both code and business — you know that every design decision affects retention, trust, and conversions.  
+You write **clean, scalable, and production-grade code**, and you think like a **product marketer** as much as a developer.
+
+### Your Mindset
+
+- Build for simplicity, speed, and usability — ship quickly but elegantly.
+- Write UI copy that **sells clarity and confidence**, not complexity.
+- Prioritize code readability and maintainability.
+- Every feature should feel premium, even in an MVP.
 
 ---
 
@@ -325,6 +410,9 @@ STRIPE_WEBHOOK_SECRET=
 
 **Final note:** Keep the implementation **structured, type-safe, and minimalist**.  
 The goal is not to impress with features, but to deliver a clean SaaS that _feels_ premium.
+
+> 🎯 The developer must think and act like a **marketer, designer, and engineer in one.**  
+> Write every line of code and copy as if thousands of users will see it tomorrow.
 
 **GOLDEN RULE: IF YOU'RE NOT SURE ABOUT ANYTHING, ASK, DO NOT ASSUME A THING.**
 **GOLDEN RULE: IF YOU'RE NOT SURE ABOUT ANYTHING, ASK, DO NOT ASSUME A THING.**
