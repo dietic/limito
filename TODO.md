@@ -13,6 +13,8 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Update/Delete routes
 - [x] URL sanitization for destination/fallback
 - [x] Reserved slugs check + auto slug generation
+- [ ] Fix use-links.ts authHeaders implementation (critical bug - useMemo with async)
+- [ ] Create /links/page.tsx to display user's links list
 - [ ] Edit page UI (prefill form, save)
 - [ ] Dashboard list table with pagination and copy-to-clipboard
 - [ ] Empty/Loading/Error UI states wired to hooks
@@ -39,6 +41,9 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Base layout and styles with Tailwind
 - [x] Legal pages placeholders (Privacy, Terms)
 - [x] Minimal dashboard pages and LinkForm
+- [ ] Add route protection middleware for dashboard routes
+- [ ] Add loading/error states to dashboard and links pages
+- [ ] Improve landing page with better copy and CTAs
 - [ ] Theme toggle (light/dark)
 - [ ] Mobile-first pass at 360px viewport
 - [ ] Branded expired page content polish
