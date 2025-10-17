@@ -1,11 +1,11 @@
 'use client'
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useAuth } from '@/hooks/use-auth'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Input from '@/components/ui/input'
 import Button from '@/components/ui/button'
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect') || '/dashboard'
@@ -178,6 +178,18 @@ export default function LoginPage() {
         </p>
       </div>
     </main>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <main className="mx-auto max-w-md p-6">
+        <div className="text-center text-gray-600">Loading...</div>
+      </main>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }
 
