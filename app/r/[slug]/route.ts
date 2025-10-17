@@ -10,7 +10,8 @@ function expiredHtml(): string {
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Link expired</title><style>body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif;margin:0;padding:2rem;background:#fff;color:#111} .c{max-width:36rem;margin:4rem auto;text-align:center} .a{display:inline-flex;align-items:center;justify-content:center;padding:.5rem 1rem;border-radius:.5rem;background:#2d5dc5;color:#fff;text-decoration:none}</style></head><body><main class="c"><h1>Link expired</h1><p>This link is no longer available.</p><a class="a" href="/">Go to Limi.to</a></main></body></html>`
 }
 
-export async function GET(request: NextRequest, { params }: { params: { slug: string } }) {
+export async function GET(request: NextRequest, props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params
   const sb = getServiceClient()
   const ip = ipFromRequestHeaders(request.headers)
   const perIp = await allowAndIncrement('redirect_ip', `ip:${ip}:slug:${params.slug}`, config.rateLimit.redirectsPerIpPerMin, 60_000, sb)

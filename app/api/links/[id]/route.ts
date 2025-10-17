@@ -5,8 +5,9 @@ import { updateLinkSchema } from '@/lib/validators/link'
 import { requireAuth } from '@/lib/auth'
 import { sanitizeUrl } from '@/lib/url'
 
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
+    const params = await props.params
     const { userId } = await requireAuth(request)
     const body = await request.json()
     const parsed = updateLinkSchema.safeParse(body)
@@ -42,8 +43,9 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }) {
   try {
+    const params = await props.params
     const { userId } = await requireAuth(request)
     const sb = getServiceClient()
     const { error } = await sb.from('links').delete().eq('id', params.id).eq('owner_id', userId)
