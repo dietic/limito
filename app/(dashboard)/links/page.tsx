@@ -1,6 +1,7 @@
 'use client'
 import NextLink from 'next/link'
 import { useLinks } from '@/hooks/use-links'
+import type { Link as LinkType } from '@/types/link'
 
 export default function LinksPage() {
   const { items, loading, error, deleteLink } = useLinks()
@@ -18,7 +19,7 @@ export default function LinksPage() {
         <p className="mt-6 text-gray-700">No links yet.</p>
       ) : (
         <div className="mt-6 divide-y rounded-md border">
-          {items.map(l => (
+          {items.map((l: LinkType) => (
             <div key={l.id} className="flex items-center justify-between p-4">
               <div className="min-w-0">
                 <div className="truncate text-sm text-gray-900">/r/{l.slug}</div>

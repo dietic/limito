@@ -13,7 +13,7 @@ export function useLinks() {
   const { getAccessToken, userId } = useAuth()
   const [state, setState] = useState<LinksState>({ loading: false, error: null, items: [] })
 
-  const authHeaders = useMemo(async () => {
+  const authHeaders = useMemo(async (): Promise<Record<string, string>> => {
     const token = await getAccessToken()
     return token ? { Authorization: `Bearer ${token}` } : {}
   }, [getAccessToken])
@@ -68,4 +68,3 @@ export function useLinks() {
 
   return { ...state, refresh, createLink, updateLink, deleteLink }
 }
-

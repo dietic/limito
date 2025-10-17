@@ -11,7 +11,7 @@ export default function NewLinkPage() {
       <h1 className="text-2xl font-semibold">Create Link</h1>
       <div className="mt-6">
         <LinkForm onSubmit={async (values) => {
-          const res = await createLink(values)
+          const res = await createLink({ ...values })
           if (res.ok) router.push('/links')
         }} />
       </div>
