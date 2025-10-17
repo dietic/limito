@@ -5,19 +5,19 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 ## 1) Auth
 - [x] Login/signup/reset with Supabase Auth (client hook + UI)
 - [ ] Add server-side session retrieval for server components when needed
-- [ ] Protect dashboard routes (redirect to login when no session)
-- [ ] Basic error/empty/loading states on auth views
+- [x] Protect dashboard routes (redirect to login when no session)
+- [x] Basic error/empty/loading states on auth views
 
 ## 2) Links CRUD
 - [x] Create/List routes with Zod validation and JSON standard
 - [x] Update/Delete routes
 - [x] URL sanitization for destination/fallback
 - [x] Reserved slugs check + auto slug generation
-- [ ] Fix use-links.ts authHeaders implementation (critical bug - useMemo with async)
-- [ ] Create /links/page.tsx to display user's links list
+- [x] Fix use-links.ts authHeaders implementation (critical bug - useMemo with async)
+- [x] Create /links/page.tsx to display user's links list
 - [ ] Edit page UI (prefill form, save)
-- [ ] Dashboard list table with pagination and copy-to-clipboard
-- [ ] Empty/Loading/Error UI states wired to hooks
+- [x] Dashboard list table with pagination and copy-to-clipboard
+- [x] Empty/Loading/Error UI states wired to hooks
 
 ## 3) Redirects
 - [x] Edge route `/r/:slug` with expiration handling
@@ -41,13 +41,13 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Base layout and styles with Tailwind
 - [x] Legal pages placeholders (Privacy, Terms)
 - [x] Minimal dashboard pages and LinkForm
-- [ ] Add route protection middleware for dashboard routes
-- [ ] Add loading/error states to dashboard and links pages
-- [ ] Improve landing page with better copy and CTAs
+- [x] Add route protection middleware for dashboard routes
+- [x] Add loading/error states to dashboard and links pages
+- [x] Improve landing page with better copy and CTAs
 - [ ] Theme toggle (light/dark)
 - [ ] Mobile-first pass at 360px viewport
 - [ ] Branded expired page content polish
-- [ ] Accessible form labels, focus states, and keyboard navigation
+- [x] Accessible form labels, focus states, and keyboard navigation
 
 ## 7) Validation & Types
 - [x] Zod validators for create/update link
