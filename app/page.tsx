@@ -1,154 +1,221 @@
 export default function Page() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <div className="mx-auto max-w-4xl px-6 py-16">
-        <div className="text-center">
-          <h1 className="text-5xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-            Limi.to
-          </h1>
-          <p className="mt-6 text-xl text-gray-600">
-            The cleanest way to create links that expire when you want.
-          </p>
-          <p className="mt-4 text-lg text-gray-500">
-            Control your links — decide when they vanish.
-          </p>
-          <div className="mt-10 flex items-center justify-center gap-4">
-            <a href="/login" className="btn-primary px-6 py-3 text-lg">
-              Get Started Free
-            </a>
-            <a
-              href="/dashboard"
-              className="btn-ghost border border-gray-300 px-6 py-3 text-lg"
-            >
-              View Dashboard
-            </a>
+    <div className="min-h-screen bg-white">
+      {/* Navigation */}
+      <nav className="border-b border-gray-100">
+        <div className="mx-auto max-w-7xl px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-blue-600">
+                <span className="text-sm font-bold text-white">L</span>
+              </div>
+              <span className="text-xl font-bold text-gray-900">Limi.to</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <a href="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900">
+                Sign in
+              </a>
+              <a href="/login" className="btn-primary text-sm">
+                Get Started
+              </a>
+            </div>
           </div>
         </div>
+      </nav>
 
-        <div className="mt-20 grid gap-8 sm:grid-cols-3">
-          <div className="rounded-lg bg-white p-6 shadow-sm">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-              <svg
-                className="h-6 w-6 text-primary"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
+      {/* Hero Section */}
+      <section className="relative overflow-hidden px-6 pb-20 pt-16 sm:pt-24">
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 to-white" />
+        <div className="relative mx-auto max-w-7xl">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-sm font-medium text-blue-700">
+              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
+              Free for individuals
             </div>
-            <h3 className="mt-4 text-lg font-semibold text-gray-900">
-              Time-Based Expiration
-            </h3>
-            <p className="mt-2 text-sm text-gray-600">
-              Set links to expire at a specific date and time. Perfect for
-              limited-time offers.
+            <h1 className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-600 bg-clip-text text-5xl font-bold tracking-tight text-transparent sm:text-6xl md:text-7xl">
+              Links that know when to disappear
+            </h1>
+            <p className="mt-6 text-xl leading-8 text-gray-600">
+              Create expiring links with precision. Set time limits or click caps, 
+              track performance, and control exactly when your links stop working.
+            </p>
+            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <a href="/login" className="btn-primary flex w-full items-center justify-center gap-2 px-8 py-4 text-base sm:w-auto">
+                Start creating links
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </a>
+              <a href="#how-it-works" className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-8 py-4 text-base font-semibold text-gray-700 shadow-sm transition hover:border-gray-400 hover:bg-gray-50 sm:w-auto">
+                See how it works
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </a>
+            </div>
+            <p className="mt-6 text-sm text-gray-500">
+              No credit card required · Free forever for basic use
             </p>
           </div>
 
-          <div className="rounded-lg bg-white p-6 shadow-sm">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10">
-              <svg
-                className="h-6 w-6 text-accent"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"
-                />
-              </svg>
+          {/* Visual Element */}
+          <div className="mx-auto mt-16 max-w-4xl">
+            <div className="rounded-2xl border border-gray-200 bg-white p-2 shadow-2xl shadow-blue-500/10">
+              <div className="aspect-video rounded-lg bg-gradient-to-br from-blue-50 to-purple-50" />
             </div>
-            <h3 className="mt-4 text-lg font-semibold text-gray-900">
-              Click-Based Limits
-            </h3>
-            <p className="mt-2 text-sm text-gray-600">
-              Expire links after a set number of clicks. Ideal for exclusive
-              content.
-            </p>
-          </div>
-
-          <div className="rounded-lg bg-white p-6 shadow-sm">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
-              <svg
-                className="h-6 w-6 text-green-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                />
-              </svg>
-            </div>
-            <h3 className="mt-4 text-lg font-semibold text-gray-900">
-              Basic Analytics
-            </h3>
-            <p className="mt-2 text-sm text-gray-600">
-              Track clicks and monitor link performance with simple, clear
-              metrics.
-            </p>
           </div>
         </div>
+      </section>
 
-        <div className="mt-16 rounded-2xl bg-white p-8 shadow-sm">
-          <h2 className="text-center text-2xl font-semibold text-gray-900">
-            How It Works
+      {/* Features Section */}
+      <section className="border-t border-gray-100 bg-gray-50/50 px-6 py-24">
+        <div className="mx-auto max-w-7xl">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              Everything you need to manage expiring links
+            </h2>
+            <p className="mt-4 text-lg text-gray-600">
+              Simple, powerful, and designed for modern link sharing
+            </p>
+          </div>
+          <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                icon: (
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                ),
+                title: 'Time-based expiration',
+                description: 'Set precise expiry dates and times. Perfect for limited offers, events, or time-sensitive content.'
+              },
+              {
+                icon: (
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+                  </svg>
+                ),
+                title: 'Click-based limits',
+                description: 'Expire links after a specific number of clicks. Great for exclusive content and limited access.'
+              },
+              {
+                icon: (
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                ),
+                title: 'Real-time analytics',
+                description: 'Track clicks, view performance metrics, and understand your link engagement at a glance.'
+              },
+              {
+                icon: (
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                ),
+                title: 'Lightning fast',
+                description: 'Edge-optimized redirects under 100ms. Your users won\'t even notice they\'re being redirected.'
+              },
+              {
+                icon: (
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                ),
+                title: 'Secure & private',
+                description: 'Your data is encrypted, your links are protected, and we never sell your information.'
+              },
+              {
+                icon: (
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                ),
+                title: 'Custom fallbacks',
+                description: 'Redirect expired links to custom URLs instead of showing an error page.'
+              }
+            ].map((feature, i) => (
+              <div key={i} className="group relative rounded-2xl border border-gray-200 bg-white p-8 shadow-sm transition hover:border-blue-200 hover:shadow-md">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30">
+                  {feature.icon}
+                </div>
+                <h3 className="mt-6 text-lg font-semibold text-gray-900">{feature.title}</h3>
+                <p className="mt-2 text-gray-600">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section id="how-it-works" className="px-6 py-24">
+        <div className="mx-auto max-w-7xl">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+              Create your first link in seconds
+            </h2>
+            <p className="mt-4 text-lg text-gray-600">
+              Three simple steps to start managing expiring links
+            </p>
+          </div>
+          <div className="mt-16 grid gap-12 lg:grid-cols-3">
+            {[
+              { step: '01', title: 'Create your link', desc: 'Enter your destination URL and choose how it should expire' },
+              { step: '02', title: 'Share anywhere', desc: 'Copy your short link and share it via email, social, or anywhere' },
+              { step: '03', title: 'Track & manage', desc: 'Monitor clicks and let your link expire automatically' }
+            ].map((item, i) => (
+              <div key={i} className="relative">
+                <div className="text-7xl font-bold text-blue-50">{item.step}</div>
+                <h3 className="-mt-10 ml-16 text-xl font-semibold text-gray-900">{item.title}</h3>
+                <p className="ml-16 mt-2 text-gray-600">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="border-t border-gray-100 bg-gradient-to-br from-blue-600 to-blue-700 px-6 py-24 text-white">
+        <div className="mx-auto max-w-4xl text-center">
+          <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
+            Ready to take control of your links?
           </h2>
-          <div className="mt-8 grid gap-6 sm:grid-cols-3">
-            <div className="text-center">
-              <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white">
-                1
-              </div>
-              <h3 className="mt-4 font-semibold text-gray-900">Create Link</h3>
-              <p className="mt-2 text-sm text-gray-600">
-                Enter your destination URL and choose how it expires
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white">
-                2
-              </div>
-              <h3 className="mt-4 font-semibold text-gray-900">Share Link</h3>
-              <p className="mt-2 text-sm text-gray-600">
-                Copy your short link and share it anywhere
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white">
-                3
-              </div>
-              <h3 className="mt-4 font-semibold text-gray-900">Auto-Expire</h3>
-              <p className="mt-2 text-sm text-gray-600">
-                Your link automatically stops working when conditions are met
-              </p>
-            </div>
+          <p className="mt-6 text-xl text-blue-100">
+            Join thousands using Limi.to to create smarter, safer links
+          </p>
+          <div className="mt-10">
+            <a href="/login" className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-4 text-base font-semibold text-blue-600 shadow-xl transition hover:bg-blue-50">
+              Start for free
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </a>
           </div>
         </div>
+      </section>
 
-        <footer className="mt-16 border-t border-gray-200 pt-8 text-center text-sm text-gray-600">
-          <div className="flex justify-center gap-6">
-            <a href="/privacy" className="hover:text-gray-900">
-              Privacy Policy
-            </a>
-            <a href="/terms" className="hover:text-gray-900">
-              Terms of Service
-            </a>
+      {/* Footer */}
+      <footer className="border-t border-gray-100 bg-gray-50 px-6 py-12">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
+            <div className="flex items-center gap-2">
+              <div className="flex h-6 w-6 items-center justify-center rounded bg-gradient-to-br from-primary to-blue-600">
+                <span className="text-xs font-bold text-white">L</span>
+              </div>
+              <span className="font-semibold text-gray-900">Limi.to</span>
+            </div>
+            <div className="flex gap-8 text-sm text-gray-600">
+              <a href="/privacy" className="hover:text-gray-900">Privacy</a>
+              <a href="/terms" className="hover:text-gray-900">Terms</a>
+            </div>
           </div>
-          <p className="mt-4">© 2025 Limi.to. Simple, safe, and beautiful.</p>
-        </footer>
-      </div>
-    </main>
-  );
+          <div className="mt-8 border-t border-gray-200 pt-8 text-center text-sm text-gray-500">
+            © 2025 Limi.to. All rights reserved.
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
 }
