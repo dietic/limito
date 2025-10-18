@@ -12,7 +12,10 @@ export default function Page() {
               <span className="text-xl font-bold text-gray-900">Limi.to</span>
             </div>
             <div className="flex items-center gap-4">
-              <a href="/login" className="text-sm font-medium text-gray-600 hover:text-gray-900">
+              <a
+                href="/login"
+                className="text-sm font-medium text-gray-600 hover:text-gray-900"
+              >
                 Sign in
               </a>
               <a href="/login" className="btn-primary text-sm">
@@ -28,9 +31,13 @@ export default function Page() {
         <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 to-white" />
         <div className="relative mx-auto max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-sm font-medium text-blue-700">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-success/10 px-4 py-1.5 text-sm font-medium text-success">
               <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clipRule="evenodd"
+                />
               </svg>
               Free for individuals
             </div>
@@ -38,20 +45,47 @@ export default function Page() {
               Links that know when to disappear
             </h1>
             <p className="mt-6 text-xl leading-8 text-gray-600">
-              Create expiring links with precision. Set time limits or click caps, 
-              track performance, and control exactly when your links stop working.
+              Create expiring links with precision. Set time limits or click
+              caps, track performance, and control exactly when your links stop
+              working.
             </p>
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <a href="/login" className="btn-primary flex w-full items-center justify-center gap-2 px-8 py-4 text-base sm:w-auto">
+              <a
+                href="/login"
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-accent px-8 py-4 text-base font-semibold text-accent-foreground shadow-lg shadow-accent/30 transition hover:bg-accent/90 sm:w-auto"
+              >
                 Start creating links
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
                 </svg>
               </a>
-              <a href="#how-it-works" className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-8 py-4 text-base font-semibold text-gray-700 shadow-sm transition hover:border-gray-400 hover:bg-gray-50 sm:w-auto">
+              <a
+                href="#how-it-works"
+                className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-border bg-background px-8 py-4 text-base font-semibold text-foreground shadow-sm transition hover:bg-muted sm:w-auto"
+              >
                 See how it works
-                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </a>
             </div>
@@ -84,65 +118,146 @@ export default function Page() {
             {[
               {
                 icon: (
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                 ),
-                title: 'Time-based expiration',
-                description: 'Set precise expiry dates and times. Perfect for limited offers, events, or time-sensitive content.'
+                title: "Time-based expiration",
+                description:
+                  "Set precise expiry dates and times. Perfect for limited offers, events, or time-sensitive content.",
               },
               {
                 icon: (
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
+                    />
                   </svg>
                 ),
-                title: 'Click-based limits',
-                description: 'Expire links after a specific number of clicks. Great for exclusive content and limited access.'
+                title: "Click-based limits",
+                description:
+                  "Expire links after a specific number of clicks. Great for exclusive content and limited access.",
               },
               {
                 icon: (
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                    />
                   </svg>
                 ),
-                title: 'Real-time analytics',
-                description: 'Track clicks, view performance metrics, and understand your link engagement at a glance.'
+                title: "Real-time analytics",
+                description:
+                  "Track clicks, view performance metrics, and understand your link engagement at a glance.",
               },
               {
                 icon: (
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
                   </svg>
                 ),
-                title: 'Lightning fast',
-                description: 'Edge-optimized redirects under 100ms. Your users won\'t even notice they\'re being redirected.'
+                title: "Lightning fast",
+                description:
+                  "Edge-optimized redirects under 100ms. Your users won't even notice they're being redirected.",
               },
               {
                 icon: (
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                    />
                   </svg>
                 ),
-                title: 'Secure & private',
-                description: 'Your data is encrypted, your links are protected, and we never sell your information.'
+                title: "Secure & private",
+                description:
+                  "Your data is encrypted, your links are protected, and we never sell your information.",
               },
               {
                 icon: (
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                    />
                   </svg>
                 ),
-                title: 'Custom fallbacks',
-                description: 'Redirect expired links to custom URLs instead of showing an error page.'
-              }
+                title: "Custom fallbacks",
+                description:
+                  "Redirect expired links to custom URLs instead of showing an error page.",
+              },
             ].map((feature, i) => (
-              <div key={i} className="group relative rounded-2xl border border-gray-200 bg-white p-8 shadow-sm transition hover:border-blue-200 hover:shadow-md">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/30">
+              <div
+                key={i}
+                className="group relative rounded-2xl border border-border bg-card p-8 shadow-sm transition hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10"
+              >
+                <div
+                  className={`flex h-12 w-12 items-center justify-center rounded-xl text-white shadow-lg ${
+                    i % 3 === 0
+                      ? "bg-gradient-to-br from-primary to-primary/80 shadow-primary/30"
+                      : i % 3 === 1
+                      ? "bg-gradient-to-br from-accent to-accent/80 shadow-accent/30"
+                      : "bg-gradient-to-br from-info to-info/80 shadow-info/30"
+                  }`}
+                >
                   {feature.icon}
                 </div>
-                <h3 className="mt-6 text-lg font-semibold text-gray-900">{feature.title}</h3>
-                <p className="mt-2 text-gray-600">{feature.description}</p>
+                <h3 className="mt-6 text-lg font-semibold text-card-foreground">
+                  {feature.title}
+                </h3>
+                <p className="mt-2 text-muted-foreground">
+                  {feature.description}
+                </p>
               </div>
             ))}
           </div>
@@ -162,13 +277,29 @@ export default function Page() {
           </div>
           <div className="mt-16 grid gap-12 lg:grid-cols-3">
             {[
-              { step: '01', title: 'Create your link', desc: 'Enter your destination URL and choose how it should expire' },
-              { step: '02', title: 'Share anywhere', desc: 'Copy your short link and share it via email, social, or anywhere' },
-              { step: '03', title: 'Track & manage', desc: 'Monitor clicks and let your link expire automatically' }
+              {
+                step: "01",
+                title: "Create your link",
+                desc: "Enter your destination URL and choose how it should expire",
+              },
+              {
+                step: "02",
+                title: "Share anywhere",
+                desc: "Copy your short link and share it via email, social, or anywhere",
+              },
+              {
+                step: "03",
+                title: "Track & manage",
+                desc: "Monitor clicks and let your link expire automatically",
+              },
             ].map((item, i) => (
               <div key={i} className="relative">
-                <div className="text-7xl font-bold text-blue-50">{item.step}</div>
-                <h3 className="-mt-10 ml-16 text-xl font-semibold text-gray-900">{item.title}</h3>
+                <div className="text-7xl font-bold text-blue-50">
+                  {item.step}
+                </div>
+                <h3 className="-mt-10 ml-16 text-xl font-semibold text-gray-900">
+                  {item.title}
+                </h3>
                 <p className="ml-16 mt-2 text-gray-600">{item.desc}</p>
               </div>
             ))}
@@ -177,19 +308,32 @@ export default function Page() {
       </section>
 
       {/* CTA Section */}
-      <section className="border-t border-gray-100 bg-gradient-to-br from-blue-600 to-blue-700 px-6 py-24 text-white">
+      <section className="border-t border-gray-100 bg-gradient-to-br from-primary via-primary to-accent px-6 py-24 text-white">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
             Ready to take control of your links?
           </h2>
-          <p className="mt-6 text-xl text-blue-100">
+          <p className="mt-6 text-xl text-primary-foreground/90">
             Join thousands using Limi.to to create smarter, safer links
           </p>
           <div className="mt-10">
-            <a href="/login" className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-4 text-base font-semibold text-blue-600 shadow-xl transition hover:bg-blue-50">
+            <a
+              href="/login"
+              className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-4 text-base font-semibold text-primary shadow-xl transition hover:bg-gray-50"
+            >
               Start for free
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                />
               </svg>
             </a>
           </div>
@@ -207,8 +351,12 @@ export default function Page() {
               <span className="font-semibold text-gray-900">Limi.to</span>
             </div>
             <div className="flex gap-8 text-sm text-gray-600">
-              <a href="/privacy" className="hover:text-gray-900">Privacy</a>
-              <a href="/terms" className="hover:text-gray-900">Terms</a>
+              <a href="/privacy" className="hover:text-gray-900">
+                Privacy
+              </a>
+              <a href="/terms" className="hover:text-gray-900">
+                Terms
+              </a>
             </div>
           </div>
           <div className="mt-8 border-t border-gray-200 pt-8 text-center text-sm text-gray-500">
@@ -217,5 +365,5 @@ export default function Page() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
