@@ -1,6 +1,6 @@
 "use client";
-import Button from "@/components/ui/button";
-import Input from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
 export interface LinkFormValues {
@@ -63,7 +63,7 @@ export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
         <div className="mt-2 flex gap-3">
           <Button
             type="button"
-            variant={mode === "by_date" ? "primary" : "ghost"}
+            variant={mode === "by_date" ? "default" : "ghost"}
             onClick={() => {
               setMode("by_date");
               setValues((v) => ({
@@ -79,7 +79,7 @@ export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
           </Button>
           <Button
             type="button"
-            variant={mode === "by_clicks" ? "primary" : "ghost"}
+            variant={mode === "by_clicks" ? "default" : "ghost"}
             onClick={() => {
               setMode("by_clicks");
               setValues((v) => ({
