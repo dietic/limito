@@ -1,36 +1,42 @@
-'use client'
-import { useState } from 'react'
-import Input from '@/components/ui/input'
-import Button from '@/components/ui/button'
+"use client";
+import Button from "@/components/ui/button";
+import Input from "@/components/ui/input";
+import { useState } from "react";
 
 export interface LinkFormValues {
-  destination_url: string
-  fallback_url?: string
-  mode: 'by_date' | 'by_clicks'
-  expires_at?: string
-  click_limit?: number
-  slug?: string
+  destination_url: string;
+  fallback_url?: string;
+  mode: "by_date" | "by_clicks";
+  expires_at?: string;
+  click_limit?: number;
+  slug?: string;
 }
 
 interface LinkFormProps {
-  onSubmit?: (values: LinkFormValues) => void
-  loading?: boolean
+  onSubmit?: (values: LinkFormValues) => void;
+  loading?: boolean;
 }
 
 export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
-  const [mode, setMode] = useState<'by_date' | 'by_clicks'>('by_date')
-  const [values, setValues] = useState<LinkFormValues>({ destination_url: '', mode: 'by_date' })
+  const [mode, setMode] = useState<"by_date" | "by_clicks">("by_date");
+  const [values, setValues] = useState<LinkFormValues>({
+    destination_url: "",
+    mode: "by_date",
+  });
 
   return (
     <form
       className="space-y-4"
-      onSubmit={e => {
-        e.preventDefault()
-        if (onSubmit) onSubmit(values)
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (onSubmit) onSubmit(values);
       }}
     >
       <div>
-        <label htmlFor="destination_url" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="destination_url"
+          className="block text-sm font-medium text-gray-700"
+        >
           Destination URL
         </label>
         <Input
@@ -38,12 +44,16 @@ export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
           type="url"
           placeholder="https://example.com"
           value={values.destination_url}
-          onChange={e => setValues(v => ({ ...v, destination_url: e.target.value }))}
+          onChange={(e) =>
+            setValues((v) => ({ ...v, destination_url: e.target.value }))
+          }
           required
           disabled={loading}
           className="mt-1"
         />
-        <p className="mt-1 text-xs text-gray-500">Where should this link redirect to?</p>
+        <p className="mt-1 text-xs text-gray-500">
+          Where should this link redirect to?
+        </p>
       </div>
 
       <div>
@@ -51,24 +61,32 @@ export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
           Expiration Mode
         </label>
         <div className="mt-2 flex gap-3">
-          <Button 
-            type="button" 
-            variant={mode === 'by_date' ? 'primary' : 'ghost'} 
-            onClick={() => { 
-              setMode('by_date'); 
-              setValues(v => ({ ...v, mode: 'by_date', click_limit: undefined })) 
+          <Button
+            type="button"
+            variant={mode === "by_date" ? "primary" : "ghost"}
+            onClick={() => {
+              setMode("by_date");
+              setValues((v) => ({
+                ...v,
+                mode: "by_date",
+                click_limit: undefined,
+              }));
             }}
             disabled={loading}
             className="flex-1"
           >
             By date
           </Button>
-          <Button 
-            type="button" 
-            variant={mode === 'by_clicks' ? 'primary' : 'ghost'} 
-            onClick={() => { 
-              setMode('by_clicks'); 
-              setValues(v => ({ ...v, mode: 'by_clicks', expires_at: undefined })) 
+          <Button
+            type="button"
+            variant={mode === "by_clicks" ? "primary" : "ghost"}
+            onClick={() => {
+              setMode("by_clicks");
+              setValues((v) => ({
+                ...v,
+                mode: "by_clicks",
+                expires_at: undefined,
+              }));
             }}
             disabled={loading}
             className="flex-1"
@@ -78,24 +96,39 @@ export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
         </div>
       </div>
 
-      {mode === 'by_date' ? (
+      {mode === "by_date" ? (
         <div>
-          <label htmlFor="expires_at" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="expires_at"
+            className="block text-sm font-medium text-gray-700"
+          >
             Expires at
           </label>
           <Input
             id="expires_at"
             type="datetime-local"
-            onChange={e => setValues(v => ({ ...v, expires_at: e.target.value ? new Date(e.target.value).toISOString() : undefined }))}
+            onChange={(e) =>
+              setValues((v) => ({
+                ...v,
+                expires_at: e.target.value
+                  ? new Date(e.target.value).toISOString()
+                  : undefined,
+              }))
+            }
             required
             disabled={loading}
             className="mt-1"
           />
-          <p className="mt-1 text-xs text-gray-500">Link will expire at this date and time</p>
+          <p className="mt-1 text-xs text-gray-500">
+            Link will expire at this date and time
+          </p>
         </div>
       ) : (
         <div>
-          <label htmlFor="click_limit" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="click_limit"
+            className="block text-sm font-medium text-gray-700"
+          >
             Click limit
           </label>
           <Input
@@ -104,51 +137,66 @@ export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
             min={1}
             step={1}
             placeholder="100"
-            onChange={e => setValues(v => ({ ...v, click_limit: Number(e.target.value) }))}
+            onChange={(e) =>
+              setValues((v) => ({ ...v, click_limit: Number(e.target.value) }))
+            }
             required
             disabled={loading}
             className="mt-1"
           />
-          <p className="mt-1 text-xs text-gray-500">Link will expire after this many clicks</p>
+          <p className="mt-1 text-xs text-gray-500">
+            Link will expire after this many clicks
+          </p>
         </div>
       )}
 
       <div>
-        <label htmlFor="slug" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="slug"
+          className="block text-sm font-medium text-gray-700"
+        >
           Custom slug (optional)
         </label>
-        <Input 
+        <Input
           id="slug"
-          type="text" 
-          placeholder="my-offer" 
-          onChange={e => setValues(v => ({ ...v, slug: e.target.value }))} 
+          type="text"
+          placeholder="my-offer"
+          onChange={(e) => setValues((v) => ({ ...v, slug: e.target.value }))}
           disabled={loading}
           className="mt-1"
         />
-        <p className="mt-1 text-xs text-gray-500">Leave empty to generate a random slug</p>
+        <p className="mt-1 text-xs text-gray-500">
+          Leave empty to generate a random slug
+        </p>
       </div>
 
       <div>
-        <label htmlFor="fallback_url" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="fallback_url"
+          className="block text-sm font-medium text-gray-700"
+        >
           Fallback URL (optional)
         </label>
-        <Input 
+        <Input
           id="fallback_url"
-          type="url" 
-          placeholder="https://example.com/expired" 
-          onChange={e => setValues(v => ({ ...v, fallback_url: e.target.value }))} 
+          type="url"
+          placeholder="https://example.com/expired"
+          onChange={(e) =>
+            setValues((v) => ({ ...v, fallback_url: e.target.value }))
+          }
           disabled={loading}
           className="mt-1"
         />
-        <p className="mt-1 text-xs text-gray-500">Where to redirect when the link expires</p>
+        <p className="mt-1 text-xs text-gray-500">
+          Where to redirect when the link expires
+        </p>
       </div>
 
       <div className="pt-2">
         <Button type="submit" disabled={loading} className="w-full">
-          {loading ? 'Creating link...' : 'Create link'}
+          {loading ? "Creating link..." : "Create link"}
         </Button>
       </div>
     </form>
-  )
+  );
 }
-
