@@ -1,24 +1,29 @@
 export default function Page() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="border-b border-gray-100">
+      <nav className="border-b border-border">
         <div className="mx-auto max-w-7xl px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-blue-600">
-                <span className="text-sm font-bold text-white">L</span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/80">
+                <span className="text-sm font-bold text-primary-foreground">
+                  L
+                </span>
               </div>
-              <span className="text-xl font-bold text-gray-900">Limi.to</span>
+              <span className="text-xl font-bold text-foreground">Limi.to</span>
             </div>
             <div className="flex items-center gap-4">
               <a
                 href="/login"
-                className="text-sm font-medium text-gray-600 hover:text-gray-900"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground"
               >
                 Sign in
               </a>
-              <a href="/login" className="btn-primary text-sm">
+              <a
+                href="/login"
+                className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground shadow-sm transition hover:bg-accent/90"
+              >
                 Get Started
               </a>
             </div>
@@ -28,7 +33,7 @@ export default function Page() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden px-6 pb-20 pt-16 sm:pt-24">
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-50/50 to-white" />
+        <div className="absolute inset-0 bg-gradient-to-b from-muted/50 to-background" />
         <div className="relative mx-auto max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-success/10 px-4 py-1.5 text-sm font-medium text-success">
@@ -41,10 +46,10 @@ export default function Page() {
               </svg>
               Free for individuals
             </div>
-            <h1 className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-600 bg-clip-text text-5xl font-bold tracking-tight text-transparent sm:text-6xl md:text-7xl">
+            <h1 className="bg-gradient-to-br from-foreground via-foreground/80 to-foreground/60 bg-clip-text text-5xl font-bold tracking-tight text-transparent sm:text-6xl md:text-7xl">
               Links that know when to disappear
             </h1>
-            <p className="mt-6 text-xl leading-8 text-gray-600">
+            <p className="mt-6 text-xl leading-8 text-muted-foreground">
               Create expiring links with precision. Set time limits or click
               caps, track performance, and control exactly when your links stop
               working.
@@ -89,28 +94,28 @@ export default function Page() {
                 </svg>
               </a>
             </div>
-            <p className="mt-6 text-sm text-gray-500">
+            <p className="mt-6 text-sm text-muted-foreground">
               No credit card required · Free forever for basic use
             </p>
           </div>
 
           {/* Visual Element */}
           <div className="mx-auto mt-16 max-w-4xl">
-            <div className="rounded-2xl border border-gray-200 bg-white p-2 shadow-2xl shadow-blue-500/10">
-              <div className="aspect-video rounded-lg bg-gradient-to-br from-blue-50 to-purple-50" />
+            <div className="rounded-2xl border border-border bg-card p-2 shadow-2xl shadow-primary/10">
+              <div className="aspect-video rounded-lg bg-gradient-to-br from-muted to-muted/50" />
             </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="border-t border-gray-100 bg-gray-50/50 px-6 py-24">
+      <section className="border-t border-border bg-muted/50 px-6 py-24">
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Everything you need to manage expiring links
             </h2>
-            <p className="mt-4 text-lg text-gray-600">
+            <p className="mt-4 text-lg text-muted-foreground">
               Simple, powerful, and designed for modern link sharing
             </p>
           </div>
@@ -268,10 +273,10 @@ export default function Page() {
       <section id="how-it-works" className="px-6 py-24">
         <div className="mx-auto max-w-7xl">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Create your first link in seconds
             </h2>
-            <p className="mt-4 text-lg text-gray-600">
+            <p className="mt-4 text-lg text-muted-foreground">
               Three simple steps to start managing expiring links
             </p>
           </div>
@@ -294,13 +299,13 @@ export default function Page() {
               },
             ].map((item, i) => (
               <div key={i} className="relative">
-                <div className="text-7xl font-bold text-blue-50">
+                <div className="text-7xl font-bold text-muted/50">
                   {item.step}
                 </div>
-                <h3 className="-mt-10 ml-16 text-xl font-semibold text-gray-900">
+                <h3 className="-mt-10 ml-16 text-xl font-semibold text-foreground">
                   {item.title}
                 </h3>
-                <p className="ml-16 mt-2 text-gray-600">{item.desc}</p>
+                <p className="ml-16 mt-2 text-muted-foreground">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -308,7 +313,7 @@ export default function Page() {
       </section>
 
       {/* CTA Section */}
-      <section className="border-t border-gray-100 bg-gradient-to-br from-primary via-primary to-accent px-6 py-24 text-white">
+      <section className="border-t border-border bg-gradient-to-br from-primary via-primary to-accent px-6 py-24 text-primary-foreground">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="text-4xl font-bold tracking-tight sm:text-5xl">
             Ready to take control of your links?
@@ -319,7 +324,7 @@ export default function Page() {
           <div className="mt-10">
             <a
               href="/login"
-              className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-4 text-base font-semibold text-primary shadow-xl transition hover:bg-gray-50"
+              className="inline-flex items-center gap-2 rounded-lg bg-background px-8 py-4 text-base font-semibold text-foreground shadow-xl transition hover:bg-background/90"
             >
               Start for free
               <svg
@@ -341,25 +346,27 @@ export default function Page() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-gray-100 bg-gray-50 px-6 py-12">
+      <footer className="border-t border-border bg-muted px-6 py-12">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
             <div className="flex items-center gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded bg-gradient-to-br from-primary to-blue-600">
-                <span className="text-xs font-bold text-white">L</span>
+              <div className="flex h-6 w-6 items-center justify-center rounded bg-gradient-to-br from-primary to-primary/80">
+                <span className="text-xs font-bold text-primary-foreground">
+                  L
+                </span>
               </div>
-              <span className="font-semibold text-gray-900">Limi.to</span>
+              <span className="font-semibold text-foreground">Limi.to</span>
             </div>
-            <div className="flex gap-8 text-sm text-gray-600">
-              <a href="/privacy" className="hover:text-gray-900">
+            <div className="flex gap-8 text-sm text-muted-foreground">
+              <a href="/privacy" className="hover:text-foreground">
                 Privacy
               </a>
-              <a href="/terms" className="hover:text-gray-900">
+              <a href="/terms" className="hover:text-foreground">
                 Terms
               </a>
             </div>
           </div>
-          <div className="mt-8 border-t border-gray-200 pt-8 text-center text-sm text-gray-500">
+          <div className="mt-8 border-t border-border pt-8 text-center text-sm text-muted-foreground">
             © 2025 Limi.to. All rights reserved.
           </div>
         </div>

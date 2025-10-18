@@ -27,12 +27,12 @@ function LoginForm() {
 
   if (userId) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 px-6">
+      <div className="flex min-h-screen items-center justify-center bg-muted px-6">
         <div className="w-full max-w-md">
-          <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-lg">
-            <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/30">
+          <div className="rounded-2xl border border-border bg-card p-8 shadow-lg">
+            <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-success to-success/80 shadow-lg shadow-success/30">
               <svg
-                className="h-8 w-8 text-white"
+                className="h-8 w-8 text-success-foreground"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -45,17 +45,17 @@ function LoginForm() {
                 />
               </svg>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-card-foreground">
               You&apos;re all set!
             </h1>
-            <p className="mt-2 text-gray-600">{email}</p>
+            <p className="mt-2 text-muted-foreground">{email}</p>
             <div className="mt-8 flex flex-col gap-3">
-              <button
+              <Button
                 onClick={() => router.push(redirect)}
-                className="btn-primary w-full py-3 text-base"
+                className="w-full py-3 text-base"
               >
                 Continue to Dashboard
-              </button>
+              </Button>
               <Button
                 variant="ghost"
                 onClick={() => {
@@ -146,22 +146,26 @@ function LoginForm() {
   return (
     <div className="flex min-h-screen">
       {/* Left side - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700 p-12 flex-col justify-between">
+      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary via-primary/90 to-accent p-12 flex-col justify-between">
         <div>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 backdrop-blur-sm">
-              <span className="text-lg font-bold text-white">L</span>
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-foreground/10 backdrop-blur-sm">
+              <span className="text-lg font-bold text-primary-foreground">
+                L
+              </span>
             </div>
-            <span className="text-2xl font-bold text-white">Limi.to</span>
+            <span className="text-2xl font-bold text-primary-foreground">
+              Limi.to
+            </span>
           </div>
         </div>
 
         <div className="space-y-8">
           <div>
-            <h2 className="text-4xl font-bold text-white">
+            <h2 className="text-4xl font-bold text-primary-foreground">
               Links that know when to disappear
             </h2>
-            <p className="mt-4 text-xl text-blue-100">
+            <p className="mt-4 text-xl text-primary-foreground/90">
               Create expiring links with precision. Set time limits or click
               caps.
             </p>
@@ -174,9 +178,9 @@ function LoginForm() {
               "Custom fallback URLs",
             ].map((feature, i) => (
               <div key={i} className="flex items-center gap-3">
-                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20">
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary-foreground/20">
                   <svg
-                    className="h-4 w-4 text-white"
+                    className="h-4 w-4 text-primary-foreground"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -187,31 +191,33 @@ function LoginForm() {
                     />
                   </svg>
                 </div>
-                <span className="text-blue-50">{feature}</span>
+                <span className="text-primary-foreground/80">{feature}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="text-sm text-blue-200">
+        <div className="text-sm text-primary-foreground/70">
           © 2025 Limi.to. All rights reserved.
         </div>
       </div>
 
       {/* Right side - Form */}
-      <div className="flex w-full lg:w-1/2 items-center justify-center bg-white px-6 py-12">
+      <div className="flex w-full lg:w-1/2 items-center justify-center bg-background px-6 py-12">
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <div className="mb-8 flex items-center gap-2 lg:hidden">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-blue-600">
-              <span className="text-sm font-bold text-white">L</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/80">
+              <span className="text-sm font-bold text-primary-foreground">
+                L
+              </span>
             </div>
-            <span className="text-xl font-bold text-gray-900">Limi.to</span>
+            <span className="text-xl font-bold text-foreground">Limi.to</span>
           </div>
 
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Welcome back</h1>
-            <p className="mt-2 text-gray-600">
+            <h1 className="text-3xl font-bold text-foreground">Welcome back</h1>
+            <p className="mt-2 text-muted-foreground">
               Sign in to your account or create a new one
             </p>
           </div>
@@ -219,10 +225,10 @@ function LoginForm() {
           <div className="mt-8 space-y-6">
             {message && (
               <div
-                className={`rounded-lg p-4 ${
+                className={`rounded-lg p-4 border ${
                   message.type === "success"
-                    ? "bg-green-50 text-green-800 border border-green-200"
-                    : "bg-red-50 text-red-800 border border-red-200"
+                    ? "bg-success/10 text-success border-success/30"
+                    : "bg-destructive/10 text-destructive border-destructive/30"
                 }`}
               >
                 <div className="flex items-start gap-3">
@@ -260,7 +266,7 @@ function LoginForm() {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-foreground"
                 >
                   Email address
                 </label>
@@ -280,7 +286,7 @@ function LoginForm() {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-foreground"
                 >
                   Password
                 </label>
@@ -308,10 +314,10 @@ function LoginForm() {
                 {submitting ? "Signing in..." : "Sign in"}
               </Button>
               <Button
-                variant="ghost"
+                variant="outline"
                 disabled={loading || submitting}
                 onClick={handleSignUp}
-                className="flex-1 border border-gray-300 py-3"
+                className="flex-1 py-3"
               >
                 Sign up
               </Button>
@@ -319,20 +325,20 @@ function LoginForm() {
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200"></div>
+                <div className="w-full border-t border-border"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="bg-white px-4 text-gray-500">
+                <span className="bg-background px-4 text-muted-foreground">
                   Or continue with
                 </span>
               </div>
             </div>
 
             <Button
-              variant="ghost"
+              variant="outline"
               disabled={loading || submitting}
               onClick={handleMagicLink}
-              className="w-full border border-gray-300 py-3"
+              className="w-full py-3"
             >
               <svg
                 className="mr-2 h-5 w-5"
@@ -350,7 +356,7 @@ function LoginForm() {
               {submitting ? "Sending..." : "Email me a magic link"}
             </Button>
 
-            <p className="text-center text-xs text-gray-500">
+            <p className="text-center text-xs text-muted-foreground">
               By continuing, you agree to our{" "}
               <a href="/terms" className="text-primary hover:underline">
                 Terms
@@ -372,7 +378,7 @@ export default function LoginPage() {
     <Suspense
       fallback={
         <div className="flex min-h-screen items-center justify-center">
-          <div className="text-gray-600">Loading...</div>
+          <div className="text-muted-foreground">Loading...</div>
         </div>
       }
     >
