@@ -1,13 +1,25 @@
 # Limi.to — MVP (v1) Development Blueprint
 
-> **Tagline:** “The cleanest way to create links that expire when you want.”  
+> **Tagline:** “The cleanest way to create links that expire when you want.”
 > **Goal:** Launch a simple, fast, and monetizable SaaS that can reach $500 MRR with minimal complexity.
 
 ---
 
 ## 🧭 Overview
 
-Limi.to is a lightweight SaaS that lets users create **expiring links** (by date or click count), view basic analytics, and optionally redirect expired links to a fallback URL.
+Limi.to is a lightweight S## 🖌️ Visual Design Rules
+
+- **Light and Dark themes** using shadcn/ui CSS variables.
+- Keep layout **minimal** but **visually professional** — clean shadows, subtle borders.
+- Use a **professional color palette** based on shadcn/ui defaults:
+  - Primary: Blue (`hsl(221.2 83.2% 53.3%)`)
+  - Secondary: Gray (`hsl(210 40% 96.1%)`)
+  - Muted: Light gray for backgrounds
+  - Border: Subtle gray borders
+- Typography: Inter (clean, geometric, professional).
+- Use meaningful icons from `lucide-react` — not decoration for decoration's sake.
+- Ensure accessibility: proper contrast, keyboard navigation, and semantic HTML.
+- Design inspiration: Linear.app, Bitly.com, Linklyhq.com — clean, minimal, conversion-focused.ts users create **expiring links** (by date or click count), view basic analytics, and optionally redirect expired links to a fallback URL.
 
 Your mission: **build something clean, fast, and scalable**, not big and complicated.
 
@@ -15,7 +27,8 @@ Your mission: **build something clean, fast, and scalable**, not big and complic
 
 ## 🧱 Tech Stack
 
-- **Frontend:** Next.js 15 (App Router) + TypeScript + Tailwind CSS
+- **Frontend:** Next.js 15 (App Router) + TypeScript + Tailwind CSS + shadcn/ui
+- **UI Components:** shadcn/ui (Radix UI primitives + Tailwind CSS)
 - **Backend:** Next.js Route Handlers (Edge runtime for redirects, Node for app logic)
 - **Database:** Supabase (PostgreSQL)
 - **Auth:** Supabase Auth (email/password + magic link)
@@ -28,7 +41,7 @@ Your mission: **build something clean, fast, and scalable**, not big and complic
 
 ## 🗂️ Project Structure Rules
 
-Codex should **create a clean, modular structure**.  
+Codex should **create a clean, modular structure**.
 No single-file blobs. No unstructured folders.
 
 **General organization:**
@@ -86,24 +99,26 @@ No single-file blobs. No unstructured folders.
 
 ### 🎨 Frontend Rules
 
-1. **Framework:** Next.js (App Router) + React + Tailwind CSS.
-2. **Component naming:** `PascalCase` (e.g., `LinkForm.tsx`, `ButtonPrimary.tsx`).
-3. **Hook names:** `useCamelCase` (e.g., `useCopyToClipboard.ts`).
-4. **Utility functions:** `camelCase` (e.g., `formatDate.ts`).
-5. **File and folder names:** `kebab-case` (e.g., `link-form.tsx`, `link-table.tsx`).
-6. **CSS classes:** use Tailwind utilities only — no external CSS frameworks.
-7. **No business logic in components.**
+1. **Framework:** Next.js (App Router) + React + Tailwind CSS + shadcn/ui.
+2. **UI Components:** Use shadcn/ui components exclusively. Import from `@/components/ui/*`.
+3. **Component naming:** `PascalCase` (e.g., `LinkForm.tsx`, `ButtonPrimary.tsx`).
+4. **Hook names:** `useCamelCase` (e.g., `useCopyToClipboard.ts`).
+5. **Utility functions:** `camelCase` (e.g., `formatDate.ts`).
+6. **File and folder names:** `kebab-case` (e.g., `link-form.tsx`, `link-table.tsx`).
+7. **CSS:** Use Tailwind utilities + shadcn/ui CSS variables. No external CSS frameworks.
+8. **Styling helper:** Use `cn()` from `@/lib/utils` to merge Tailwind classes.
+9. **No business logic in components.**
    - Components should only handle UI and minor state.
    - Move side effects, validation, and data fetching into hooks or server actions.
-8. **Use React Server Components** whenever possible; avoid unnecessary client components.
-9. **Always validate props with TypeScript interfaces.**
-10. **Mobile-first design:**
+10. **Use React Server Components** whenever possible; avoid unnecessary client components.
+11. **Always validate props with TypeScript interfaces.**
+12. **Mobile-first design:**
     - Test at 360px width minimum.
-    - Keep spacing and typography consistent (`p-4`, `mt-6`, `text-sm`, etc.).
-11. **Error and loading states required** for all async UI sections.
-12. **No direct calls to Supabase or API endpoints inside UI components.**
+    - Keep spacing and typography consistent.
+13. **Error and loading states required** for all async UI sections.
+14. **No direct calls to Supabase or API endpoints inside UI components.**
     - Use custom hooks or actions for data fetching.
-13. **GOLDEN RULE: IF YOU'RE NOT SURE ABOUT ANYTHING, ASK, DO NOT ASSUME A THING.**
+15. **GOLDEN RULE: IF YOU'RE NOT SURE ABOUT ANYTHING, ASK, DO NOT ASSUME A THING.**
 
 ---
 
@@ -239,15 +254,20 @@ Rules:
 
 ## 🎨 UI Rules
 
-- Use Tailwind CSS utilities only.
-- Follow a 2-color palette:
-  - Primary: `#2d5dc5`
-  - Accent: `#f26749`
-- Clean spacing: base `p-4`, `mt-6`
-- Use consistent button + input components.
-- No external UI libraries.
+- Use shadcn/ui components for all UI elements.
+- Follow shadcn/ui's CSS variable-based theming system.
+- Color palette defined in `styles/globals.css` using HSL values:
+  - Primary: Blue-based (`--primary`)
+  - Secondary: Neutral gray (`--secondary`)
+  - Muted: Subtle backgrounds (`--muted`)
+  - Accent: Interactive highlights (`--accent`)
+  - Destructive: Error states (`--destructive`)
+- Clean spacing using Tailwind's spacing scale.
+- Use `cn()` utility from `@/lib/utils` for class merging.
+- No external UI libraries beyond shadcn/ui.
 - Mobile responsive from day one.
 - Include loading and error states.
+- Professional, minimal design inspired by Linear, Bitly, and Linkly.
 
 ---
 
@@ -288,7 +308,7 @@ The UI copy, landing pages, and dashboard text must reflect:
 - **Confidence over complexity**
 - **Trust, privacy, and control**
 
-**Tone:**  
+**Tone:**
 Friendly, trustworthy, and slightly conversational — like you’re talking to a smart, busy user who values clarity.
 
 ### Example Style
@@ -380,10 +400,10 @@ STRIPE_WEBHOOK_SECRET=
 
 ## 👨‍💻 Developer Profile
 
-You are a **Senior Full-Stack Developer** with 10+ years of experience building SaaS products.  
+You are a **Senior Full-Stack Developer** with 10+ years of experience building SaaS products.
 Your expertise includes **React, Next.js, TypeScript, Supabase, and Tailwind CSS**, as well as **marketing, copywriting, and conversion-driven UI/UX**.
 
-You understand both code and business — you know that every design decision affects retention, trust, and conversions.  
+You understand both code and business — you know that every design decision affects retention, trust, and conversions.
 You write **clean, scalable, and production-grade code**, and you think like a **product marketer** as much as a developer.
 
 ### Your Mindset
@@ -408,10 +428,10 @@ You write **clean, scalable, and production-grade code**, and you think like a *
 
 ---
 
-**Final note:** Keep the implementation **structured, type-safe, and minimalist**.  
+**Final note:** Keep the implementation **structured, type-safe, and minimalist**.
 The goal is not to impress with features, but to deliver a clean SaaS that _feels_ premium.
 
-> 🎯 The developer must think and act like a **marketer, designer, and engineer in one.**  
+> 🎯 The developer must think and act like a **marketer, designer, and engineer in one.**
 > Write every line of code and copy as if thousands of users will see it tomorrow.
 
 **GOLDEN RULE: IF YOU'RE NOT SURE ABOUT ANYTHING, ASK, DO NOT ASSUME A THING.**
