@@ -3,6 +3,8 @@ import { useAuth } from "@/hooks/use-auth";
 import { useLinks } from "@/hooks/use-links";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -55,7 +57,10 @@ export default function DashboardPage() {
               </NextLink>
               <NextLink
                 href="/links/new"
-                className="btn-primary px-6 py-2 text-sm shadow-lg shadow-primary/30"
+                className={cn(
+                  buttonVariants({ variant: "default" }),
+                  "px-6 py-2 text-sm shadow-lg shadow-primary/30"
+                )}
               >
                 + Create Link
               </NextLink>
@@ -248,7 +253,10 @@ export default function DashboardPage() {
             </p>
             <NextLink
               href="/links/new"
-              className="btn-primary mt-6 inline-flex px-8 py-3 shadow-lg shadow-primary/30"
+              className={cn(
+                buttonVariants({ variant: "default", size: "lg" }),
+                "mt-6 inline-flex shadow-lg shadow-primary/30"
+              )}
             >
               Create Your First Link
             </NextLink>
