@@ -35,7 +35,7 @@ export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
       <div>
         <label
           htmlFor="destination_url"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-foreground"
         >
           Destination URL
         </label>
@@ -51,13 +51,13 @@ export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
           disabled={loading}
           className="mt-1"
         />
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-muted-foreground">
           Where should this link redirect to?
         </p>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-foreground">
           Expiration Mode
         </label>
         <div className="mt-2 flex gap-3">
@@ -100,7 +100,7 @@ export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
         <div>
           <label
             htmlFor="expires_at"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-foreground"
           >
             Expires at
           </label>
@@ -119,7 +119,7 @@ export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
             disabled={loading}
             className="mt-1"
           />
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-muted-foreground">
             Link will expire at this date and time
           </p>
         </div>
@@ -127,7 +127,7 @@ export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
         <div>
           <label
             htmlFor="click_limit"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-foreground"
           >
             Click limit
           </label>
@@ -144,7 +144,7 @@ export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
             disabled={loading}
             className="mt-1"
           />
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-muted-foreground">
             Link will expire after this many clicks
           </p>
         </div>
@@ -153,7 +153,7 @@ export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
       <div>
         <label
           htmlFor="slug"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-foreground"
         >
           Custom slug (optional)
         </label>
@@ -165,7 +165,7 @@ export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
           disabled={loading}
           className="mt-1"
         />
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-muted-foreground">
           Leave empty to generate a random slug
         </p>
       </div>
@@ -173,7 +173,7 @@ export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
       <div>
         <label
           htmlFor="fallback_url"
-          className="block text-sm font-medium text-gray-700"
+          className="block text-sm font-medium text-foreground"
         >
           Fallback URL (optional)
         </label>
@@ -187,7 +187,7 @@ export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
           disabled={loading}
           className="mt-1"
         />
-        <p className="mt-1 text-xs text-gray-500">
+        <p className="mt-1 text-xs text-muted-foreground">
           Where to redirect when the link expires
         </p>
       </div>
