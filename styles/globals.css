@@ -2,29 +2,106 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --color-primary: #2d5dc5;
-  --color-accent: #f26749;
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    /* Primary - Blue */
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+
+    /* Secondary - Slate/Gray */
+    --secondary: 215 20% 65%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    /* Muted - Light Gray */
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    /* Accent - Coral/Orange */
+    --accent: 14 100% 57%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Destructive - Red */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Success - Emerald */
+    --success: 142.1 76.2% 36.3%;
+    --success-foreground: 0 0% 100%;
+
+    /* Warning - Amber */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    /* Info - Cyan */
+    --info: 188.7 94.5% 42.7%;
+    --info-foreground: 0 0% 100%;
+
+    /* Borders & Inputs */
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Primary - Lighter Blue */
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    /* Secondary - Dark Slate */
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    /* Muted - Dark Gray */
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    /* Accent - Lighter Coral */
+    --accent: 14 90% 65%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    /* Destructive - Darker Red */
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Success - Darker Emerald */
+    --success: 142.1 70.6% 45.3%;
+    --success-foreground: 0 0% 100%;
+
+    /* Warning - Darker Amber */
+    --warning: 38 84% 60%;
+    --warning-foreground: 222.2 47.4% 11.2%;
+
+    /* Info - Darker Cyan */
+    --info: 188.7 85% 50%;
+    --info-foreground: 222.2 47.4% 11.2%;
+
+    /* Borders & Inputs */
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+  }
 }
 
-html, body {
-  height: 100%;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
-
-body {
-  color: rgb(17 24 39);
-  background-color: rgb(255 255 255);
-}
-
-.btn-primary {
-  @apply inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-white transition-colors hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed;
-}
-
-.btn-accent {
-  @apply inline-flex items-center justify-center rounded-md bg-accent px-4 py-2 text-white transition-colors hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed;
-}
-
-.input {
-  @apply w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary;
-}
-
