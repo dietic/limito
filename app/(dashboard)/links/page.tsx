@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import type { Link as LinkType } from "@/types/link";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export default function LinksPage() {
   const router = useRouter();
@@ -16,26 +16,8 @@ export default function LinksPage() {
   const [copying, setCopying] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | "active" | "expired">("all");
-
-  if (authLoading) {
-    return (
-      <main className="min-h-screen bg-gradient-to-br from-background to-muted px-6 py-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="flex items-center justify-center py-20">
-            <div className="flex items-center gap-3 text-muted-foreground">
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
-              <span>Loading your links...</span>
-            </div>
-          </div>
-        </div>
-      </main>
-    );
-  }
-
-  if (!userId) {
-    router.push("/login");
-    return null;
-  }
+  const [page, setPage] = useState(0);
+  const [pageSize] = useState(10);
 
   const copyToClipboard = async (slug: string) => {
     setCopying(slug);
@@ -58,11 +40,42 @@ export default function LinksPage() {
     setDeleting(null);
   };
 
-  const filteredItems = items.filter((link) => {
+  const filteredItems = useMemo(() => items.filter((link) => {
     if (filter === "active") return !isExpired(link);
     if (filter === "expired") return isExpired(link);
     return true;
-  });
+  }), [items, filter]);
+
+  // Reset to first page when filters or data change
+  useEffect(() => {
+    setPage(0);
+  }, [filter, items.length]);
+
+  const pageCount = Math.max(1, Math.ceil(filteredItems.length / pageSize));
+  const clampedPage = Math.min(page, pageCount - 1);
+  const pageStart = clampedPage * pageSize;
+  const pageEnd = Math.min(pageStart + pageSize, filteredItems.length);
+  const pageItems = filteredItems.slice(pageStart, pageEnd);
+
+  if (authLoading) {
+    return (
+      <main className="min-h-screen bg-gradient-to-br from-background to-muted px-6 py-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex items-center justify-center py-20">
+            <div className="flex items-center gap-3 text-muted-foreground">
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+              <span>Loading your links...</span>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (!userId) {
+    router.push("/login");
+    return null;
+  }
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-background to-muted">
@@ -195,9 +208,9 @@ export default function LinksPage() {
               </button>
             </div>
 
-            {/* Links Grid */}
+            {/* Links Grid (paginated) */}
             <div className="space-y-3">
-              {filteredItems.map((link: LinkType) => (
+              {pageItems.map((link: LinkType) => (
                 <div
                   key={link.id}
                   className="group overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all hover:shadow-xl"
@@ -391,6 +404,45 @@ export default function LinksPage() {
                 <p className="mt-2 text-sm text-muted-foreground">
                   Try changing the filter or create a new link
                 </p>
+              </div>
+            )}
+
+            {/* Pagination Controls */}
+            {filteredItems.length > 0 && (
+              <div className="mt-6 flex flex-col items-center justify-between gap-3 rounded-xl border border-border bg-card p-3 text-sm shadow-sm sm:flex-row">
+                <div className="text-muted-foreground">
+                  Showing <span className="font-semibold text-foreground">{filteredItems.length === 0 ? 0 : pageStart + 1}</span>
+                  
+                  {" "}–{" "}
+                  <span className="font-semibold text-foreground">{pageEnd}</span>
+                  {" "}of{" "}
+                  <span className="font-semibold text-foreground">{filteredItems.length}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setPage((p) => Math.max(0, p - 1))}
+                    disabled={clampedPage === 0}
+                    className={cn(
+                      "rounded-lg border border-border bg-card px-3 py-2 font-medium text-foreground transition-all hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50",
+                    )}
+                    aria-label="Previous page"
+                  >
+                    ← Prev
+                  </button>
+                  <div className="rounded-lg border border-border bg-background px-3 py-2 text-muted-foreground">
+                    Page <span className="font-semibold text-foreground">{clampedPage + 1}</span> / {pageCount}
+                  </div>
+                  <button
+                    onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
+                    disabled={clampedPage >= pageCount - 1}
+                    className={cn(
+                      "rounded-lg border border-border bg-card px-3 py-2 font-medium text-foreground transition-all hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50",
+                    )}
+                    aria-label="Next page"
+                  >
+                    Next →
+                  </button>
+                </div>
               </div>
             )}
           </>
