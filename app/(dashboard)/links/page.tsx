@@ -12,7 +12,7 @@ import { useEffect, useMemo, useState } from "react";
 export default function LinksPage() {
   const router = useRouter();
   const { userId, loading: authLoading } = useAuth();
-  const { items, loading, error, deleteLink } = useLinks();
+  const { items, loading, error, deleteLink, refresh } = useLinks();
   const [copying, setCopying] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | "active" | "expired">("all");
@@ -128,13 +128,27 @@ export default function LinksPage() {
                 clipRule="evenodd"
               />
             </svg>
-            <div className="text-sm">
-              <div>{error}</div>
-              {(/Database not initialized/i.test(error) || /schema cache/i.test(error)) && (
-                <div className="mt-2 text-xs text-destructive/90">
-                  Tip: Apply Supabase migrations to create required tables. You can use the Supabase SQL editor to run the files in <code className="rounded bg-destructive/20 px-1 py-0.5">supabase/migrations</code>.
-                </div>
-              )}
+            <div className="flex w-full items-center justify-between gap-3">
+              <div className="text-sm">
+                <div>{error}</div>
+                {(/Database not initialized/i.test(error) ||
+                  /schema cache/i.test(error)) && (
+                  <div className="mt-2 text-xs text-destructive/90">
+                    Tip: Apply Supabase migrations to create required tables.
+                    You can use the Supabase SQL editor to run the files in{" "}
+                    <code className="rounded bg-destructive/20 px-1 py-0.5">
+                      supabase/migrations
+                    </code>
+                    . Schema cache may take up to ~30s to refresh.
+                  </div>
+                )}
+              </div>
+              <button
+                onClick={() => refresh()}
+                className="rounded-md border border-destructive/30 bg-destructive/20 px-3 py-1.5 text-sm font-medium text-destructive shadow-sm transition-colors hover:bg-destructive/25"
+              >
+                Retry
+              </button>
             </div>
           </div>
         )}

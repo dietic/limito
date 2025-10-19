@@ -10,7 +10,7 @@ Perfect for time‑limited offers, launch previews, job applications, private do
 
 To run locally you must provide Supabase credentials and apply the database schema:
 
-1) Environment variables (create `.env`):
+1. Environment variables (create `.env`):
 
 ```
 NEXT_PUBLIC_SUPABASE_URL=...       # Supabase Project URL
@@ -19,16 +19,17 @@ SUPABASE_SERVICE_ROLE_KEY=...      # Service role key (server API routes)
 APP_URL=http://localhost:3000
 ```
 
-2) Apply migrations (one of):
+2. Apply migrations (one of):
 
 - SQL Editor (no CLI): open Supabase → SQL Editor and run the files in `supabase/migrations` in order:
-	- `0001_init.sql`
-	- `0002_rate_limits.sql`
+
+  - `0001_init.sql`
+  - `0002_rate_limits.sql`
 
 - CLI:
-	```zsh
-	supabase link --project-ref <your-project-ref>
-	supabase db push
-	```
+  ```zsh
+  supabase link --project-ref <your-project-ref>
+  supabase db push
+  ```
 
 If you see “Database not initialized: run Supabase migrations” in the app, it means step 2 hasn’t been done yet.

@@ -34,7 +34,8 @@ export async function GET(request: NextRequest) {
     if (error) {
       const errMsg = String((error as { message?: string }).message || "");
       const isMissingTable =
-        (errMsg.toLowerCase().includes("relation") && errMsg.toLowerCase().includes("links")) ||
+        (errMsg.toLowerCase().includes("relation") &&
+          errMsg.toLowerCase().includes("links")) ||
         errMsg.toLowerCase().includes("schema cache");
       return jsonError(
         process.env.NODE_ENV === "production"
