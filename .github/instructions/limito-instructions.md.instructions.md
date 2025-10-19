@@ -4,6 +4,11 @@ applyTo: "**"
 
 # Limi.to Development Instructions
 
+This repository uses Copilot Development Instructions. These files are always loaded and must be followed:
+
+- `.github/instructions/limito-instructions.md.instructions.md` (this file)
+- `.github/instructions/AGENTS.md` (additional blueprint and design rules)
+
 ## Architecture Overview
 
 Limi.to is a Next.js 15 SaaS for creating expiring links. Architecture follows a clean separation:
@@ -95,13 +100,20 @@ See: `app/(dashboard)/dashboard/page.tsx`, `app/(dashboard)/links/page.tsx`
 
 ### Styling
 
-- **shadcn/ui components** - Use exclusively from `@/components/ui/*`
+- **shadcn/ui components (application-wide)** - Use exclusively from `@/components/ui/*`; do not introduce ad-hoc UI outside shadcn unless added as a proper tokenized component under `components/ui/`
 - **CSS Variables** - Theme defined in `styles/globals.css` with HSL values
 - **Utility merging** - Use `cn()` from `@/lib/utils` to merge Tailwind classes
-- **Color system**: Primary (blue), Secondary (gray), Muted, Accent, Destructive
+- **Color system**: Primary (blue), Secondary (gray), Muted, Accent, Success, Warning, Info, Destructive
 - **Mobile-first**: Use `sm:`, `lg:` breakpoints, test at 360px minimum
 - **Consistent spacing**: Follow shadcn/ui spacing conventions
 - **Professional aesthetics**: Clean, minimal, inspired by Linear/Bitly/Linkly
+
+### UX Principles
+
+- UI must be intuitive, playful but professional; users should immediately understand "What can I do here?"
+- Clear information architecture and discoverability: sections, actions, and navigation must be obvious.
+- Always include loading, empty, and error states; ensure accessible color contrast and keyboard navigation.
+- Use light/dark themes via CSS variables; no hardcoded colors. Prefer token utilities like `text-foreground`, `text-muted-foreground`, `bg-card`, `border-border`, etc.
 
 ## Development Workflow
 
@@ -121,6 +133,11 @@ pnpm test             # Run Vitest unit tests
 3. Verify no unused imports, no TODOs, no console.logs
 4. Atomic commits: `feat:`, `fix:`, `refactor:`, `chore:`
 
+### Backlog and TODO tracking
+
+- Maintain `TODO.md` as the single-source backlog: list features, bugs, and chores.
+- When a feature is completed, update `TODO.md` in the same PR (mark done/move to Done section) before requesting commit approval.
+
 ### Commit Approval Policy
 
 - Do not commit immediately after making changes.
@@ -128,6 +145,11 @@ pnpm test             # Run Vitest unit tests
 - Provide a concise summary of changes, verification results (lint/build/tests), and a diff overview if helpful.
 - Wait for explicit user approval before staging and committing.
 - When approved, commit atomically with a descriptive message and reference any related tasks.
+
+### Branching and PR Hygiene
+
+- Branch naming: `feature/*`, `fix/*`, `chore/*`.
+- Open PRs with a concise purpose, screenshots for UI changes, and a checklist of what was verified.
 
 ### Database Migrations
 
@@ -156,6 +178,20 @@ HTTP codes: 200/201 (success), 400 (bad request), 401 (unauthorized), 404 (not f
 - **E2E tests**: Playwright for redirect flows (planned)
 - No inline test code - all tests in `/tests` directory
 
+### Environment Variables Checklist
+
+Define these in local env and Vercel before running or deploying:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+RESEND_API_KEY=
+APP_URL=https://limi.to
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
+```
+
 ## Key Files Reference
 
 - `middleware.ts` - Route protection for authenticated pages
@@ -174,6 +210,18 @@ Build for **simplicity, speed, and premium feel**:
 - Clear, benefit-driven copy (not clever, but confident)
 - Every view answers: "What can I do here?"
 - Launch before perfection - MVP first, iterate fast
+
+## Role Expectations and Quality Bar
+
+- Copywriting: When writing copy (landing, UI text, microcopy), act as a professional copywriter with 10+ years of experience. Favor clarity, confidence, and benefit-driven messaging.
+- UI implementation: When building UI, act as a FAANG-level frontend/design/UX tech lead with 10+ years of experience. Prioritize accessibility, responsive design, and premium SaaS feel.
+- Logic & architecture: When implementing logic/backend, act as a senior tech lead with 10+ years of experience. Keep code simple, type-safe, and well-structured.
+
+## Additional Notes
+
+- Always use shadcn/ui and theme tokens across the entire app; avoid `text-white`, `bg-white`, `text-gray-*`, `bg-gray-*`, etc.
+- Prefer reusable, tokenized components; avoid duplicating styles inline.
+- If unsure, ask before proceeding. Maintain small, focused changes to avoid oversized diffs.
 
 **Golden Rule**: If unsure about anything, ask - do not assume.
 **Golden Rule**: If unsure about anything, ask - do not assume.
