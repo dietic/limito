@@ -391,6 +391,10 @@ STRIPE_WEBHOOK_SECRET=
 - **Pre-deploy checks:** run `pnpm run lint && pnpm run test`.
 - **No direct pushes** to `main`.
 
+### Instructions Sync
+
+- Keep `.github/instructions/limito-instructions.md.instructions.md` and this file in sync. Any change to rules or design guidance in one must be mirrored in the other in the same PR.
+
 ### Commit Gating (Approval Required)
 
 - After changes are implemented, do not commit immediately.

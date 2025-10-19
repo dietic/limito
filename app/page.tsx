@@ -1,5 +1,6 @@
 import Faq from "@/components/faq-section";
 import Pricing from "@/components/pricing-section";
+import ThemeToggle from "@/components/theme-toggle";
 export default function Page() {
   return (
     <div className="relative min-h-screen bg-background">
@@ -47,6 +48,7 @@ export default function Page() {
               >
                 Get Started
               </a>
+              <ThemeToggle />
             </div>
           </div>
         </div>

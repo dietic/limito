@@ -137,6 +137,7 @@ pnpm test             # Run Vitest unit tests
 
 - Maintain `TODO.md` as the single-source backlog: list features, bugs, and chores.
 - When a feature is completed, update `TODO.md` in the same PR (mark done/move to Done section) before requesting commit approval.
+- Keep this file and `.github/instructions/AGENTS.md` in sync: any change to rules or design guidance here must be mirrored in AGENTS.md in the same PR.
 
 ### Commit Approval Policy
 
@@ -204,6 +205,7 @@ STRIPE_WEBHOOK_SECRET=
 - `components/pricing-section.tsx` - Landing pricing with monthly/yearly toggle
 - `components/faq-section.tsx` - Landing FAQ accordion
 - `lib/ab.ts` - Minimal client A/B testing helper (query override + localStorage)
+- `components/theme-toggle.tsx`, `components/theme-provider.tsx` - Light/dark theme and toggle
 
 ## Design Philosophy
 

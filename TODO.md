@@ -55,7 +55,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Improve landing page with better copy and CTAs (modern SaaS hero/features/CTA)
 - [x] Pricing section with monthly/yearly toggle
 - [x] Tokenize pages to theme tokens (no hardcoded colors)
-- [ ] Theme toggle (light/dark)
+- [x] Theme toggle (light/dark)
 - [ ] Mobile-first pass at 360px viewport
 - [ ] Branded expired page content polish (use theme tokens, match branding)
 - [x] Accessible form labels, focus states, and keyboard navigation
