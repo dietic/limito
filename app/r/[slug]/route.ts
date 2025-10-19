@@ -25,7 +25,10 @@ export async function GET(
     sb
   );
   if (!perIp.allowed)
-    return new NextResponse("Too Many Requests", { status: 429, headers: { "Retry-After": "60" } });
+    return new NextResponse("Too Many Requests", {
+      status: 429,
+      headers: { "Retry-After": "60" },
+    });
   const global = await allowAndIncrement(
     "redirect_slug",
     `slug:${params.slug}`,
@@ -34,7 +37,10 @@ export async function GET(
     sb
   );
   if (!global.allowed)
-    return new NextResponse("Too Many Requests", { status: 429, headers: { "Retry-After": "60" } });
+    return new NextResponse("Too Many Requests", {
+      status: 429,
+      headers: { "Retry-After": "60" },
+    });
   const { data: link } = await sb
     .from("links")
     .select("*")
@@ -69,14 +75,12 @@ export async function GET(
       .from("links")
       .update({ click_count: newCount, last_clicked_at: nowIso })
       .eq("id", link.id),
-    sb
-      .from("click_events")
-      .insert({
-        link_id: link.id,
-        clicked_at: nowIso,
-        referrer,
-        user_agent: userAgent,
-      }),
+    sb.from("click_events").insert({
+      link_id: link.id,
+      clicked_at: nowIso,
+      referrer,
+      user_agent: userAgent,
+    }),
   ]);
 
   return NextResponse.redirect(link.destination_url, { status: 302 });

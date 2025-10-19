@@ -40,7 +40,8 @@ export default function DashboardPage() {
   const lastClickAt = items
     .map((l) => (l.last_clicked_at ? new Date(l.last_clicked_at).getTime() : 0))
     .reduce((a, b) => Math.max(a, b), 0);
-  const lastClickLabel = lastClickAt > 0 ? new Date(lastClickAt).toLocaleString() : null;
+  const lastClickLabel =
+    lastClickAt > 0 ? new Date(lastClickAt).toLocaleString() : null;
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-background to-muted">
@@ -50,9 +51,13 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
-              <p className="mt-1 text-muted-foreground">Welcome back, {email}</p>
+              <p className="mt-1 text-muted-foreground">
+                Welcome back, {email}
+              </p>
               {lastClickLabel && (
-                <p className="text-xs text-muted-foreground">Last activity: {lastClickLabel}</p>
+                <p className="text-xs text-muted-foreground">
+                  Last activity: {lastClickLabel}
+                </p>
               )}
             </div>
             <div className="flex gap-3">
