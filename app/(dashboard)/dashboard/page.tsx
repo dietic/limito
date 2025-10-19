@@ -41,12 +41,14 @@ export default function DashboardPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-background to-muted">
       {/* Header */}
-  <div className="border-b border-border bg-background/70 backdrop-blur-sm">
+      <div className="border-b border-border bg-background/70 backdrop-blur-sm">
         <div className="mx-auto max-w-7xl px-6 py-6">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
-              <p className="mt-1 text-muted-foreground">Welcome back, {email}</p>
+              <p className="mt-1 text-muted-foreground">
+                Welcome back, {email}
+              </p>
             </div>
             <div className="flex gap-3">
               <NextLink
@@ -202,7 +204,9 @@ export default function DashboardPage() {
                 </div>
               </div>
               <div className="mt-4">
-                <div className="text-sm font-medium text-muted-foreground">Expired</div>
+                <div className="text-sm font-medium text-muted-foreground">
+                  Expired
+                </div>
                 <div className="mt-2 text-4xl font-bold text-warning">
                   {loading ? (
                     <div className="h-10 w-16 animate-pulse rounded bg-muted"></div>
@@ -219,7 +223,9 @@ export default function DashboardPage() {
         {!loading && items.length > 0 && (
           <div className="mt-8">
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-foreground">Recent Links</h2>
+              <h2 className="text-2xl font-bold text-foreground">
+                Recent Links
+              </h2>
               <NextLink
                 href="/links"
                 className="text-sm font-medium text-primary hover:underline"
