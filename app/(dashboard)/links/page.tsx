@@ -40,11 +40,15 @@ export default function LinksPage() {
     setDeleting(null);
   };
 
-  const filteredItems = useMemo(() => items.filter((link) => {
-    if (filter === "active") return !isExpired(link);
-    if (filter === "expired") return isExpired(link);
-    return true;
-  }), [items, filter]);
+  const filteredItems = useMemo(
+    () =>
+      items.filter((link) => {
+        if (filter === "active") return !isExpired(link);
+        if (filter === "expired") return isExpired(link);
+        return true;
+      }),
+    [items, filter]
+  );
 
   // Reset to first page when filters or data change
   useEffect(() => {
@@ -411,32 +415,44 @@ export default function LinksPage() {
             {filteredItems.length > 0 && (
               <div className="mt-6 flex flex-col items-center justify-between gap-3 rounded-xl border border-border bg-card p-3 text-sm shadow-sm sm:flex-row">
                 <div className="text-muted-foreground">
-                  Showing <span className="font-semibold text-foreground">{filteredItems.length === 0 ? 0 : pageStart + 1}</span>
-                  
-                  {" "}–{" "}
-                  <span className="font-semibold text-foreground">{pageEnd}</span>
-                  {" "}of{" "}
-                  <span className="font-semibold text-foreground">{filteredItems.length}</span>
+                  Showing{" "}
+                  <span className="font-semibold text-foreground">
+                    {filteredItems.length === 0 ? 0 : pageStart + 1}
+                  </span>{" "}
+                  –{" "}
+                  <span className="font-semibold text-foreground">
+                    {pageEnd}
+                  </span>{" "}
+                  of{" "}
+                  <span className="font-semibold text-foreground">
+                    {filteredItems.length}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setPage((p) => Math.max(0, p - 1))}
                     disabled={clampedPage === 0}
                     className={cn(
-                      "rounded-lg border border-border bg-card px-3 py-2 font-medium text-foreground transition-all hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50",
+                      "rounded-lg border border-border bg-card px-3 py-2 font-medium text-foreground transition-all hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
                     )}
                     aria-label="Previous page"
                   >
                     ← Prev
                   </button>
                   <div className="rounded-lg border border-border bg-background px-3 py-2 text-muted-foreground">
-                    Page <span className="font-semibold text-foreground">{clampedPage + 1}</span> / {pageCount}
+                    Page{" "}
+                    <span className="font-semibold text-foreground">
+                      {clampedPage + 1}
+                    </span>{" "}
+                    / {pageCount}
                   </div>
                   <button
-                    onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
+                    onClick={() =>
+                      setPage((p) => Math.min(pageCount - 1, p + 1))
+                    }
                     disabled={clampedPage >= pageCount - 1}
                     className={cn(
-                      "rounded-lg border border-border bg-card px-3 py-2 font-medium text-foreground transition-all hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50",
+                      "rounded-lg border border-border bg-card px-3 py-2 font-medium text-foreground transition-all hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
                     )}
                     aria-label="Next page"
                   >
