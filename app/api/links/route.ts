@@ -26,11 +26,24 @@ export async function GET(request: NextRequest) {
       }
       return jsonError("Server error", 500);
     }
-    const { data, error } = await sb
+    const url = new URL(request.url);
+    const sp = url.searchParams;
+    const limitParam = sp.get("limit");
+    const offsetParam = sp.get("offset");
+    const limit = limitParam ? Math.min(Math.max(parseInt(limitParam || "", 10) || 0, 1), 100) : null;
+    const offset = offsetParam ? Math.max(parseInt(offsetParam || "", 10) || 0, 0) : 0;
+
+    let query = sb
       .from("links")
-      .select("*")
+      .select("*", { count: limit ? "exact" : undefined })
       .eq("owner_id", userId)
       .order("created_at", { ascending: false });
+
+    if (limit) {
+      query = query.range(offset, offset + (limit - 1));
+    }
+
+    const { data, error, count } = await query;
     if (error) {
       const errMsg = String((error as { message?: string }).message || "");
       const isMissingTable =
@@ -45,6 +58,11 @@ export async function GET(request: NextRequest) {
           : `Failed to fetch links${errMsg ? ": " + errMsg : ""}`,
         500
       );
+    }
+    if (limit) {
+      const total = typeof count === "number" ? count : data?.length ?? 0;
+      const hasMore = offset + (data?.length ?? 0) < total;
+      return jsonSuccess({ items: data ?? [], total, limit, offset, hasMore });
     }
     return jsonSuccess(data);
   } catch (e) {

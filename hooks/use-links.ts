@@ -8,9 +8,15 @@ interface LinksState {
   loading: boolean;
   error: string | null;
   items: Link[];
+  total?: number;
+  limit?: number;
+  offset?: number;
+  hasMore?: boolean;
 }
 
-export function useLinks() {
+type FetchOptions = { limit?: number; offset?: number };
+
+export function useLinks(initial?: FetchOptions) {
   const { getAccessToken, userId } = useAuth();
   const [state, setState] = useState<LinksState>({
     loading: false,
@@ -25,11 +31,20 @@ export function useLinks() {
     return token ? { Authorization: `Bearer ${token}` } : {};
   }, [getAccessToken]);
 
-  const refresh = useCallback(async () => {
+  const refresh = useCallback(async (opts?: FetchOptions) => {
     setState((s) => ({ ...s, loading: true, error: null }));
     try {
       const headers = await getAuthHeaders();
-      const res = await fetch("/api/links", { headers });
+      const params = new URLSearchParams();
+      const limit = opts?.limit ?? initial?.limit;
+      const offset = opts?.offset ?? initial?.offset;
+      if (limit) params.set("limit", String(limit));
+      if (typeof offset === "number" && offset > 0)
+        params.set("offset", String(offset));
+      const url = params.toString()
+        ? `/api/links?${params.toString()}`
+        : "/api/links";
+      const res = await fetch(url, { headers });
       const payload = await res.json();
       if (!res.ok) {
         setState({
@@ -39,16 +54,30 @@ export function useLinks() {
         });
         return;
       }
-      setState({ loading: false, error: null, items: payload.data as Link[] });
+      // Back-compat: payload.data can be an array (old) or an object with items
+      const data = payload.data;
+      if (Array.isArray(data)) {
+        setState({ loading: false, error: null, items: data });
+      } else {
+        setState({
+          loading: false,
+          error: null,
+          items: (data.items as Link[]) ?? [],
+          total: data.total as number,
+          limit: data.limit as number,
+          offset: data.offset as number,
+          hasMore: data.hasMore as boolean,
+        });
+      }
     } catch {
       setState({ loading: false, error: "Network error", items: [] });
     }
-  }, [getAuthHeaders]);
+  }, [getAuthHeaders, initial?.limit, initial?.offset]);
 
   useEffect(() => {
     if (!userId) return;
-    refresh();
-  }, [userId, refresh]);
+    refresh(initial);
+  }, [userId, refresh, initial]);
 
   const createLink = useCallback(
     async (input: CreateLinkInput) => {
@@ -60,10 +89,10 @@ export function useLinks() {
       });
       const payload = await res.json();
       if (!res.ok) return { ok: false, message: payload.message as string };
-      await refresh();
+      await refresh(initial);
       return { ok: true, data: payload.data as Link };
     },
-    [getAuthHeaders, refresh]
+    [getAuthHeaders, refresh, initial]
   );
 
   const updateLink = useCallback(
@@ -76,10 +105,10 @@ export function useLinks() {
       });
       const payload = await res.json();
       if (!res.ok) return { ok: false, message: payload.message as string };
-      await refresh();
+      await refresh(initial);
       return { ok: true, data: payload.data as Link };
     },
-    [getAuthHeaders, refresh]
+    [getAuthHeaders, refresh, initial]
   );
 
   const deleteLink = useCallback(
@@ -91,10 +120,10 @@ export function useLinks() {
       });
       const payload = await res.json();
       if (!res.ok) return { ok: false, message: payload.message as string };
-      await refresh();
+      await refresh(initial);
       return { ok: true, data: payload.data };
     },
-    [getAuthHeaders, refresh]
+    [getAuthHeaders, refresh, initial]
   );
 
   return { ...state, refresh, createLink, updateLink, deleteLink };
