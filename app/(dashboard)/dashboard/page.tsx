@@ -13,10 +13,10 @@ export default function DashboardPage() {
 
   if (authLoading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 px-6 py-8">
+      <main className="min-h-screen bg-gradient-to-br from-background to-muted px-6 py-8">
         <div className="mx-auto max-w-7xl">
           <div className="flex items-center justify-center py-20">
-            <div className="flex items-center gap-3 text-gray-600">
+            <div className="flex items-center gap-3 text-muted-foreground">
               <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
               <span>Loading your dashboard...</span>
             </div>
@@ -39,19 +39,19 @@ export default function DashboardPage() {
   const expiredLinks = items.filter((link) => !link.is_active);
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+    <main className="min-h-screen bg-gradient-to-br from-background to-muted">
       {/* Header */}
-      <div className="border-b border-white/50 bg-white/70 backdrop-blur-sm">
+  <div className="border-b border-border bg-background/70 backdrop-blur-sm">
         <div className="mx-auto max-w-7xl px-6 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-              <p className="mt-1 text-gray-600">Welcome back, {email}</p>
+              <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
+              <p className="mt-1 text-muted-foreground">Welcome back, {email}</p>
             </div>
             <div className="flex gap-3">
               <NextLink
                 href="/links"
-                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-50 hover:shadow-md"
+                className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-muted hover:shadow-md"
               >
                 All Links
               </NextLink>
@@ -73,13 +73,13 @@ export default function DashboardPage() {
         {/* Stats Grid */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {/* Total Links */}
-          <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-xl">
-            <div className="absolute right-0 top-0 h-20 w-20 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 opacity-10 blur-2xl transition-all group-hover:scale-150"></div>
+          <div className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:shadow-xl">
+            <div className="absolute right-0 top-0 h-20 w-20 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-primary to-accent opacity-10 blur-2xl transition-all group-hover:scale-150"></div>
             <div className="relative">
               <div className="flex items-center justify-between">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-500/30">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 shadow-lg shadow-primary/30">
                   <svg
-                    className="h-6 w-6 text-white"
+                    className="h-6 w-6 text-primary-foreground"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -94,12 +94,12 @@ export default function DashboardPage() {
                 </div>
               </div>
               <div className="mt-4">
-                <div className="text-sm font-medium text-gray-600">
+                <div className="text-sm font-medium text-muted-foreground">
                   Total Links
                 </div>
-                <div className="mt-2 text-4xl font-bold text-gray-900">
+                <div className="mt-2 text-4xl font-bold text-foreground">
                   {loading ? (
-                    <div className="h-10 w-16 animate-pulse rounded bg-gray-200"></div>
+                    <div className="h-10 w-16 animate-pulse rounded bg-muted"></div>
                   ) : (
                     items.length
                   )}
@@ -109,13 +109,13 @@ export default function DashboardPage() {
           </div>
 
           {/* Active Links */}
-          <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-xl">
-            <div className="absolute right-0 top-0 h-20 w-20 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 opacity-10 blur-2xl transition-all group-hover:scale-150"></div>
+          <div className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:shadow-xl">
+            <div className="absolute right-0 top-0 h-20 w-20 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-success to-success/80 opacity-10 blur-2xl transition-all group-hover:scale-150"></div>
             <div className="relative">
               <div className="flex items-center justify-between">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/30">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-success to-success/80 shadow-lg shadow-success/30">
                   <svg
-                    className="h-6 w-6 text-white"
+                    className="h-6 w-6 text-primary-foreground"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -130,12 +130,12 @@ export default function DashboardPage() {
                 </div>
               </div>
               <div className="mt-4">
-                <div className="text-sm font-medium text-gray-600">
+                <div className="text-sm font-medium text-muted-foreground">
                   Active Links
                 </div>
-                <div className="mt-2 text-4xl font-bold text-green-600">
+                <div className="mt-2 text-4xl font-bold text-success">
                   {loading ? (
-                    <div className="h-10 w-16 animate-pulse rounded bg-gray-200"></div>
+                    <div className="h-10 w-16 animate-pulse rounded bg-muted"></div>
                   ) : (
                     activeLinks.length
                   )}
@@ -145,13 +145,13 @@ export default function DashboardPage() {
           </div>
 
           {/* Total Clicks */}
-          <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-xl">
-            <div className="absolute right-0 top-0 h-20 w-20 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 opacity-10 blur-2xl transition-all group-hover:scale-150"></div>
+          <div className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:shadow-xl">
+            <div className="absolute right-0 top-0 h-20 w-20 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-info to-accent opacity-10 blur-2xl transition-all group-hover:scale-150"></div>
             <div className="relative">
               <div className="flex items-center justify-between">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg shadow-purple-500/30">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-info to-info/80 shadow-lg shadow-info/30">
                   <svg
-                    className="h-6 w-6 text-white"
+                    className="h-6 w-6 text-primary-foreground"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -166,12 +166,12 @@ export default function DashboardPage() {
                 </div>
               </div>
               <div className="mt-4">
-                <div className="text-sm font-medium text-gray-600">
+                <div className="text-sm font-medium text-muted-foreground">
                   Total Clicks
                 </div>
-                <div className="mt-2 text-4xl font-bold text-purple-600">
+                <div className="mt-2 text-4xl font-bold text-info">
                   {loading ? (
-                    <div className="h-10 w-16 animate-pulse rounded bg-gray-200"></div>
+                    <div className="h-10 w-16 animate-pulse rounded bg-muted"></div>
                   ) : (
                     totalClicks.toLocaleString()
                   )}
@@ -181,13 +181,13 @@ export default function DashboardPage() {
           </div>
 
           {/* Expired Links */}
-          <div className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-xl">
-            <div className="absolute right-0 top-0 h-20 w-20 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-orange-500 to-red-500 opacity-10 blur-2xl transition-all group-hover:scale-150"></div>
+          <div className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-all hover:shadow-xl">
+            <div className="absolute right-0 top-0 h-20 w-20 translate-x-8 -translate-y-8 rounded-full bg-gradient-to-br from-warning to-destructive opacity-10 blur-2xl transition-all group-hover:scale-150"></div>
             <div className="relative">
               <div className="flex items-center justify-between">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-warning to-warning/80 shadow-lg shadow-warning/30">
                   <svg
-                    className="h-6 w-6 text-white"
+                    className="h-6 w-6 text-primary-foreground"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -202,10 +202,10 @@ export default function DashboardPage() {
                 </div>
               </div>
               <div className="mt-4">
-                <div className="text-sm font-medium text-gray-600">Expired</div>
-                <div className="mt-2 text-4xl font-bold text-orange-600">
+                <div className="text-sm font-medium text-muted-foreground">Expired</div>
+                <div className="mt-2 text-4xl font-bold text-warning">
                   {loading ? (
-                    <div className="h-10 w-16 animate-pulse rounded bg-gray-200"></div>
+                    <div className="h-10 w-16 animate-pulse rounded bg-muted"></div>
                   ) : (
                     expiredLinks.length
                   )}
@@ -219,7 +219,7 @@ export default function DashboardPage() {
         {!loading && items.length > 0 && (
           <div className="mt-8">
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-gray-900">Recent Links</h2>
+              <h2 className="text-2xl font-bold text-foreground">Recent Links</h2>
               <NextLink
                 href="/links"
                 className="text-sm font-medium text-primary hover:underline"
@@ -228,34 +228,34 @@ export default function DashboardPage() {
               </NextLink>
             </div>
 
-            <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-              <div className="divide-y divide-gray-100">
+            <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+              <div className="divide-y divide-border">
                 {items.slice(0, 5).map((link) => (
                   <div
                     key={link.id}
-                    className="flex items-center justify-between p-6 transition-all hover:bg-gray-50"
+                    className="flex items-center justify-between p-6 transition-all hover:bg-muted"
                   >
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-3">
-                        <code className="rounded-lg bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-900">
+                        <code className="rounded-lg bg-muted px-3 py-1.5 text-sm font-medium text-foreground">
                           /{link.slug}
                         </code>
                         {link.is_active ? (
-                          <span className="flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
-                            <span className="h-1.5 w-1.5 rounded-full bg-green-600"></span>
+                          <span className="flex items-center gap-1.5 rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success">
+                            <span className="h-1.5 w-1.5 rounded-full bg-success"></span>
                             Active
                           </span>
                         ) : (
-                          <span className="flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-600">
-                            <span className="h-1.5 w-1.5 rounded-full bg-gray-400"></span>
+                          <span className="flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
+                            <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground"></span>
                             Expired
                           </span>
                         )}
                       </div>
-                      <div className="mt-2 truncate text-sm text-gray-600">
+                      <div className="mt-2 truncate text-sm text-muted-foreground">
                         → {link.destination_url}
                       </div>
-                      <div className="mt-2 flex items-center gap-4 text-xs text-gray-500">
+                      <div className="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
                         <span className="flex items-center gap-1">
                           <svg
                             className="h-3.5 w-3.5"
@@ -294,7 +294,7 @@ export default function DashboardPage() {
                     </div>
                     <NextLink
                       href={`/links/${link.id}`}
-                      className="ml-4 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-all hover:bg-gray-50 hover:shadow-md"
+                      className="ml-4 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-all hover:bg-muted hover:shadow-md"
                     >
                       View
                     </NextLink>
@@ -308,9 +308,9 @@ export default function DashboardPage() {
         {/* Empty State */}
         {!loading && items.length === 0 && (
           <div className="mt-12 text-center">
-            <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-purple-500 shadow-2xl shadow-blue-500/30">
+            <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-accent shadow-2xl shadow-primary/30">
               <svg
-                className="h-12 w-12 text-white"
+                className="h-12 w-12 text-primary-foreground"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -323,10 +323,10 @@ export default function DashboardPage() {
                 />
               </svg>
             </div>
-            <h3 className="mt-6 text-2xl font-bold text-gray-900">
+            <h3 className="mt-6 text-2xl font-bold text-foreground">
               No links yet
             </h3>
-            <p className="mt-2 text-gray-600">
+            <p className="mt-2 text-muted-foreground">
               Create your first expiring link to get started
             </p>
             <NextLink
