@@ -1,3 +1,7 @@
+---
+applyTo: "**"
+---
+
 # Limi.to Development Instructions
 
 ## Architecture Overview
@@ -171,4 +175,8 @@ Build for **simplicity, speed, and premium feel**:
 - Every view answers: "What can I do here?"
 - Launch before perfection - MVP first, iterate fast
 
+**Golden Rule**: If unsure about anything, ask - do not assume.
+**Golden Rule**: If unsure about anything, ask - do not assume.
+**Golden Rule**: If unsure about anything, ask - do not assume.
+**Golden Rule**: If unsure about anything, ask - do not assume.
 **Golden Rule**: If unsure about anything, ask - do not assume.
