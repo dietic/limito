@@ -2,6 +2,25 @@
 
 This is the implementation checklist for MVP (v1). Each feature has a focused, verifiable task list. Items marked [x] are done.
 
+## MVP Readiness Checklist (invite users when all are checked)
+
+- [ ] Links: add details/edit page and wire Dashboard "View" action
+  - Implement `app/(dashboard)/links/[id]/page.tsx` to fetch, prefill, update (PATCH), and delete (DELETE)
+- [ ] Accurate expiry in UI
+  - Compute with `isExpired(link)` in lists/filters/badges; optionally also hard-set `is_active=false` in redirect handler when an expiration is detected
+- [ ] robots.txt and sitemap.xml
+  - Add `app/robots.ts` and `app/sitemap.ts` with basic entries for marketing routes
+- [ ] SEO metadata baseline
+  - Title/description and OG tags in `app/layout.tsx` and marketing pages
+- [ ] Enable Vercel Analytics (basic telemetry only)
+- [ ] Tests for confidence
+  - Integration: CRUD routes (happy/invalid/unauthorized)
+  - E2E (Playwright): login → create link → redirect → click count increases
+- [ ] Brand polish
+  - Replace placeholder logo/favicon; finalize Privacy & Terms copy
+- [ ] Ops hygiene (optional for invite, recommended)
+  - TTL cleanup for `rate_limits` windows; sweep old `click_events` beyond free-plan retention
+
 ## 1) Auth
 
 - [x] Login/signup/reset with Supabase Auth (client hook + UI)
@@ -22,6 +41,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [ ] Pagination on links list
 - [x] Filter tabs: All / Active / Expired
 - [x] Empty/Loading/Error UI states wired to hooks
+      -> MVP: Add details/edit page and ensure expired filtering uses `isExpired()`.
 
 ## 3) Redirects
 
@@ -36,13 +56,14 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Enforce create per user/day
 - [x] Enforce redirects per IP/min and global per slug/min
 - [x] Return informative `429` JSON for API requests (create link)
-- [ ] Expose `Retry-After` header where relevant (create & redirects)
+- [x] Expose `Retry-After` header where relevant (create & redirects)
+- [ ] Background cleanup: delete expired `rate_limits` windows (cron or Supabase scheduled task)
 
 ## 5) Analytics
 
 - [x] Basic analytics endpoint (click_count, last_clicked_at)
 - [x] Dashboard card: total clicks
-- [ ] Show last click date (latest across links) in dashboard
+- [x] Show last click date (latest across links) in dashboard
 - [ ] Add small trends: last 24h count (optional v1)
 
 ## 6) UI/UX
@@ -59,6 +80,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [ ] Mobile-first pass at 360px viewport
 - [ ] Branded expired page content polish (use theme tokens, match branding)
 - [x] Accessible form labels, focus states, and keyboard navigation
+      -> MVP: ensure nav “View” works, expired badges reflect real state, and marketing pages have baseline SEO metadata.
 
 ## 7) Validation & Types
 
@@ -93,6 +115,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Landing blurb polishing
 - [ ] Expired-page copy (tone, clarity)
 - [ ] Privacy & ToS final copy
+      -> MVP: logo/favicon + final Privacy/ToS.
 
 ## 12) Payments (Deferred v2)
 
@@ -128,3 +151,9 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 
 - [ ] Domain verification flow
 - [ ] Redirect route handling for custom hostnames
+
+## 17) SEO
+
+- [ ] robots.txt (`app/robots.ts`)
+- [ ] sitemap.xml (`app/sitemap.ts`)
+- [ ] Baseline metadata/OG tags for marketing pages
