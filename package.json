@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "clean": "rm -rf .next .turbo node_modules/.cache",
     "dev": "next dev",
+    "dev:clean": "pnpm run -s clean && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
