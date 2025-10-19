@@ -2,12 +2,12 @@
 import { buttonVariants } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { useLinks } from "@/hooks/use-links";
+import { isExpired } from "@/lib/expiration";
 import { cn } from "@/lib/utils";
 import type { Link as LinkType } from "@/types/link";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { isExpired } from "@/lib/expiration";
 
 export default function LinksPage() {
   const router = useRouter();

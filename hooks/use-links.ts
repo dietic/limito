@@ -1,8 +1,8 @@
 "use client";
 import { useAuth } from "@/hooks/use-auth";
+import type { CreateLinkInput, UpdateLinkInput } from "@/lib/validators/link";
 import type { Link } from "@/types/link";
 import { useCallback, useEffect, useState } from "react";
-import type { CreateLinkInput, UpdateLinkInput } from "@/lib/validators/link";
 
 interface LinksState {
   loading: boolean;

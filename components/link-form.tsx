@@ -19,7 +19,12 @@ interface LinkFormProps {
   submitLabel?: string;
 }
 
-export default function LinkForm({ onSubmit, loading, initialValues, submitLabel }: LinkFormProps) {
+export default function LinkForm({
+  onSubmit,
+  loading,
+  initialValues,
+  submitLabel,
+}: LinkFormProps) {
   const [mode, setMode] = useState<"by_date" | "by_clicks">(
     initialValues?.mode ?? "by_date"
   );
@@ -208,7 +213,10 @@ export default function LinkForm({ onSubmit, loading, initialValues, submitLabel
               : values.slug || initialValues?.destination_url
               ? "Saving..."
               : "Creating link..."
-            : submitLabel ?? (values.slug || initialValues?.destination_url ? "Save changes" : "Create link")}
+            : submitLabel ??
+              (values.slug || initialValues?.destination_url
+                ? "Save changes"
+                : "Create link")}
         </Button>
       </div>
     </form>

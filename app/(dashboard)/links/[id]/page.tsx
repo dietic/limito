@@ -108,7 +108,10 @@ export default function LinkDetailsPage() {
               </NextLink>
               <button
                 onClick={async () => {
-                  if (!confirm("Delete this link? This action cannot be undone.")) return;
+                  if (
+                    !confirm("Delete this link? This action cannot be undone.")
+                  )
+                    return;
                   const res = await deleteLink(link.id);
                   if (!res.ok) {
                     alert(res.message || "Failed to delete");
@@ -132,8 +135,18 @@ export default function LinkDetailsPage() {
       <div className="mx-auto max-w-4xl px-6 py-8">
         {saving && (
           <div className="mb-6 flex items-start gap-3 rounded-xl border border-info/30 bg-info/10 p-4 text-info">
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3" />
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4l3 3"
+              />
             </svg>
             <span className="text-sm">Saving changes...</span>
           </div>
@@ -143,13 +156,27 @@ export default function LinkDetailsPage() {
           <div className="bg-gradient-to-br from-primary/5 to-accent/5 px-8 py-6">
             <div className="flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/30">
-                <svg className="h-6 w-6 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                <svg
+                  className="h-6 w-6 text-primary-foreground"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  />
                 </svg>
               </div>
               <div>
-                <h2 className="text-xl font-bold text-foreground">Link Details</h2>
-                <p className="text-sm text-muted-foreground">Update destination, expiration, and options</p>
+                <h2 className="text-xl font-bold text-foreground">
+                  Link Details
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  Update destination, expiration, and options
+                </p>
               </div>
             </div>
           </div>
