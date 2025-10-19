@@ -51,7 +51,13 @@ function LoginForm() {
             <p className="mt-2 text-muted-foreground">{email}</p>
             <div className="mt-8 flex flex-col gap-3">
               <Button
-                onClick={() => router.push(redirect)}
+                onClick={() => {
+                  try {
+                    router.replace(redirect);
+                  } catch {
+                    window.location.href = redirect;
+                  }
+                }}
                 className="w-full py-3 text-base"
               >
                 Continue to Dashboard
@@ -88,7 +94,11 @@ function LoginForm() {
     if (!res.ok) {
       setMessage({ type: "error", text: res.message || "Sign in failed" });
     } else {
-      router.push(redirect);
+      try {
+        router.replace(redirect);
+      } catch {
+        window.location.href = redirect;
+      }
     }
   };
 
@@ -109,7 +119,10 @@ function LoginForm() {
     }
     setSubmitting(true);
     setMessage(null);
-    const res = await signUpWithPassword(form.email, form.password);
+    const callback = `${
+      window.location.origin
+    }/login?redirect=${encodeURIComponent(redirect)}`;
+    const res = await signUpWithPassword(form.email, form.password, callback);
     setSubmitting(false);
     if (res.ok) {
       setMessage({
@@ -128,7 +141,10 @@ function LoginForm() {
     }
     setSubmitting(true);
     setMessage(null);
-    const res = await sendMagicLink(form.email);
+    const callback = `${
+      window.location.origin
+    }/login?redirect=${encodeURIComponent(redirect)}`;
+    const res = await sendMagicLink(form.email, callback);
     setSubmitting(false);
     if (res.ok) {
       setMessage({
