@@ -5,6 +5,7 @@ import { useLinks } from "@/hooks/use-links";
 import { cn } from "@/lib/utils";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
+import { isExpired } from "@/lib/expiration";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -31,12 +32,12 @@ export default function DashboardPage() {
     return null;
   }
 
-  const activeLinks = items.filter((link) => link.is_active);
+  const activeLinks = items.filter((link) => !isExpired(link));
   const totalClicks = items.reduce(
     (sum, link) => sum + (link.click_count || 0),
     0
   );
-  const expiredLinks = items.filter((link) => !link.is_active);
+  const expiredLinks = items.filter((link) => isExpired(link));
   const lastClickAt = items
     .map((l) => (l.last_clicked_at ? new Date(l.last_clicked_at).getTime() : 0))
     .reduce((a, b) => Math.max(a, b), 0);

@@ -5,6 +5,29 @@ import { sanitizeUrl } from "@/lib/url";
 import { updateLinkSchema } from "@/lib/validators/link";
 import { NextRequest } from "next/server";
 
+export async function GET(
+  request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+) {
+  try {
+    const params = await props.params;
+    const { userId } = await requireAuth(request);
+    const sb = getServiceClient();
+    const { data, error } = await sb
+      .from("links")
+      .select("*")
+      .eq("id", params.id)
+      .eq("owner_id", userId)
+      .single();
+    if (error || !data) return jsonError("Not found", 404);
+    return jsonSuccess(data);
+  } catch (e) {
+    if ((e as Error).message === "Unauthorized")
+      return jsonError("Unauthorized", 401);
+    return jsonError("Server error", 500);
+  }
+}
+
 export async function PATCH(
   request: NextRequest,
   props: { params: Promise<{ id: string }> }

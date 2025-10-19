@@ -2,6 +2,7 @@
 import { useAuth } from "@/hooks/use-auth";
 import type { Link } from "@/types/link";
 import { useCallback, useEffect, useState } from "react";
+import type { CreateLinkInput, UpdateLinkInput } from "@/lib/validators/link";
 
 interface LinksState {
   loading: boolean;
@@ -50,7 +51,7 @@ export function useLinks() {
   }, [userId, refresh]);
 
   const createLink = useCallback(
-    async (input: Record<string, unknown>) => {
+    async (input: CreateLinkInput) => {
       const headers = await getAuthHeaders();
       const res = await fetch("/api/links", {
         method: "POST",
@@ -66,7 +67,7 @@ export function useLinks() {
   );
 
   const updateLink = useCallback(
-    async (id: string, input: Record<string, unknown>) => {
+    async (id: string, input: UpdateLinkInput) => {
       const headers = await getAuthHeaders();
       const res = await fetch(`/api/links/${id}`, {
         method: "PATCH",

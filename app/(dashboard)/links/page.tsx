@@ -7,6 +7,7 @@ import type { Link as LinkType } from "@/types/link";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { isExpired } from "@/lib/expiration";
 
 export default function LinksPage() {
   const router = useRouter();
@@ -58,8 +59,8 @@ export default function LinksPage() {
   };
 
   const filteredItems = items.filter((link) => {
-    if (filter === "active") return link.is_active;
-    if (filter === "expired") return !link.is_active;
+    if (filter === "active") return !isExpired(link);
+    if (filter === "expired") return isExpired(link);
     return true;
   });
 
@@ -209,7 +210,7 @@ export default function LinksPage() {
                           <code className="rounded-lg bg-gradient-to-br from-muted to-background px-4 py-2 text-base font-semibold text-foreground shadow-sm">
                             /{link.slug}
                           </code>
-                          {link.is_active ? (
+                          {!isExpired(link) ? (
                             <span className="flex items-center gap-1.5 rounded-full bg-success/10 px-3 py-1 text-xs font-semibold text-success">
                               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-success"></span>
                               Active

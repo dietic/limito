@@ -15,13 +15,21 @@ export interface LinkFormValues {
 interface LinkFormProps {
   onSubmit?: (values: LinkFormValues) => void;
   loading?: boolean;
+  initialValues?: Partial<LinkFormValues>;
+  submitLabel?: string;
 }
 
-export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
-  const [mode, setMode] = useState<"by_date" | "by_clicks">("by_date");
+export default function LinkForm({ onSubmit, loading, initialValues, submitLabel }: LinkFormProps) {
+  const [mode, setMode] = useState<"by_date" | "by_clicks">(
+    initialValues?.mode ?? "by_date"
+  );
   const [values, setValues] = useState<LinkFormValues>({
-    destination_url: "",
-    mode: "by_date",
+    destination_url: initialValues?.destination_url ?? "",
+    fallback_url: initialValues?.fallback_url,
+    mode: initialValues?.mode ?? "by_date",
+    expires_at: initialValues?.expires_at,
+    click_limit: initialValues?.click_limit,
+    slug: initialValues?.slug,
   });
 
   return (
@@ -194,7 +202,13 @@ export default function LinkForm({ onSubmit, loading }: LinkFormProps) {
 
       <div className="pt-2">
         <Button type="submit" disabled={loading} className="w-full">
-          {loading ? "Creating link..." : "Create link"}
+          {loading
+            ? submitLabel
+              ? `${submitLabel}...`
+              : values.slug || initialValues?.destination_url
+              ? "Saving..."
+              : "Creating link..."
+            : submitLabel ?? (values.slug || initialValues?.destination_url ? "Save changes" : "Create link")}
         </Button>
       </div>
     </form>

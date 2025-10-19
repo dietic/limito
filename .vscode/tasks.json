@@ -73,6 +73,19 @@
 				"$eslint-stylish"
 			],
 			"group": "build"
+		},
+		{
+			"label": "lint",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"run",
+				"lint"
+			],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
 		}
 	]
 }
