@@ -286,7 +286,7 @@ export default function Page() {
                 className="group relative rounded-2xl border border-border bg-card p-8 shadow-sm transition hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10"
               >
                 <div
-                  className={`flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${f.color} text-white shadow-lg`}
+                  className={`flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${f.color} text-primary-foreground shadow-lg`}
                 >
                   {f.icon}
                 </div>

@@ -127,7 +127,7 @@ export default function LinksPage() {
           <div className="mt-12 text-center">
             <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-accent shadow-2xl shadow-primary/30">
               <svg
-                className="h-12 w-12 text-white"
+                className="h-12 w-12 text-primary-foreground"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

@@ -130,7 +130,7 @@ export default function NewLinkPage() {
             <div className="flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/30">
                 <svg
-                  className="h-6 w-6 text-white"
+                  className="h-6 w-6 text-primary-foreground"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
