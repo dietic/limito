@@ -5,95 +5,95 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 222.2 47.4% 11.2%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 222.2 47.4% 11.2%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 222.2 47.4% 11.2%;
 
-    /* Primary - Blue */
-    --primary: 221.2 83.2% 53.3%;
+    /* Primary - Crisp Blue */
+    --primary: 226 71% 55%;
     --primary-foreground: 210 40% 98%;
 
-    /* Secondary - Slate/Gray */
-    --secondary: 215 20% 65%;
+    /* Secondary - Subtle Gray (surfaces) */
+    --secondary: 220 14% 96%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
-    /* Muted - Light Gray */
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted - Neutral UI fills */
+    --muted: 220 16% 96%;
+    --muted-foreground: 220 10% 40%;
 
-    /* Accent - Coral/Orange */
-    --accent: 14 100% 57%;
+    /* Accent - Violet for premium feel */
+    --accent: 263 83% 58%;
     --accent-foreground: 0 0% 100%;
 
-    /* Destructive - Red */
-    --destructive: 0 84.2% 60.2%;
+    /* Destructive - Confident Red */
+    --destructive: 358 75% 54%;
     --destructive-foreground: 210 40% 98%;
 
-    /* Success - Emerald */
-    --success: 142.1 76.2% 36.3%;
+    /* Success - Emerald/Teal */
+    --success: 151 55% 40%;
     --success-foreground: 0 0% 100%;
 
     /* Warning - Amber */
-    --warning: 38 92% 50%;
+    --warning: 40 95% 50%;
     --warning-foreground: 0 0% 100%;
 
-    /* Info - Cyan */
-    --info: 188.7 94.5% 42.7%;
+    /* Info - Azure */
+    --info: 206 89% 54%;
     --info-foreground: 0 0% 100%;
 
     /* Borders & Inputs */
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --border: 220 16% 90%;
+    --input: 220 16% 90%;
+    --ring: 226 71% 55%;
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 224 14% 10%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 224 14% 10%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 224 14% 10%;
     --popover-foreground: 210 40% 98%;
 
-    /* Primary - Lighter Blue */
-    --primary: 217.2 91.2% 59.8%;
+    /* Primary - Vibrant Blue */
+    --primary: 226 70% 60%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
-    /* Secondary - Dark Slate */
-    --secondary: 217.2 32.6% 17.5%;
+    /* Secondary - Deep Slate */
+    --secondary: 224 14% 18%;
     --secondary-foreground: 210 40% 98%;
 
-    /* Muted - Dark Gray */
-    --muted: 217.2 32.6% 17.5%;
+    /* Muted - Dark Surfaces */
+    --muted: 224 14% 18%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    /* Accent - Lighter Coral */
-    --accent: 14 90% 65%;
+    /* Accent - Electric Violet */
+    --accent: 263 83% 65%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
-    /* Destructive - Darker Red */
-    --destructive: 0 62.8% 30.6%;
+    /* Destructive - Controlled Red */
+    --destructive: 358 70% 40%;
     --destructive-foreground: 210 40% 98%;
 
-    /* Success - Darker Emerald */
-    --success: 142.1 70.6% 45.3%;
+    /* Success - Emerald/Teal */
+    --success: 151 55% 45%;
     --success-foreground: 0 0% 100%;
 
-    /* Warning - Darker Amber */
-    --warning: 38 84% 60%;
+    /* Warning - Amber */
+    --warning: 40 90% 55%;
     --warning-foreground: 222.2 47.4% 11.2%;
 
-    /* Info - Darker Cyan */
-    --info: 188.7 85% 50%;
+    /* Info - Azure */
+    --info: 206 89% 58%;
     --info-foreground: 222.2 47.4% 11.2%;
 
     /* Borders & Inputs */
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --border: 224 14% 18%;
+    --input: 224 14% 18%;
+    --ring: 226 70% 60%;
   }
 }
 
