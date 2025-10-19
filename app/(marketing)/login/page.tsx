@@ -25,6 +25,16 @@ function LoginForm() {
   } | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
+  // Auto-redirect when already authenticated
+  if (typeof window !== "undefined" && userId) {
+    // Best-effort immediate redirect; UI below serves as a fallback if navigation is blocked
+    try {
+      router.replace(redirect);
+    } catch {
+      window.location.href = redirect;
+    }
+  }
+
   if (userId) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-muted px-6">

@@ -44,8 +44,8 @@ export async function POST(request: NextRequest) {
       return jsonError('Free plan limit reached', 403)
     }
 
-    const rl = await allowAndIncrement('create_link', `user:${userId}`, config.plans.free.dailyCreations, 24 * 60 * 60 * 1000, sb)
-    if (!rl.allowed) return jsonError('Daily creation limit reached', 429)
+  const rl = await allowAndIncrement('create_link', `user:${userId}`, config.plans.free.dailyCreations, 24 * 60 * 60 * 1000, sb)
+  if (!rl.allowed) return jsonError('Daily creation limit reached', { status: 429, headers: { 'Retry-After': '86400' } })
 
     let slug = parsed.data.slug?.toLowerCase().trim() || ''
     if (slug && !isValidCustomSlug(slug)) return jsonError('Invalid slug', 400)
