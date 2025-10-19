@@ -1,10 +1,19 @@
 "use client";
-import { useState } from "react";
 import { buttonVariants } from "@/components/ui/button";
+import { useAbVariant } from "@/lib/ab";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 export default function PricingSection() {
-  const [yearly, setYearly] = useState(true);
+  const priceDefault = useAbVariant(
+    "pricing_default",
+    ["monthly", "yearly"],
+    "yearly"
+  );
+  const [yearly, setYearly] = useState(priceDefault === "yearly");
+  useEffect(() => {
+    setYearly(priceDefault === "yearly");
+  }, [priceDefault]);
 
   const plans = [
     {
@@ -22,23 +31,40 @@ export default function PricingSection() {
       highlight: false,
     },
     {
+      name: "Plus",
+      monthly: 6,
+      yearly: 60,
+      description: "More headroom for active projects and campaigns.",
+      features: [
+        "Higher limits",
+        "Priority redirect capacity",
+        "Click trends (24h)",
+        "Email support (soon)",
+      ],
+      cta: { label: "Join waitlist", href: "/login" },
+      highlight: true,
+    },
+    {
       name: "Pro",
       monthly: 12,
       yearly: 120,
       description: "For power users and teams who need higher limits.",
       features: [
-        "Higher limits",
-        "Priority redirects",
+        "Max limits",
+        "Fastest redirects",
         "Advanced analytics (soon)",
         "Priority support (soon)",
       ],
       cta: { label: "Join waitlist", href: "/login" },
-      highlight: true,
+      highlight: false,
     },
   ];
 
   return (
-    <section id="pricing" className="border-t border-border bg-muted/40 px-6 py-24">
+    <section
+      id="pricing"
+      className="border-t border-border bg-muted/40 px-6 py-24"
+    >
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
@@ -79,7 +105,7 @@ export default function PricingSection() {
           )}
         </div>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2">
+  <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {plans.map((p) => {
             const price = yearly ? p.yearly : p.monthly;
             const suffix = yearly ? "/year" : "/mo";
@@ -88,8 +114,7 @@ export default function PricingSection() {
                 key={p.name}
                 className={cn(
                   "relative rounded-2xl border border-border bg-card p-8 shadow-sm",
-                  p.highlight &&
-                    "ring-1 ring-primary/40 shadow-primary/10"
+                  p.highlight && "ring-1 ring-primary/40 shadow-primary/10"
                 )}
               >
                 {p.highlight && (
@@ -125,7 +150,10 @@ export default function PricingSection() {
                   <a
                     href={p.cta.href}
                     className={cn(
-                      buttonVariants({ variant: p.highlight ? "default" : "outline", size: "lg" }),
+                      buttonVariants({
+                        variant: p.highlight ? "default" : "outline",
+                        size: "lg",
+                      }),
                       "w-full"
                     )}
                   >

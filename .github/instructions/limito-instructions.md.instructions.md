@@ -201,6 +201,9 @@ STRIPE_WEBHOOK_SECRET=
 - `lib/expiration.ts` - Link expiration logic (by date or clicks)
 - `app/api/links/route.ts` - Create/list links endpoints
 - `app/r/[slug]/route.ts` - Edge runtime redirect handler
+ - `components/pricing-section.tsx` - Landing pricing with monthly/yearly toggle
+ - `components/faq-section.tsx` - Landing FAQ accordion
+ - `lib/ab.ts` - Minimal client A/B testing helper (query override + localStorage)
 
 ## Design Philosophy
 
@@ -209,6 +212,7 @@ Build for **simplicity, speed, and premium feel**:
 - Gradients, smooth shadows, subtle animations
 - Clear, benefit-driven copy (not clever, but confident)
 - Every view answers: "What can I do here?"
+- Landing must include Pricing and FAQ sections for clarity and conversion. Pricing supports a monthly/yearly toggle and may default via A/B testing (`useAbVariant`).
 - Launch before perfection - MVP first, iterate fast
 
 ## Role Expectations and Quality Bar

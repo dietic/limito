@@ -190,6 +190,8 @@ No single-file blobs. No unstructured folders.
 - Copy/QR functionality.
 - Light/dark theme toggle.
 - Pricing section on landing page with Monthly/Yearly toggle. Keep copy simple and benefits-driven. Use shadcn tokens and accessible contrast. Keep CTAs wired to /login or checkout when available.
+- FAQ section with 5–7 concise questions (limits, analytics, redirects speed, privacy, expiry behavior). Use lightweight accordion and tokenized styles.
+- A/B testing: it’s acceptable to default Pricing toggle via a simple client-side variant (`useAbVariant`) with query param overrides (`?ab_pricing_default=yearly|monthly`) and localStorage persistence.
 
 **Deferred (v2)**
 
