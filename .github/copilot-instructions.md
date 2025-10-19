@@ -117,6 +117,14 @@ pnpm test             # Run Vitest unit tests
 3. Verify no unused imports, no TODOs, no console.logs
 4. Atomic commits: `feat:`, `fix:`, `refactor:`, `chore:`
 
+### Commit Approval Policy
+
+- Do not commit immediately after making changes.
+- After implementing changes, run `pnpm run lint`, `pnpm build`, and `pnpm test` locally.
+- Provide a concise summary of changes, verification results (lint/build/tests), and a diff overview if helpful.
+- Wait for explicit user approval before staging and committing.
+- When approved, commit atomically with a descriptive message and reference any related tasks.
+
 ### Database Migrations
 
 - All schema changes via `supabase/migrations/*.sql`

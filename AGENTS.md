@@ -384,6 +384,13 @@ STRIPE_WEBHOOK_SECRET=
 - **Pre-deploy checks:** run `pnpm run lint && pnpm run test`.
 - **No direct pushes** to `main`.
 
+### Commit Gating (Approval Required)
+
+- After changes are implemented, do not commit immediately.
+- First run: `pnpm run lint`, `pnpm build`, and `pnpm test` to ensure zero errors.
+- Share a short summary of edits and verification status with the user.
+- Proceed to commit only after explicit user approval.
+
 ---
 
 ## 🧠 Quality Principles
