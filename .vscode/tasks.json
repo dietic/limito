@@ -99,6 +99,31 @@
 				"$eslint-stylish"
 			],
 			"group": "build"
+		},
+		{
+			"label": "lint",
+			"type": "shell",
+			"command": "pnpm",
+			"args": [
+				"run",
+				"lint"
+			],
+			"problemMatcher": [
+				"$eslint-stylish"
+			],
+			"group": "build"
+		},
+		{
+			"label": "build-and-test",
+			"type": "shell",
+			"command": "bash",
+			"args": [
+				"-lc",
+				"pnpm build && pnpm test"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
 		}
 	]
 }

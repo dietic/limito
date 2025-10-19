@@ -3,8 +3,30 @@ import type { ReactNode } from "react";
 import "../styles/globals.css";
 
 export const metadata = {
-  title: "Limi.to",
-  description: "The cleanest way to create links that expire when you want.",
+  metadataBase: new URL(process.env["APP_URL"] || "http://localhost:3000"),
+  title: {
+    default: "Limi.to — Expiring links, done right",
+    template: "%s — Limi.to",
+  },
+  description:
+    "Create links that automatically expire by date or clicks. Simple, fast, privacy-first.",
+  openGraph: {
+    title: "Limi.to — Expiring links, done right",
+    description:
+      "Create links that automatically expire by date or clicks. Simple, fast, privacy-first.",
+    url: "/",
+    siteName: "Limi.to",
+    images: [{ url: "/icon.svg", width: 256, height: 256, alt: "Limi.to" }],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Limi.to — Expiring links, done right",
+    description:
+      "Create links that automatically expire by date or clicks. Simple, fast, privacy-first.",
+    images: ["/icon.svg"],
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
