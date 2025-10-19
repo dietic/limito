@@ -18,7 +18,9 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Fix use-links.ts authHeaders implementation (critical bug - useMemo with async)
 - [x] Create /links/page.tsx to display user's links list
 - [ ] Edit page UI (prefill form, save)
-- [x] Dashboard list table with pagination and copy-to-clipboard
+- [x] Copy-to-clipboard with visual feedback
+- [ ] Pagination on links list
+- [x] Filter tabs: All / Active / Expired
 - [x] Empty/Loading/Error UI states wired to hooks
 
 ## 3) Redirects
@@ -33,13 +35,14 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] DB-backed counters table with TTL windows
 - [x] Enforce create per user/day
 - [x] Enforce redirects per IP/min and global per slug/min
-- [ ] Return informative `429` JSON for API requests
-- [ ] Expose `Retry-After` header where relevant
+- [x] Return informative `429` JSON for API requests (create link)
+- [ ] Expose `Retry-After` header where relevant (create & redirects)
 
 ## 5) Analytics
 
 - [x] Basic analytics endpoint (click_count, last_clicked_at)
-- [ ] Simple dashboard card: total clicks + last click date
+- [x] Dashboard card: total clicks
+- [ ] Show last click date (latest across links) in dashboard
 - [ ] Add small trends: last 24h count (optional v1)
 
 ## 6) UI/UX
@@ -49,10 +52,11 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Minimal dashboard pages and LinkForm
 - [x] Add route protection middleware for dashboard routes
 - [x] Add loading/error states to dashboard and links pages
-- [x] Improve landing page with better copy and CTAs
+- [x] Improve landing page with better copy and CTAs (modern SaaS hero/features/CTA)
+- [x] Tokenize pages to theme tokens (no hardcoded colors)
 - [ ] Theme toggle (light/dark)
 - [ ] Mobile-first pass at 360px viewport
-- [ ] Branded expired page content polish
+- [ ] Branded expired page content polish (use theme tokens, match branding)
 - [x] Accessible form labels, focus states, and keyboard navigation
 
 ## 7) Validation & Types
@@ -85,7 +89,8 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 
 - [x] App icon placeholder
 - [ ] Logo + favicon (replace placeholder)
-- [ ] Expired-page copy and landing blurb polishing
+- [x] Landing blurb polishing
+- [ ] Expired-page copy (tone, clarity)
 - [ ] Privacy & ToS final copy
 
 ## 12) Payments (Deferred v2)
@@ -105,6 +110,20 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [ ] API keys management UI
 
 ## 15) Custom Domains (Deferred v2)
+
+-
+
+## 16) Chores & Docs
+
+- [x] Always-on instructions aligned (Copilot + AGENTS)
+- [x] Commit gating policy documented and enforced
+- [x] Extend color tokens: success, warning, info
+- [x] Add Playwright artifacts to .gitignore
+- [x] Middleware protects `/dashboard` and `/links` via Supabase Auth
+- [x] Standardize API responses across routes (jsonSuccess/jsonError)
+- [x] Env var sanity checks for service clients
+- [ ] Add "Definition of Done" to instructions
+- [ ] Add "Token usage primer" to instructions
 
 - [ ] Domain verification flow
 - [ ] Redirect route handling for custom hostnames
