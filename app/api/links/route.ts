@@ -33,7 +33,9 @@ export async function GET(request: NextRequest) {
       .order("created_at", { ascending: false });
     if (error) {
       const errMsg = String((error as { message?: string }).message || "");
-      const isMissingTable = errMsg.includes("relation") && errMsg.includes("links");
+      const isMissingTable =
+        (errMsg.toLowerCase().includes("relation") && errMsg.toLowerCase().includes("links")) ||
+        errMsg.toLowerCase().includes("schema cache");
       return jsonError(
         process.env.NODE_ENV === "production"
           ? "Failed to fetch links"

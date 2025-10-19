@@ -128,7 +128,14 @@ export default function LinksPage() {
                 clipRule="evenodd"
               />
             </svg>
-            <span className="text-sm">{error}</span>
+            <div className="text-sm">
+              <div>{error}</div>
+              {(/Database not initialized/i.test(error) || /schema cache/i.test(error)) && (
+                <div className="mt-2 text-xs text-destructive/90">
+                  Tip: Apply Supabase migrations to create required tables. You can use the Supabase SQL editor to run the files in <code className="rounded bg-destructive/20 px-1 py-0.5">supabase/migrations</code>.
+                </div>
+              )}
+            </div>
           </div>
         )}
 
