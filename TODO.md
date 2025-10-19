@@ -53,6 +53,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Add route protection middleware for dashboard routes
 - [x] Add loading/error states to dashboard and links pages
 - [x] Improve landing page with better copy and CTAs (modern SaaS hero/features/CTA)
+- [x] Pricing section with monthly/yearly toggle
 - [x] Tokenize pages to theme tokens (no hardcoded colors)
 - [ ] Theme toggle (light/dark)
 - [ ] Mobile-first pass at 360px viewport

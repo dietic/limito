@@ -189,6 +189,7 @@ No single-file blobs. No unstructured folders.
 - Branded “link expired” page.
 - Copy/QR functionality.
 - Light/dark theme toggle.
+- Pricing section on landing page with Monthly/Yearly toggle. Keep copy simple and benefits-driven. Use shadcn tokens and accessible contrast. Keep CTAs wired to /login or checkout when available.
 
 **Deferred (v2)**
 

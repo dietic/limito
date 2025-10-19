@@ -1,3 +1,4 @@
+import Pricing from "@/components/pricing-section";
 export default function Page() {
   return (
     <div className="relative min-h-screen bg-background">
@@ -26,6 +27,12 @@ export default function Page() {
                 className="text-sm font-medium text-muted-foreground hover:text-foreground"
               >
                 Sign in
+              </a>
+              <a
+                href="#pricing"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground"
+              >
+                Pricing
               </a>
               <a
                 href="/login"
@@ -299,6 +306,9 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+  {/* Pricing Section */}
+  <Pricing />
 
       {/* How it works */}
       <section id="how-it-works" className="px-6 py-24">
