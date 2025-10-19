@@ -259,6 +259,8 @@ export default function Page() {
                 description:
                   "No pixel soup. Just what you need to manage links.",
                 color: "from-muted to-muted/80",
+                iconText: "text-foreground",
+                ring: true,
                 icon: (
                   <svg
                     className="h-6 w-6"
@@ -302,7 +304,11 @@ export default function Page() {
                 className="group relative rounded-2xl border border-border bg-card p-8 shadow-sm transition hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10"
               >
                 <div
-                  className={`flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${f.color} text-primary-foreground shadow-lg`}
+                  className={`flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${
+                    f.color
+                  } ${f.iconText ?? "text-primary-foreground"} shadow-lg ${
+                    f.ring ? "ring-1 ring-border/70" : ""
+                  }`}
                 >
                   {f.icon}
                 </div>
