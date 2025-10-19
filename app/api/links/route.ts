@@ -11,13 +11,38 @@ import { NextRequest } from "next/server";
 export async function GET(request: NextRequest) {
   try {
     const { userId } = await requireAuth(request);
-    const sb = getServiceClient();
+    let sb;
+    try {
+      sb = getServiceClient();
+    } catch (e) {
+      const msg = (e as Error).message || "";
+      if (msg.includes("SUPABASE_SERVICE_ROLE_KEY")) {
+        return jsonError(
+          process.env.NODE_ENV === "production"
+            ? "Server error"
+            : "Server not configured: SUPABASE_SERVICE_ROLE_KEY is missing",
+          500
+        );
+      }
+      return jsonError("Server error", 500);
+    }
     const { data, error } = await sb
       .from("links")
       .select("*")
       .eq("owner_id", userId)
       .order("created_at", { ascending: false });
-    if (error) return jsonError("Failed to fetch links", 500);
+    if (error) {
+      const errMsg = String((error as { message?: string }).message || "");
+      const isMissingTable = errMsg.includes("relation") && errMsg.includes("links");
+      return jsonError(
+        process.env.NODE_ENV === "production"
+          ? "Failed to fetch links"
+          : isMissingTable
+          ? "Database not initialized: run Supabase migrations"
+          : `Failed to fetch links${errMsg ? ": " + errMsg : ""}`,
+        500
+      );
+    }
     return jsonSuccess(data);
   } catch (e) {
     if ((e as Error).message === "Unauthorized")
@@ -34,7 +59,21 @@ export async function POST(request: NextRequest) {
     if (!parsed.success)
       return jsonError(parsed.error.errors[0]?.message || "Invalid input", 400);
 
-    const sb = getServiceClient();
+    let sb;
+    try {
+      sb = getServiceClient();
+    } catch (e) {
+      const msg = (e as Error).message || "";
+      if (msg.includes("SUPABASE_SERVICE_ROLE_KEY")) {
+        return jsonError(
+          process.env.NODE_ENV === "production"
+            ? "Server error"
+            : "Server not configured: SUPABASE_SERVICE_ROLE_KEY is missing",
+          500
+        );
+      }
+      return jsonError("Server error", 500);
+    }
 
     const { count: activeCount } = await sb
       .from("links")
