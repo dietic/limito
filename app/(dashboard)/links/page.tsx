@@ -7,17 +7,25 @@ import { cn } from "@/lib/utils";
 import type { Link as LinkType } from "@/types/link";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 export default function LinksPage() {
   const router = useRouter();
   const { userId, loading: authLoading } = useAuth();
-  const { items, loading, error, deleteLink, refresh } = useLinks();
+  const {
+    items,
+    loading,
+    error,
+    deleteLink,
+    refresh,
+    total,
+    limit,
+    offset,
+    hasMore,
+  } = useLinks({ limit: 10 });
   const [copying, setCopying] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | "active" | "expired">("all");
-  const [page, setPage] = useState(0);
-  const [pageSize] = useState(10);
 
   const copyToClipboard = async (slug: string) => {
     setCopying(slug);
@@ -50,16 +58,8 @@ export default function LinksPage() {
     [items, filter]
   );
 
-  // Reset to first page when filters or data change
-  useEffect(() => {
-    setPage(0);
-  }, [filter, items.length]);
-
-  const pageCount = Math.max(1, Math.ceil(filteredItems.length / pageSize));
-  const clampedPage = Math.min(page, pageCount - 1);
-  const pageStart = clampedPage * pageSize;
-  const pageEnd = Math.min(pageStart + pageSize, filteredItems.length);
-  const pageItems = filteredItems.slice(pageStart, pageEnd);
+  const pageFrom = (offset ?? 0) + (filteredItems.length > 0 ? 1 : 0);
+  const pageTo = (offset ?? 0) + filteredItems.length;
 
   if (authLoading) {
     return (
@@ -90,7 +90,9 @@ export default function LinksPage() {
             <div>
               <h1 className="text-3xl font-bold text-foreground">Your Links</h1>
               <p className="mt-1 text-muted-foreground">
-                {items.length} {items.length === 1 ? "link" : "links"} total
+                {filter === "all" && typeof total === "number"
+                  ? `${total} ${total === 1 ? "link" : "links"} total`
+                  : `${filteredItems.length} ${filteredItems.length === 1 ? "result" : "results"} on this page`}
               </p>
             </div>
             <div className="flex gap-3">
@@ -219,7 +221,7 @@ export default function LinksPage() {
                     : "text-muted-foreground hover:bg-muted"
                 }`}
               >
-                Active ({items.filter((l) => l.is_active).length})
+                Active ({items.filter((l) => !isExpired(l)).length})
               </button>
               <button
                 onClick={() => setFilter("expired")}
@@ -229,13 +231,13 @@ export default function LinksPage() {
                     : "text-muted-foreground hover:bg-muted"
                 }`}
               >
-                Expired ({items.filter((l) => !l.is_active).length})
+                Expired ({items.filter((l) => isExpired(l)).length})
               </button>
             </div>
 
-            {/* Links Grid (paginated) */}
+            {/* Links Grid (server-paginated) */}
             <div className="space-y-3">
-              {pageItems.map((link: LinkType) => (
+              {filteredItems.map((link: LinkType) => (
                 <div
                   key={link.id}
                   className="group overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all hover:shadow-xl"
@@ -432,27 +434,24 @@ export default function LinksPage() {
               </div>
             )}
 
-            {/* Pagination Controls */}
+            {/* Pagination Controls (server) */}
             {filteredItems.length > 0 && (
               <div className="mt-6 flex flex-col items-center justify-between gap-3 rounded-xl border border-border bg-card p-3 text-sm shadow-sm sm:flex-row">
                 <div className="text-muted-foreground">
-                  Showing{" "}
-                  <span className="font-semibold text-foreground">
-                    {filteredItems.length === 0 ? 0 : pageStart + 1}
-                  </span>{" "}
-                  –{" "}
-                  <span className="font-semibold text-foreground">
-                    {pageEnd}
-                  </span>{" "}
-                  of{" "}
-                  <span className="font-semibold text-foreground">
-                    {filteredItems.length}
-                  </span>
+                  Showing <span className="font-semibold text-foreground">{pageFrom || 0}</span>
+                  {" "}–{" "}
+                  <span className="font-semibold text-foreground">{pageTo}</span>
+                  {filter === "all" && typeof total === "number" && (
+                    <>
+                      {" "}of{" "}
+                      <span className="font-semibold text-foreground">{total}</span>
+                    </>
+                  )}
                 </div>
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => setPage((p) => Math.max(0, p - 1))}
-                    disabled={clampedPage === 0}
+                    onClick={() => refresh({ limit: limit ?? 10, offset: Math.max(0, (offset ?? 0) - (limit ?? 10)) })}
+                    disabled={loading || (offset ?? 0) === 0}
                     className={cn(
                       "rounded-lg border border-border bg-card px-3 py-2 font-medium text-foreground transition-all hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
                     )}
@@ -461,17 +460,15 @@ export default function LinksPage() {
                     ← Prev
                   </button>
                   <div className="rounded-lg border border-border bg-background px-3 py-2 text-muted-foreground">
-                    Page{" "}
-                    <span className="font-semibold text-foreground">
-                      {clampedPage + 1}
-                    </span>{" "}
-                    / {pageCount}
+                    {typeof total === "number" && typeof limit === "number" ? (
+                      <>Page <span className="font-semibold text-foreground">{Math.floor(((offset ?? 0) / limit) + 1)}</span> / {Math.max(1, Math.ceil(total / limit))}</>
+                    ) : (
+                      <>Page</>
+                    )}
                   </div>
                   <button
-                    onClick={() =>
-                      setPage((p) => Math.min(pageCount - 1, p + 1))
-                    }
-                    disabled={clampedPage >= pageCount - 1}
+                    onClick={() => refresh({ limit: limit ?? 10, offset: (offset ?? 0) + (limit ?? 10) })}
+                    disabled={loading || !hasMore}
                     className={cn(
                       "rounded-lg border border-border bg-card px-3 py-2 font-medium text-foreground transition-all hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
                     )}
