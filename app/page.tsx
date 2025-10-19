@@ -1,5 +1,5 @@
-import Pricing from "@/components/pricing-section";
 import Faq from "@/components/faq-section";
+import Pricing from "@/components/pricing-section";
 export default function Page() {
   return (
     <div className="relative min-h-screen bg-background">

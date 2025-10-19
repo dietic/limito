@@ -38,12 +38,17 @@ export default function FaqSection() {
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2">
           {faqs.map((item) => (
-            <details key={item.q} className="group rounded-2xl border border-border bg-card p-6">
+            <details
+              key={item.q}
+              className="group rounded-2xl border border-border bg-card p-6"
+            >
               <summary className="cursor-pointer list-none font-semibold text-card-foreground">
                 <span className="mr-2 inline-block h-2 w-2 rounded-full bg-primary align-middle" />
                 {item.q}
               </summary>
-              <p className="mt-2 text-sm leading-6 text-muted-foreground">{item.a}</p>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                {item.a}
+              </p>
             </details>
           ))}
         </div>

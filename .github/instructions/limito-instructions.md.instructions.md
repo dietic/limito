@@ -201,9 +201,9 @@ STRIPE_WEBHOOK_SECRET=
 - `lib/expiration.ts` - Link expiration logic (by date or clicks)
 - `app/api/links/route.ts` - Create/list links endpoints
 - `app/r/[slug]/route.ts` - Edge runtime redirect handler
- - `components/pricing-section.tsx` - Landing pricing with monthly/yearly toggle
- - `components/faq-section.tsx` - Landing FAQ accordion
- - `lib/ab.ts` - Minimal client A/B testing helper (query override + localStorage)
+- `components/pricing-section.tsx` - Landing pricing with monthly/yearly toggle
+- `components/faq-section.tsx` - Landing FAQ accordion
+- `lib/ab.ts` - Minimal client A/B testing helper (query override + localStorage)
 
 ## Design Philosophy
 

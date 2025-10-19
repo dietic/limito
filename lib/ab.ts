@@ -5,9 +5,7 @@ type Variant = string;
 
 function readOverride(name: string): string | null {
   if (typeof window === "undefined") return null;
-  const param = new URLSearchParams(window.location.search).get(
-    `ab_${name}`
-  );
+  const param = new URLSearchParams(window.location.search).get(`ab_${name}`);
   return param;
 }
 
