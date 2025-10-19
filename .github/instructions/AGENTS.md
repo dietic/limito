@@ -1,3 +1,7 @@
+---
+applyTo: "**"
+---
+
 # Limi.to — MVP (v1) Development Blueprint
 
 > **Tagline:** “The cleanest way to create links that expire when you want.”
