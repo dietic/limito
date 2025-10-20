@@ -26,8 +26,7 @@ function LinksPageInner() {
   } = useLinks({
     limit: 10,
     filter:
-      (search.get("filter") as "all" | "active" | "expired" | null) ??
-      "all",
+      (search.get("filter") as "all" | "active" | "expired" | null) ?? "all",
     offset: Number(search.get("offset") ?? 0),
   });
   const [copying, setCopying] = useState<string | null>(null);
@@ -484,8 +483,15 @@ function LinksPageInner() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => {
-                      const nextOffset = Math.max(0, (offset ?? 0) - (limit ?? 10));
-                      refresh({ limit: limit ?? 10, offset: nextOffset, filter });
+                      const nextOffset = Math.max(
+                        0,
+                        (offset ?? 0) - (limit ?? 10)
+                      );
+                      refresh({
+                        limit: limit ?? 10,
+                        offset: nextOffset,
+                        filter,
+                      });
                     }}
                     disabled={loading || (offset ?? 0) === 0}
                     className={cn(
@@ -511,7 +517,11 @@ function LinksPageInner() {
                   <button
                     onClick={() => {
                       const nextOffset = (offset ?? 0) + (limit ?? 10);
-                      refresh({ limit: limit ?? 10, offset: nextOffset, filter });
+                      refresh({
+                        limit: limit ?? 10,
+                        offset: nextOffset,
+                        filter,
+                      });
                     }}
                     disabled={loading || !hasMore}
                     className={cn(

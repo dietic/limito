@@ -9,4 +9,3 @@ select
 from public.links l;
 
 -- RLS applies from base table `public.links`.
-

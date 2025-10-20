@@ -42,6 +42,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Filter tabs: All / Active / Expired
 - [x] Empty/Loading/Error UI states wired to hooks
       -> Done: Details/edit page added and expired filtering uses `isExpired()`.
+  -> Done: Server-side pagination + filtering with URL sync (limit/offset/filter)
 
 ## 3) Redirects
 
@@ -163,3 +164,4 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] README: Supabase setup and migrations instructions
 - [x] API DX: clearer dev error messages (missing service role key / schema not initialized)
 - [x] Real server-side pagination for links (API + hook + UI)
+- [x] Server-side filtering for links (API + hook + UI) and URL synchronization

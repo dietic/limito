@@ -30,6 +30,7 @@ export async function GET(request: NextRequest) {
     const sp = url.searchParams;
     const limitParam = sp.get("limit");
     const offsetParam = sp.get("offset");
+    const filter = (sp.get("filter") || "all").toLowerCase();
     const limit = limitParam
       ? Math.min(Math.max(parseInt(limitParam || "", 10) || 0, 1), 100)
       : null;
@@ -37,11 +38,18 @@ export async function GET(request: NextRequest) {
       ? Math.max(parseInt(offsetParam || "", 10) || 0, 0)
       : 0;
 
+    // Use view for server-computed expiration status
     let query = sb
-      .from("links")
+      .from(filter === "all" ? "links" : "links_with_status")
       .select("*", { count: limit ? "exact" : undefined })
       .eq("owner_id", userId)
       .order("created_at", { ascending: false });
+
+    if (filter === "active") {
+      query = query.eq("is_expired", false);
+    } else if (filter === "expired") {
+      query = query.eq("is_expired", true);
+    }
 
     if (limit) {
       query = query.range(offset, offset + (limit - 1));
