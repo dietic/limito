@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 export default function LinkDetailsPage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
-  const { userId, loading: authLoading } = useAuth();
+  const { userId, loading: authLoading, getAccessToken } = useAuth();
   const { updateLink, deleteLink, refresh } = useLinks();
 
   const [loading, setLoading] = useState(true);
@@ -24,7 +24,14 @@ export default function LinkDetailsPage() {
     let canceled = false;
     async function load() {
       try {
-        const res = await fetch(`/api/links/${params.id}`);
+        // Wait for auth to be ready and require a token
+        const token = await getAccessToken();
+        if (!token) {
+          throw new Error("Unauthorized");
+        }
+        const res = await fetch(`/api/links/${params.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         const payload = await res.json();
         if (!res.ok) throw new Error(payload.message || "Failed to load");
         if (!canceled) setLink(payload.data as Link);
@@ -34,11 +41,17 @@ export default function LinkDetailsPage() {
         if (!canceled) setLoading(false);
       }
     }
-    if (params?.id) load();
+    if (!params?.id) return;
+    if (authLoading) return; // wait for auth ready
+    if (!userId) {
+      setLoading(false);
+      return;
+    }
+    load();
     return () => {
       canceled = true;
     };
-  }, [params?.id]);
+  }, [params?.id, authLoading, userId, getAccessToken]);
 
   if (authLoading || loading) {
     return (
@@ -188,7 +201,17 @@ export default function LinkDetailsPage() {
               loading={saving}
               onSubmit={async (values) => {
                 setSaving(true);
-                const res = await updateLink(link.id, values);
+                const normalized = {
+                  ...values,
+                  // If user leaves slug empty => request regeneration by sending empty string
+                  slug:
+                    values.slug === undefined
+                      ? undefined
+                      : values.slug.trim().length > 0
+                      ? values.slug.trim()
+                      : "",
+                };
+                const res = await updateLink(link.id, normalized);
                 setSaving(false);
                 if (!res.ok) {
                   alert(res.message || "Failed to save changes");

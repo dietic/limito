@@ -1,5 +1,6 @@
 import { requireAuth } from "@/lib/auth";
 import { jsonError, jsonSuccess } from "@/lib/http";
+import { generateSlug, isValidCustomSlug } from "@/lib/slug";
 import { getServiceClient } from "@/lib/supabase";
 import { sanitizeUrl } from "@/lib/url";
 import { updateLinkSchema } from "@/lib/validators/link";
@@ -63,7 +64,16 @@ export async function PATCH(
         return jsonError("Invalid fallback URL", 400);
       payload["fallback_url"] = fb;
     }
-    if (parsed.data.slug) payload["slug"] = parsed.data.slug;
+    if (parsed.data.slug !== undefined) {
+      const raw = parsed.data.slug;
+      if (raw === "") {
+        // Regenerate a new random slug
+        payload["slug"] = generateSlug();
+      } else {
+        if (!isValidCustomSlug(raw)) return jsonError("Invalid slug", 400);
+        payload["slug"] = raw;
+      }
+    }
     if (parsed.data.mode) payload["mode"] = parsed.data.mode;
     if (parsed.data.expires_at !== undefined)
       payload["expires_at"] = parsed.data.expires_at;

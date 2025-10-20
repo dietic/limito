@@ -2,6 +2,9 @@ import { defineConfig, devices } from "@playwright/test";
 
 const base = process.env["APP_URL"] || "http://localhost:3000";
 const webCommand = process.env["PW_WEB_COMMAND"] || "pnpm dev";
+const noWebServer =
+  process.env["PW_NO_WEBSERVER"] === "1" ||
+  process.env["PW_NO_WEBSERVER"] === "true";
 
 export default defineConfig({
   testDir: "tests/e2e",
@@ -20,10 +23,12 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
   ],
-  webServer: {
-    command: webCommand,
-    url: base,
-    reuseExistingServer: true,
-    timeout: 120_000,
-  },
+  webServer: noWebServer
+    ? undefined
+    : {
+        command: webCommand,
+        url: base,
+        reuseExistingServer: true,
+        timeout: 120_000,
+      },
 });

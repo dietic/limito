@@ -163,7 +163,14 @@ export default function NewLinkPage() {
                 setLoading(true);
                 setError(null);
                 setSuccess(false);
-                const res = await createLink({ ...values });
+                const normalized = {
+                  ...values,
+                  slug:
+                    values.slug && values.slug.trim().length > 0
+                      ? values.slug.trim()
+                      : undefined,
+                };
+                const res = await createLink(normalized);
                 setLoading(false);
                 if (res.ok) {
                   setSuccess(true);
