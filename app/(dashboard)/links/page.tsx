@@ -12,6 +12,10 @@ import { Suspense, useEffect, useState } from "react";
 function LinksPageInner() {
   const router = useRouter();
   const search = useSearchParams();
+  const initialLimit = (() => {
+    const v = Number(search.get("limit") ?? 10);
+    return Number.isFinite(v) && v > 0 && v <= 100 ? v : 10;
+  })();
   const { userId, loading: authLoading } = useAuth();
   const {
     items,
@@ -20,11 +24,10 @@ function LinksPageInner() {
     deleteLink,
     refresh,
     total,
-    limit,
     offset,
     hasMore,
   } = useLinks({
-    limit: 10,
+    limit: initialLimit,
     filter:
       (search.get("filter") as "all" | "active" | "expired" | null) ?? "all",
     offset: Number(search.get("offset") ?? 0),
@@ -34,8 +37,9 @@ function LinksPageInner() {
   const [filter, setFilter] = useState<"all" | "active" | "expired">(
     (search.get("filter") as "all" | "active" | "expired") || "all"
   );
+  const [pageSize, setPageSize] = useState<number>(initialLimit);
 
-  // Keep URL in sync when filter or offset changes
+  // Keep URL in sync when filter, offset or page size changes
   useEffect(() => {
     const params = new URLSearchParams(search.toString());
     if (filter && filter !== "all") params.set("filter", filter);
@@ -43,10 +47,12 @@ function LinksPageInner() {
     if (typeof offset === "number" && offset > 0)
       params.set("offset", String(offset));
     else params.delete("offset");
+    if (typeof pageSize === "number" && pageSize > 0)
+      params.set("limit", String(pageSize));
     const qs = params.toString();
     router.replace(qs ? `/links?${qs}` : "/links");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filter, offset]);
+  }, [filter, offset, pageSize]);
 
   const copyToClipboard = async (slug: string) => {
     setCopying(slug);
@@ -221,7 +227,7 @@ function LinksPageInner() {
               <button
                 onClick={() => {
                   setFilter("all");
-                  refresh({ limit: limit ?? 10, offset: 0, filter: "all" });
+                  refresh({ limit: pageSize, offset: 0, filter: "all" });
                 }}
                 className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
                   filter === "all"
@@ -234,7 +240,7 @@ function LinksPageInner() {
               <button
                 onClick={() => {
                   setFilter("active");
-                  refresh({ limit: limit ?? 10, offset: 0, filter: "active" });
+                  refresh({ limit: pageSize, offset: 0, filter: "active" });
                 }}
                 className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
                   filter === "active"
@@ -247,7 +253,7 @@ function LinksPageInner() {
               <button
                 onClick={() => {
                   setFilter("expired");
-                  refresh({ limit: limit ?? 10, offset: 0, filter: "expired" });
+                  refresh({ limit: pageSize, offset: 0, filter: "expired" });
                 }}
                 className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
                   filter === "expired"
@@ -480,15 +486,33 @@ function LinksPageInner() {
                     </>
                   )}
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
+                  <div className="hidden items-center gap-2 sm:flex">
+                    <span className="text-muted-foreground">Rows:</span>
+                    <div className="flex overflow-hidden rounded-lg border border-border bg-card">
+                      {[10, 25, 50].map((n) => (
+                        <button
+                          key={n}
+                          onClick={() => {
+                            setPageSize(n);
+                            refresh({ limit: n, offset: 0, filter });
+                          }}
+                          className={cn(
+                            "px-3 py-2 text-foreground transition-colors hover:bg-muted",
+                            n === pageSize && "bg-muted font-semibold"
+                          )}
+                          aria-pressed={n === pageSize}
+                        >
+                          {n}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                   <button
                     onClick={() => {
-                      const nextOffset = Math.max(
-                        0,
-                        (offset ?? 0) - (limit ?? 10)
-                      );
+                      const nextOffset = Math.max(0, (offset ?? 0) - pageSize);
                       refresh({
-                        limit: limit ?? 10,
+                        limit: pageSize,
                         offset: nextOffset,
                         filter,
                       });
@@ -502,13 +526,13 @@ function LinksPageInner() {
                     ← Prev
                   </button>
                   <div className="rounded-lg border border-border bg-background px-3 py-2 text-muted-foreground">
-                    {typeof total === "number" && typeof limit === "number" ? (
+                    {typeof total === "number" && typeof pageSize === "number" ? (
                       <>
                         Page{" "}
                         <span className="font-semibold text-foreground">
-                          {Math.floor((offset ?? 0) / limit + 1)}
+                          {Math.floor((offset ?? 0) / pageSize + 1)}
                         </span>{" "}
-                        / {Math.max(1, Math.ceil(total / limit))}
+                        / {Math.max(1, Math.ceil(total / pageSize))}
                       </>
                     ) : (
                       <>Page</>
@@ -516,9 +540,9 @@ function LinksPageInner() {
                   </div>
                   <button
                     onClick={() => {
-                      const nextOffset = (offset ?? 0) + (limit ?? 10);
+                      const nextOffset = (offset ?? 0) + pageSize;
                       refresh({
-                        limit: limit ?? 10,
+                        limit: pageSize,
                         offset: nextOffset,
                         filter,
                       });
