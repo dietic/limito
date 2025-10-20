@@ -30,8 +30,10 @@ export function useAuth() {
         expiresAt && expiresAt > 0
           ? Math.max(0, expiresAt - Math.floor(Date.now() / 1000))
           : 60 * 60;
-      const secure = window.location.protocol === 'https:' ? '; secure' : '';
-      document.cookie = `${name}=${encodeURIComponent(token)}; path=/; max-age=${maxAge}; samesite=lax${secure}`;
+      const secure = window.location.protocol === "https:" ? "; secure" : "";
+      document.cookie = `${name}=${encodeURIComponent(
+        token
+      )}; path=/; max-age=${maxAge}; samesite=lax${secure}`;
     } catch {}
   }
 
