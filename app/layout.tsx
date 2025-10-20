@@ -1,7 +1,7 @@
 import ThemeProvider from "@/components/theme-provider";
+import { Analytics } from "@vercel/analytics/react";
 import type { ReactNode } from "react";
 import "../styles/globals.css";
-import { Analytics } from "@vercel/analytics/react";
 
 export const metadata = {
   metadataBase: new URL(process.env["APP_URL"] || "http://localhost:3000"),

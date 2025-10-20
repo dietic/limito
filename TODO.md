@@ -43,7 +43,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Empty/Loading/Error UI states wired to hooks
       -> Done: Details/edit page added and expired filtering uses `isExpired()`.
       -> Done: Server-side pagination + filtering with URL sync (limit/offset/filter)
-  -> Done: Server-side counts for All/Active/Expired tabs
+      -> Done: Server-side counts for All/Active/Expired tabs
 
 ## 3) Redirects
 

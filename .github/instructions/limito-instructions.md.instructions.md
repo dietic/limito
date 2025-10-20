@@ -234,3 +234,8 @@ Build for **simplicity, speed, and premium feel**:
 **Golden Rule**: If unsure about anything, ask - do not assume.
 **Golden Rule**: If unsure about anything, ask - do not assume.
 **Golden Rule**: If unsure about anything, ask - do not assume.
+**Golden Rule N.2**: Update the TODO after each implementation before asking my permission to commit.
+**Golden Rule N.2**: Update the TODO after each implementation before asking my permission to commit.
+**Golden Rule N.2**: Update the TODO after each implementation before asking my permission to commit.
+**Golden Rule N.2**: Update the TODO after each implementation before asking my permission to commit.
+**Golden Rule N.2**: Update the TODO after each implementation before asking my permission to commit.

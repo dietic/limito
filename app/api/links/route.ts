@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
       query = query.range(offset, offset + (limit - 1));
     }
 
-  const { data, error, count } = await query;
+    const { data, error, count } = await query;
     if (error) {
       const errMsg = String((error as { message?: string }).message || "");
       const isMissingTable =

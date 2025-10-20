@@ -11,7 +11,7 @@ applyTo: "**"
 
 ## 🧭 Overview
 
-Limi.to is a lightweight S## 🖌️ Visual Design Rules
+## 🖌️ Visual Design Rules
 
 - **Light and Dark themes** using shadcn/ui CSS variables.
 - Keep layout **minimal** but **visually professional** — clean shadows, subtle borders.

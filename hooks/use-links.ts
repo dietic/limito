@@ -72,7 +72,11 @@ export function useLinks(initial?: FetchOptions) {
             limit: data.limit as number,
             offset: data.offset as number,
             hasMore: data.hasMore as boolean,
-            counts: data.counts as { all?: number; active?: number; expired?: number },
+            counts: data.counts as {
+              all?: number;
+              active?: number;
+              expired?: number;
+            },
           });
         }
       } catch {
