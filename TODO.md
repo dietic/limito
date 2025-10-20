@@ -20,7 +20,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
   - Replace placeholder logo/favicon; finalize Privacy & Terms copy
 - [ ] Ops hygiene (optional for invite, recommended)
   - TTL cleanup for `rate_limits` windows; sweep old `click_events` beyond free-plan retention
-      -> Partial: added probabilistic cleanup in runtime (2% sampling) for both `rate_limits` and `click_events` on traffic paths
+    -> Partial: added probabilistic cleanup in runtime (2% sampling) for both `rate_limits` and `click_events` on traffic paths
 
 ## 1) Auth
 

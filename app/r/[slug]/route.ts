@@ -169,7 +169,8 @@ export async function GET(
   try {
     if (Math.random() < 0.02) {
       const cutoff = new Date(
-        Date.now() - config.plans.free.analyticsRetentionDays * 24 * 60 * 60 * 1000
+        Date.now() -
+          config.plans.free.analyticsRetentionDays * 24 * 60 * 60 * 1000
       ).toISOString();
       await sb
         .from("click_events")
