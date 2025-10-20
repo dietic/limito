@@ -41,7 +41,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Fix use-links.ts authHeaders implementation (critical bug - useMemo with async)
 - [x] Create /links/page.tsx to display user's links list
 - [x] Edit page UI (prefill form, save)
-  -> List page now includes an Edit button for direct navigation to the details page
+      -> List page now includes an Edit button for direct navigation to the details page
 - [x] Copy-to-clipboard with visual feedback
 - [x] Pagination on links list
 - [x] Filter tabs: All / Active / Expired
