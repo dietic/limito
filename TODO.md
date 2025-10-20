@@ -55,7 +55,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Fallback redirect or branded expired page
 - [x] Click counting and last_clicked_at update
 - [ ] Optimize redirect for <100ms (minimal data fields, early return)
-  -> Partial: reduced DB select to minimal fields used by redirect flow
+      -> Partial: reduced DB select to minimal fields used by redirect flow
 
 ## 4) Rate Limiting
 
@@ -84,10 +84,11 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Pricing section with monthly/yearly toggle
 - [x] Tokenize pages to theme tokens (no hardcoded colors)
 - [x] Theme toggle (light/dark)
-- [ ] Mobile-first pass at 360px viewport
+- [x] Mobile-first pass at 360px viewport
 - [ ] Branded expired page content polish (use theme tokens, match branding)
 - [x] Accessible form labels, focus states, and keyboard navigation
-      -> MVP: ensure nav “View” works, expired badges reflect real state, and marketing pages have baseline SEO metadata.
+  -> MVP: ensure nav “View” works, expired badges reflect real state, and marketing pages have baseline SEO metadata.
+  -> Done: polished /links and /links/new for small screens (stacked headers, wrapping tabs, responsive actions)
 
 ## 7) Validation & Types
 

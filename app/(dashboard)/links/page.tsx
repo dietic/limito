@@ -113,7 +113,7 @@ function LinksPageInner() {
       {/* Header */}
       <div className="border-b border-border bg-background/70 backdrop-blur-sm">
         <div className="mx-auto max-w-7xl px-6 py-6">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
             <div>
               <h1 className="text-3xl font-bold text-foreground">Your Links</h1>
               <p className="mt-1 text-muted-foreground">
@@ -124,10 +124,10 @@ function LinksPageInner() {
                     } on this page`}
               </p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:gap-3">
               <NextLink
                 href="/dashboard"
-                className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-muted hover:shadow-md"
+                className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-muted hover:shadow-md text-center"
               >
                 ← Dashboard
               </NextLink>
@@ -135,7 +135,7 @@ function LinksPageInner() {
                 href="/links/new"
                 className={cn(
                   buttonVariants({ variant: "default" }),
-                  "px-6 py-2 text-sm shadow-lg shadow-primary/30"
+                  "px-6 py-2 text-sm shadow-lg shadow-primary/30 text-center"
                 )}
               >
                 + Create Link
@@ -231,13 +231,13 @@ function LinksPageInner() {
         {!loading && items.length > 0 && (
           <>
             {/* Filter Tabs */}
-            <div className="mb-6 flex gap-2 rounded-xl border border-border bg-card p-1 shadow-sm">
+            <div className="mb-6 flex flex-wrap gap-2 rounded-xl border border-border bg-card p-1 shadow-sm sm:flex-nowrap">
               <button
                 onClick={() => {
                   setFilter("all");
                   refresh({ limit: pageSize, offset: 0, filter: "all" });
                 }}
-                className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
+                className={`flex-1 rounded-lg px-3 py-2 sm:px-4 text-sm font-medium transition-all ${
                   filter === "all"
                     ? "bg-primary text-primary-foreground shadow-md"
                     : "text-muted-foreground hover:bg-muted"
@@ -250,7 +250,7 @@ function LinksPageInner() {
                   setFilter("active");
                   refresh({ limit: pageSize, offset: 0, filter: "active" });
                 }}
-                className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
+                className={`flex-1 rounded-lg px-3 py-2 sm:px-4 text-sm font-medium transition-all ${
                   filter === "active"
                     ? "bg-success text-success-foreground shadow-md"
                     : "text-muted-foreground hover:bg-muted"
@@ -266,7 +266,7 @@ function LinksPageInner() {
                   setFilter("expired");
                   refresh({ limit: pageSize, offset: 0, filter: "expired" });
                 }}
-                className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
+                className={`flex-1 rounded-lg px-3 py-2 sm:px-4 text-sm font-medium transition-all ${
                   filter === "expired"
                     ? "bg-muted text-foreground shadow-md"
                     : "text-muted-foreground hover:bg-muted"
@@ -287,7 +287,7 @@ function LinksPageInner() {
                   className="group overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all hover:shadow-xl"
                 >
                   <div className="p-6">
-                    <div className="flex items-start justify-between">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                       <div className="min-w-0 flex-1">
                         {/* Slug & Status */}
                         <div className="flex items-center gap-3">
@@ -322,13 +322,16 @@ function LinksPageInner() {
                               d="M14 5l7 7m0 0l-7 7m7-7H3"
                             />
                           </svg>
-                          <span className="truncate font-medium">
+                          <span
+                            className="truncate font-medium"
+                            title={link.destination_url}
+                          >
                             {link.destination_url}
                           </span>
                         </div>
 
                         {/* Stats */}
-                        <div className="mt-4 flex items-center gap-6 text-sm">
+                        <div className="mt-4 flex flex-wrap items-center gap-4 text-sm sm:gap-6">
                           <div className="flex items-center gap-2 text-muted-foreground">
                             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10">
                               <svg
@@ -385,11 +388,11 @@ function LinksPageInner() {
                       </div>
 
                       {/* Actions */}
-                      <div className="ml-6 flex flex-col gap-2">
+                      <div className="ml-0 flex w-full flex-row gap-2 sm:ml-6 sm:w-auto sm:flex-col">
                         <button
                           onClick={() => copyToClipboard(link.slug)}
                           disabled={copying === link.slug}
-                          className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-muted hover:shadow-md disabled:opacity-50"
+                          className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-muted hover:shadow-md disabled:opacity-50 sm:flex-none"
                         >
                           {copying === link.slug ? (
                             <>
@@ -428,7 +431,7 @@ function LinksPageInner() {
                         <button
                           onClick={() => handleDelete(link.id)}
                           disabled={deleting === link.id}
-                          className="flex items-center gap-2 rounded-lg border border-destructive bg-card px-4 py-2 text-sm font-medium text-destructive shadow-sm transition-all hover:bg-destructive/10 hover:shadow-md disabled:opacity-50"
+                          className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-destructive bg-card px-4 py-2 text-sm font-medium text-destructive shadow-sm transition-all hover:bg-destructive/10 hover:shadow-md disabled:opacity-50 sm:flex-none"
                         >
                           <svg
                             className="h-4 w-4"

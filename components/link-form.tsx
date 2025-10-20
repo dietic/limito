@@ -32,8 +32,8 @@ export default function LinkForm({
     destination_url: initialValues?.destination_url ?? "",
     fallback_url: initialValues?.fallback_url,
     mode: initialValues?.mode ?? "by_date",
-    expires_at: initialValues?.expires_at,
-    click_limit: initialValues?.click_limit,
+  expires_at: initialValues?.expires_at,
+  click_limit: initialValues?.click_limit,
     slug: initialValues?.slug,
   });
 
@@ -73,7 +73,7 @@ export default function LinkForm({
         <label className="block text-sm font-medium text-foreground">
           Expiration Mode
         </label>
-        <div className="mt-2 flex gap-3">
+        <div className="mt-2 grid grid-cols-2 gap-3 sm:flex">
           <Button
             type="button"
             variant={mode === "by_date" ? "default" : "ghost"}
@@ -86,7 +86,7 @@ export default function LinkForm({
               }));
             }}
             disabled={loading}
-            className="flex-1"
+            className="w-full"
           >
             By date
           </Button>
@@ -102,7 +102,7 @@ export default function LinkForm({
               }));
             }}
             disabled={loading}
-            className="flex-1"
+            className="w-full"
           >
             By clicks
           </Button>
@@ -120,6 +120,7 @@ export default function LinkForm({
           <Input
             id="expires_at"
             type="datetime-local"
+            defaultValue={values.expires_at ? new Date(values.expires_at).toISOString().slice(0,16) : undefined}
             onChange={(e) =>
               setValues((v) => ({
                 ...v,
@@ -150,6 +151,7 @@ export default function LinkForm({
             min={1}
             step={1}
             placeholder="100"
+            defaultValue={values.click_limit ?? undefined}
             onChange={(e) =>
               setValues((v) => ({ ...v, click_limit: Number(e.target.value) }))
             }
@@ -174,6 +176,7 @@ export default function LinkForm({
           id="slug"
           type="text"
           placeholder="my-offer"
+          defaultValue={values.slug ?? ""}
           onChange={(e) => setValues((v) => ({ ...v, slug: e.target.value }))}
           disabled={loading}
           className="mt-1"
@@ -194,6 +197,7 @@ export default function LinkForm({
           id="fallback_url"
           type="url"
           placeholder="https://example.com/expired"
+          defaultValue={values.fallback_url ?? ""}
           onChange={(e) =>
             setValues((v) => ({ ...v, fallback_url: e.target.value }))
           }
