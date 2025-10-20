@@ -92,7 +92,9 @@ export default function LinksPage() {
               <p className="mt-1 text-muted-foreground">
                 {filter === "all" && typeof total === "number"
                   ? `${total} ${total === 1 ? "link" : "links"} total`
-                  : `${filteredItems.length} ${filteredItems.length === 1 ? "result" : "results"} on this page`}
+                  : `${filteredItems.length} ${
+                      filteredItems.length === 1 ? "result" : "results"
+                    } on this page`}
               </p>
             </div>
             <div className="flex gap-3">
@@ -438,19 +440,32 @@ export default function LinksPage() {
             {filteredItems.length > 0 && (
               <div className="mt-6 flex flex-col items-center justify-between gap-3 rounded-xl border border-border bg-card p-3 text-sm shadow-sm sm:flex-row">
                 <div className="text-muted-foreground">
-                  Showing <span className="font-semibold text-foreground">{pageFrom || 0}</span>
-                  {" "}–{" "}
-                  <span className="font-semibold text-foreground">{pageTo}</span>
+                  Showing{" "}
+                  <span className="font-semibold text-foreground">
+                    {pageFrom || 0}
+                  </span>{" "}
+                  –{" "}
+                  <span className="font-semibold text-foreground">
+                    {pageTo}
+                  </span>
                   {filter === "all" && typeof total === "number" && (
                     <>
-                      {" "}of{" "}
-                      <span className="font-semibold text-foreground">{total}</span>
+                      {" "}
+                      of{" "}
+                      <span className="font-semibold text-foreground">
+                        {total}
+                      </span>
                     </>
                   )}
                 </div>
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => refresh({ limit: limit ?? 10, offset: Math.max(0, (offset ?? 0) - (limit ?? 10)) })}
+                    onClick={() =>
+                      refresh({
+                        limit: limit ?? 10,
+                        offset: Math.max(0, (offset ?? 0) - (limit ?? 10)),
+                      })
+                    }
                     disabled={loading || (offset ?? 0) === 0}
                     className={cn(
                       "rounded-lg border border-border bg-card px-3 py-2 font-medium text-foreground transition-all hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
@@ -461,13 +476,24 @@ export default function LinksPage() {
                   </button>
                   <div className="rounded-lg border border-border bg-background px-3 py-2 text-muted-foreground">
                     {typeof total === "number" && typeof limit === "number" ? (
-                      <>Page <span className="font-semibold text-foreground">{Math.floor(((offset ?? 0) / limit) + 1)}</span> / {Math.max(1, Math.ceil(total / limit))}</>
+                      <>
+                        Page{" "}
+                        <span className="font-semibold text-foreground">
+                          {Math.floor((offset ?? 0) / limit + 1)}
+                        </span>{" "}
+                        / {Math.max(1, Math.ceil(total / limit))}
+                      </>
                     ) : (
                       <>Page</>
                     )}
                   </div>
                   <button
-                    onClick={() => refresh({ limit: limit ?? 10, offset: (offset ?? 0) + (limit ?? 10) })}
+                    onClick={() =>
+                      refresh({
+                        limit: limit ?? 10,
+                        offset: (offset ?? 0) + (limit ?? 10),
+                      })
+                    }
                     disabled={loading || !hasMore}
                     className={cn(
                       "rounded-lg border border-border bg-card px-3 py-2 font-medium text-foreground transition-all hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"

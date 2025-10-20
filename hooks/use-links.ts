@@ -31,48 +31,51 @@ export function useLinks(initial?: FetchOptions) {
     return token ? { Authorization: `Bearer ${token}` } : {};
   }, [getAccessToken]);
 
-  const refresh = useCallback(async (opts?: FetchOptions) => {
-    setState((s) => ({ ...s, loading: true, error: null }));
-    try {
-      const headers = await getAuthHeaders();
-      const params = new URLSearchParams();
-      const limit = opts?.limit ?? initial?.limit;
-      const offset = opts?.offset ?? initial?.offset;
-      if (limit) params.set("limit", String(limit));
-      if (typeof offset === "number" && offset > 0)
-        params.set("offset", String(offset));
-      const url = params.toString()
-        ? `/api/links?${params.toString()}`
-        : "/api/links";
-      const res = await fetch(url, { headers });
-      const payload = await res.json();
-      if (!res.ok) {
-        setState({
-          loading: false,
-          error: payload.message || "Failed to load",
-          items: [],
-        });
-        return;
+  const refresh = useCallback(
+    async (opts?: FetchOptions) => {
+      setState((s) => ({ ...s, loading: true, error: null }));
+      try {
+        const headers = await getAuthHeaders();
+        const params = new URLSearchParams();
+        const limit = opts?.limit ?? initial?.limit;
+        const offset = opts?.offset ?? initial?.offset;
+        if (limit) params.set("limit", String(limit));
+        if (typeof offset === "number" && offset > 0)
+          params.set("offset", String(offset));
+        const url = params.toString()
+          ? `/api/links?${params.toString()}`
+          : "/api/links";
+        const res = await fetch(url, { headers });
+        const payload = await res.json();
+        if (!res.ok) {
+          setState({
+            loading: false,
+            error: payload.message || "Failed to load",
+            items: [],
+          });
+          return;
+        }
+        // Back-compat: payload.data can be an array (old) or an object with items
+        const data = payload.data;
+        if (Array.isArray(data)) {
+          setState({ loading: false, error: null, items: data });
+        } else {
+          setState({
+            loading: false,
+            error: null,
+            items: (data.items as Link[]) ?? [],
+            total: data.total as number,
+            limit: data.limit as number,
+            offset: data.offset as number,
+            hasMore: data.hasMore as boolean,
+          });
+        }
+      } catch {
+        setState({ loading: false, error: "Network error", items: [] });
       }
-      // Back-compat: payload.data can be an array (old) or an object with items
-      const data = payload.data;
-      if (Array.isArray(data)) {
-        setState({ loading: false, error: null, items: data });
-      } else {
-        setState({
-          loading: false,
-          error: null,
-          items: (data.items as Link[]) ?? [],
-          total: data.total as number,
-          limit: data.limit as number,
-          offset: data.offset as number,
-          hasMore: data.hasMore as boolean,
-        });
-      }
-    } catch {
-      setState({ loading: false, error: "Network error", items: [] });
-    }
-  }, [getAuthHeaders, initial?.limit, initial?.offset]);
+    },
+    [getAuthHeaders, initial?.limit, initial?.offset]
+  );
 
   useEffect(() => {
     if (!userId) return;

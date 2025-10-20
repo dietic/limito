@@ -30,8 +30,12 @@ export async function GET(request: NextRequest) {
     const sp = url.searchParams;
     const limitParam = sp.get("limit");
     const offsetParam = sp.get("offset");
-    const limit = limitParam ? Math.min(Math.max(parseInt(limitParam || "", 10) || 0, 1), 100) : null;
-    const offset = offsetParam ? Math.max(parseInt(offsetParam || "", 10) || 0, 0) : 0;
+    const limit = limitParam
+      ? Math.min(Math.max(parseInt(limitParam || "", 10) || 0, 1), 100)
+      : null;
+    const offset = offsetParam
+      ? Math.max(parseInt(offsetParam || "", 10) || 0, 0)
+      : 0;
 
     let query = sb
       .from("links")
