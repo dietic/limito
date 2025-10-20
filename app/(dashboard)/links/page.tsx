@@ -69,10 +69,18 @@ function LinksPageInner() {
     const url = `${window.location.origin}/r/${slug}`;
     try {
       await navigator.clipboard.writeText(url);
-      toast({ title: "Copied", description: "Link URL copied to clipboard", variant: "success" });
+      toast({
+        title: "Copied",
+        description: "Link URL copied to clipboard",
+        variant: "success",
+      });
       setTimeout(() => setCopying(null), 2000);
     } catch {
-      toast({ title: "Copy failed", description: "We couldn't copy the URL", variant: "destructive" });
+      toast({
+        title: "Copy failed",
+        description: "We couldn't copy the URL",
+        variant: "destructive",
+      });
       setCopying(null);
     }
   };

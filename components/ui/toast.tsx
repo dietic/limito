@@ -1,6 +1,15 @@
 "use client";
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 
 type ToastVariant = "default" | "destructive" | "success" | "info";
 
@@ -34,31 +43,42 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const toast = useCallback((opts: ToastOptions) => {
-    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-    const item: ToastItem = {
-      id,
-      title: opts.title ?? "",
-      description: opts.description ?? "",
-      variant: opts.variant ?? "default",
-      durationMs: opts.durationMs ?? 2000,
-      createdAt: Date.now(),
-    };
-    setToasts((prev) => [...prev, item]);
-    const tm = setTimeout(() => remove(id), item.durationMs);
-    timers.current.set(id, tm);
-    return id;
-  }, [remove]);
+  const toast = useCallback(
+    (opts: ToastOptions) => {
+      const id = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      const item: ToastItem = {
+        id,
+        title: opts.title ?? "",
+        description: opts.description ?? "",
+        variant: opts.variant ?? "default",
+        durationMs: opts.durationMs ?? 2000,
+        createdAt: Date.now(),
+      };
+      setToasts((prev) => [...prev, item]);
+      const tm = setTimeout(() => remove(id), item.durationMs);
+      timers.current.set(id, tm);
+      return id;
+    },
+    [remove]
+  );
 
-  useEffect(() => () => {
-    // cleanup on unmount
-    timers.current.forEach((tm) => clearTimeout(tm));
-    timers.current.clear();
-  }, []);
+  useEffect(
+    () => () => {
+      // cleanup on unmount
+      timers.current.forEach((tm) => clearTimeout(tm));
+      timers.current.clear();
+    },
+    []
+  );
 
-  const value = useMemo(() => ({ toast, remove, toasts }), [toast, remove, toasts]);
+  const value = useMemo(
+    () => ({ toast, remove, toasts }),
+    [toast, remove, toasts]
+  );
 
-  return <ToastContext.Provider value={value}>{children}</ToastContext.Provider>;
+  return (
+    <ToastContext.Provider value={value}>{children}</ToastContext.Provider>
+  );
 }
 
 export function useToast() {
@@ -81,17 +101,23 @@ export function Toaster() {
           className={cn(
             "pointer-events-auto rounded-xl border p-3 shadow-lg transition-all",
             "bg-card text-card-foreground border-border",
-            t.variant === "destructive" && "border-destructive/40 bg-destructive/10 text-destructive",
-            t.variant === "success" && "border-success/40 bg-success/10 text-success",
+            t.variant === "destructive" &&
+              "border-destructive/40 bg-destructive/10 text-destructive",
+            t.variant === "success" &&
+              "border-success/40 bg-success/10 text-success",
             t.variant === "info" && "border-info/40 bg-info/10 text-info"
           )}
           role="status"
         >
           <div className="flex items-start gap-3">
             <div className="flex-1">
-              {t.title && <div className="font-semibold leading-snug">{t.title}</div>}
+              {t.title && (
+                <div className="font-semibold leading-snug">{t.title}</div>
+              )}
               {t.description && (
-                <div className="mt-0.5 text-sm text-muted-foreground">{t.description}</div>
+                <div className="mt-0.5 text-sm text-muted-foreground">
+                  {t.description}
+                </div>
               )}
             </div>
             <button
