@@ -1,6 +1,7 @@
 "use client";
 import { useAuth } from "@/hooks/use-auth";
 import type { CreateLinkInput, UpdateLinkInput } from "@/lib/validators/link";
+import type { ApiError, ApiSuccess, LinksListPaginated } from "@/types/api";
 import type { Link } from "@/types/link";
 import { useCallback, useEffect, useState } from "react";
 
@@ -50,33 +51,31 @@ export function useLinks(initial?: FetchOptions) {
           ? `/api/links?${params.toString()}`
           : "/api/links";
         const res = await fetch(url, { headers });
-        const payload = await res.json();
+        const payload: ApiSuccess<unknown> | ApiError = await res.json();
         if (!res.ok) {
           setState({
             loading: false,
-            error: payload.message || "Failed to load",
+            error: (payload as ApiError).message || "Failed to load",
             items: [],
           });
           return;
         }
         // Back-compat: payload.data can be an array (old) or an object with items
-        const data = payload.data;
+        const data = (payload as ApiSuccess<unknown>).data as
+          | Link[]
+          | LinksListPaginated;
         if (Array.isArray(data)) {
           setState({ loading: false, error: null, items: data });
         } else {
           setState({
             loading: false,
             error: null,
-            items: (data.items as Link[]) ?? [],
-            total: data.total as number,
-            limit: data.limit as number,
-            offset: data.offset as number,
-            hasMore: data.hasMore as boolean,
-            counts: data.counts as {
-              all?: number;
-              active?: number;
-              expired?: number;
-            },
+            items: data.items ?? [],
+            total: data.total,
+            limit: data.limit,
+            offset: data.offset,
+            hasMore: data.hasMore,
+            counts: data.counts,
           });
         }
       } catch {

@@ -88,7 +88,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 
 - [x] Zod validators for create/update link
 - [x] Strict TypeScript configuration (no `any`, strict mode)
-- [ ] Add schema types for API responses
+- [x] Add schema types for API responses
 
 ## 8) Testing
 
@@ -166,3 +166,4 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] API DX: clearer dev error messages (missing service role key / schema not initialized)
 - [x] Real server-side pagination for links (API + hook + UI)
 - [x] Server-side filtering for links (API + hook + UI) and URL synchronization
+- [x] Typed API response contracts (`types/api.ts`) and `use-links` refactor to use them
