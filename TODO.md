@@ -4,13 +4,13 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 
 ## MVP Readiness Checklist (invite users when all are checked)
 
-- [ ] Links: add details/edit page and wire Dashboard "View" action
+- [x] Links: add details/edit page and wire Dashboard "View" action
   - Implement `app/(dashboard)/links/[id]/page.tsx` to fetch, prefill, update (PATCH), and delete (DELETE)
-- [ ] Accurate expiry in UI
+- [x] Accurate expiry in UI
   - Compute with `isExpired(link)` in lists/filters/badges; optionally also hard-set `is_active=false` in redirect handler when an expiration is detected
-- [ ] robots.txt and sitemap.xml
+- [x] robots.txt and sitemap.xml
   - Add `app/robots.ts` and `app/sitemap.ts` with basic entries for marketing routes
-- [ ] SEO metadata baseline
+- [x] SEO metadata baseline
   - Title/description and OG tags in `app/layout.tsx` and marketing pages
 - [ ] Enable Vercel Analytics (basic telemetry only)
 - [ ] Tests for confidence
@@ -36,12 +36,12 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Reserved slugs check + auto slug generation
 - [x] Fix use-links.ts authHeaders implementation (critical bug - useMemo with async)
 - [x] Create /links/page.tsx to display user's links list
-- [ ] Edit page UI (prefill form, save)
+- [x] Edit page UI (prefill form, save)
 - [x] Copy-to-clipboard with visual feedback
-- [ ] Pagination on links list
+- [x] Pagination on links list
 - [x] Filter tabs: All / Active / Expired
 - [x] Empty/Loading/Error UI states wired to hooks
-      -> MVP: Add details/edit page and ensure expired filtering uses `isExpired()`.
+  -> Done: Details/edit page added and expired filtering uses `isExpired()`.
 
 ## 3) Redirects
 
@@ -154,6 +154,12 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 
 ## 17) SEO
 
-- [ ] robots.txt (`app/robots.ts`)
-- [ ] sitemap.xml (`app/sitemap.ts`)
-- [ ] Baseline metadata/OG tags for marketing pages
+- [x] robots.txt (`app/robots.ts`)
+- [x] sitemap.xml (`app/sitemap.ts`)
+- [x] Baseline metadata/OG tags for marketing pages
+
+## 18) Recently Completed Chores (for release notes)
+
+- [x] README: Supabase setup and migrations instructions
+- [x] API DX: clearer dev error messages (missing service role key / schema not initialized)
+- [x] Real server-side pagination for links (API + hook + UI)
