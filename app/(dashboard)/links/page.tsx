@@ -6,11 +6,12 @@ import { isExpired } from "@/lib/expiration";
 import { cn } from "@/lib/utils";
 import type { Link as LinkType } from "@/types/link";
 import NextLink from "next/link";
-import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 
-export default function LinksPage() {
+function LinksPageInner() {
   const router = useRouter();
+  const search = useSearchParams();
   const { userId, loading: authLoading } = useAuth();
   const {
     items,
@@ -22,10 +23,31 @@ export default function LinksPage() {
     limit,
     offset,
     hasMore,
-  } = useLinks({ limit: 10 });
+  } = useLinks({
+    limit: 10,
+    filter:
+      (search.get("filter") as "all" | "active" | "expired" | null) ??
+      "all",
+    offset: Number(search.get("offset") ?? 0),
+  });
   const [copying, setCopying] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
-  const [filter, setFilter] = useState<"all" | "active" | "expired">("all");
+  const [filter, setFilter] = useState<"all" | "active" | "expired">(
+    (search.get("filter") as "all" | "active" | "expired") || "all"
+  );
+
+  // Keep URL in sync when filter or offset changes
+  useEffect(() => {
+    const params = new URLSearchParams(search.toString());
+    if (filter && filter !== "all") params.set("filter", filter);
+    else params.delete("filter");
+    if (typeof offset === "number" && offset > 0)
+      params.set("offset", String(offset));
+    else params.delete("offset");
+    const qs = params.toString();
+    router.replace(qs ? `/links?${qs}` : "/links");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter, offset]);
 
   const copyToClipboard = async (slug: string) => {
     setCopying(slug);
@@ -48,18 +70,10 @@ export default function LinksPage() {
     setDeleting(null);
   };
 
-  const filteredItems = useMemo(
-    () =>
-      items.filter((link) => {
-        if (filter === "active") return !isExpired(link);
-        if (filter === "expired") return isExpired(link);
-        return true;
-      }),
-    [items, filter]
-  );
+  const shownItems = items; // server already applied filter & pagination
 
-  const pageFrom = (offset ?? 0) + (filteredItems.length > 0 ? 1 : 0);
-  const pageTo = (offset ?? 0) + filteredItems.length;
+  const pageFrom = (offset ?? 0) + (shownItems.length > 0 ? 1 : 0);
+  const pageTo = (offset ?? 0) + shownItems.length;
 
   if (authLoading) {
     return (
@@ -92,8 +106,8 @@ export default function LinksPage() {
               <p className="mt-1 text-muted-foreground">
                 {filter === "all" && typeof total === "number"
                   ? `${total} ${total === 1 ? "link" : "links"} total`
-                  : `${filteredItems.length} ${
-                      filteredItems.length === 1 ? "result" : "results"
+                  : `${shownItems.length} ${
+                      shownItems.length === 1 ? "result" : "results"
                     } on this page`}
               </p>
             </div>
@@ -206,40 +220,49 @@ export default function LinksPage() {
             {/* Filter Tabs */}
             <div className="mb-6 flex gap-2 rounded-xl border border-border bg-card p-1 shadow-sm">
               <button
-                onClick={() => setFilter("all")}
+                onClick={() => {
+                  setFilter("all");
+                  refresh({ limit: limit ?? 10, offset: 0, filter: "all" });
+                }}
                 className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
                   filter === "all"
                     ? "bg-primary text-primary-foreground shadow-md"
                     : "text-muted-foreground hover:bg-muted"
                 }`}
               >
-                All ({items.length})
+                All
               </button>
               <button
-                onClick={() => setFilter("active")}
+                onClick={() => {
+                  setFilter("active");
+                  refresh({ limit: limit ?? 10, offset: 0, filter: "active" });
+                }}
                 className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
                   filter === "active"
                     ? "bg-success text-success-foreground shadow-md"
                     : "text-muted-foreground hover:bg-muted"
                 }`}
               >
-                Active ({items.filter((l) => !isExpired(l)).length})
+                Active
               </button>
               <button
-                onClick={() => setFilter("expired")}
+                onClick={() => {
+                  setFilter("expired");
+                  refresh({ limit: limit ?? 10, offset: 0, filter: "expired" });
+                }}
                 className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all ${
                   filter === "expired"
                     ? "bg-muted text-foreground shadow-md"
                     : "text-muted-foreground hover:bg-muted"
                 }`}
               >
-                Expired ({items.filter((l) => isExpired(l)).length})
+                Expired
               </button>
             </div>
 
             {/* Links Grid (server-paginated) */}
             <div className="space-y-3">
-              {filteredItems.map((link: LinkType) => (
+              {shownItems.map((link: LinkType) => (
                 <div
                   key={link.id}
                   className="group overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all hover:shadow-xl"
@@ -410,7 +433,7 @@ export default function LinksPage() {
               ))}
             </div>
 
-            {filteredItems.length === 0 && (
+            {shownItems.length === 0 && (
               <div className="rounded-2xl border border-border bg-card p-12 text-center shadow-sm">
                 <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-xl bg-muted">
                   <svg
@@ -437,7 +460,7 @@ export default function LinksPage() {
             )}
 
             {/* Pagination Controls (server) */}
-            {filteredItems.length > 0 && (
+            {shownItems.length > 0 && (
               <div className="mt-6 flex flex-col items-center justify-between gap-3 rounded-xl border border-border bg-card p-3 text-sm shadow-sm sm:flex-row">
                 <div className="text-muted-foreground">
                   Showing{" "}
@@ -460,12 +483,10 @@ export default function LinksPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() =>
-                      refresh({
-                        limit: limit ?? 10,
-                        offset: Math.max(0, (offset ?? 0) - (limit ?? 10)),
-                      })
-                    }
+                    onClick={() => {
+                      const nextOffset = Math.max(0, (offset ?? 0) - (limit ?? 10));
+                      refresh({ limit: limit ?? 10, offset: nextOffset, filter });
+                    }}
                     disabled={loading || (offset ?? 0) === 0}
                     className={cn(
                       "rounded-lg border border-border bg-card px-3 py-2 font-medium text-foreground transition-all hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
@@ -488,12 +509,10 @@ export default function LinksPage() {
                     )}
                   </div>
                   <button
-                    onClick={() =>
-                      refresh({
-                        limit: limit ?? 10,
-                        offset: (offset ?? 0) + (limit ?? 10),
-                      })
-                    }
+                    onClick={() => {
+                      const nextOffset = (offset ?? 0) + (limit ?? 10);
+                      refresh({ limit: limit ?? 10, offset: nextOffset, filter });
+                    }}
                     disabled={loading || !hasMore}
                     className={cn(
                       "rounded-lg border border-border bg-card px-3 py-2 font-medium text-foreground transition-all hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
@@ -509,5 +528,26 @@ export default function LinksPage() {
         )}
       </div>
     </main>
+  );
+}
+
+export default function LinksPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-gradient-to-br from-background to-muted px-6 py-8">
+          <div className="mx-auto max-w-7xl">
+            <div className="flex items-center justify-center py-20">
+              <div className="flex items-center gap-3 text-muted-foreground">
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+                <span>Loading links...</span>
+              </div>
+            </div>
+          </div>
+        </main>
+      }
+    >
+      <LinksPageInner />
+    </Suspense>
   );
 }

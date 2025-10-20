@@ -14,7 +14,8 @@ interface LinksState {
   hasMore?: boolean;
 }
 
-type FetchOptions = { limit?: number; offset?: number };
+type Filter = "all" | "active" | "expired";
+type FetchOptions = { limit?: number; offset?: number; filter?: Filter };
 
 export function useLinks(initial?: FetchOptions) {
   const { getAccessToken, userId } = useAuth();
@@ -39,9 +40,11 @@ export function useLinks(initial?: FetchOptions) {
         const params = new URLSearchParams();
         const limit = opts?.limit ?? initial?.limit;
         const offset = opts?.offset ?? initial?.offset;
+        const filter = opts?.filter ?? initial?.filter;
         if (limit) params.set("limit", String(limit));
         if (typeof offset === "number" && offset > 0)
           params.set("offset", String(offset));
+        if (filter && filter !== "all") params.set("filter", filter);
         const url = params.toString()
           ? `/api/links?${params.toString()}`
           : "/api/links";
@@ -74,7 +77,7 @@ export function useLinks(initial?: FetchOptions) {
         setState({ loading: false, error: "Network error", items: [] });
       }
     },
-    [getAuthHeaders, initial?.limit, initial?.offset]
+    [getAuthHeaders, initial?.limit, initial?.offset, initial?.filter]
   );
 
   useEffect(() => {
