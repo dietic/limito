@@ -20,6 +20,9 @@ test("login → create link → redirect increments click count", async ({
 
   // 1) Login via UI
   await page.goto("/login");
+  // Wait for inputs to become enabled (auth hook sets loading initially)
+  await page.waitForSelector('input#email:not([disabled])', { timeout: 15_000 });
+  await page.waitForSelector('input#password:not([disabled])', { timeout: 15_000 });
   await page.getByLabel(/Email address/i).fill(email!);
   await page.getByLabel(/Password/i).fill(password!);
   await page.getByRole("button", { name: /Sign in/i }).click();
@@ -44,6 +47,9 @@ test("login → create link → redirect increments click count", async ({
 
   // 2) Create a link via UI
   const slug = `e2e-${Date.now()}`;
+  // Log slug to help find it if KEEP is enabled
+  // eslint-disable-next-line no-console
+  console.log(`[E2E] Creating link with slug: ${slug}`);
   await page.goto("/links/new");
   await page.getByLabel(/Destination URL/i).fill("https://example.com/");
   await page.getByRole("button", { name: /By clicks/i }).click();
@@ -77,12 +83,18 @@ test("login → create link → redirect increments click count", async ({
   const updatedLink = updated!;
   expect(updatedLink.click_count ?? 0).toBe(beforeClicks + 1);
 
-  // 5) Cleanup (delete link) to keep environment tidy
-  const id = updatedLink.id;
-  const del = await request.delete(`/api/links/${id}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  expect(del.ok(), "Cleanup: delete created link").toBeTruthy();
+  // 5) Cleanup (delete link) to keep environment tidy unless KEEP is set
+  const keep = process.env["E2E_KEEP"] === "1" || process.env["E2E_KEEP"] === "true";
+  if (!keep) {
+    const id = updatedLink.id;
+    const del = await request.delete(`/api/links/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    expect(del.ok(), "Cleanup: delete created link").toBeTruthy();
+  } else {
+    // eslint-disable-next-line no-console
+    console.log(`[E2E] KEEP enabled, leaving link with slug: ${slug}`);
+  }
 });
 
 test("smoke: homepage loads and shows CTA", async ({ page }) => {

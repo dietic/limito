@@ -218,13 +218,10 @@ export default function LinkForm({
           {loading
             ? submitLabel
               ? `${submitLabel}...`
-              : values.slug || initialValues?.destination_url
+              : initialValues
               ? "Saving..."
               : "Creating link..."
-            : submitLabel ??
-              (values.slug || initialValues?.destination_url
-                ? "Save changes"
-                : "Create link")}
+            : submitLabel ?? (initialValues ? "Save changes" : "Create link")}
         </Button>
       </div>
     </form>
