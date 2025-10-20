@@ -13,10 +13,10 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] SEO metadata baseline
   - Title/description and OG tags in `app/layout.tsx` and marketing pages
 - [x] Enable Vercel Analytics (basic telemetry only)
-- [ ] Tests for confidence
+- [x] Tests for confidence
   - Integration: CRUD routes (happy/invalid/unauthorized)
   - E2E (Playwright): login → create link → redirect → click count increases
-    -> Scaffolded Playwright config and a skipped core flow test; wire server + auth next
+    -> E2E runs against a real server; requires E2E_EMAIL/E2E_PASSWORD set in env
 - [x] Brand polish
   - Replace placeholder logo/favicon; finalize Privacy & Terms copy
     -> Done: Privacy & Terms copy updated on marketing pages
@@ -100,8 +100,8 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 
 - [x] Unit: expiration logic
 - [x] Unit: validators
-- [ ] Integration: CRUD routes (happy/invalid/unauthorized)
-- [ ] E2E (Playwright): login → create link → redirect → counts
+- [x] Integration: CRUD routes (happy/invalid/unauthorized)
+- [x] E2E (Playwright): login → create link → redirect → counts
 
 ## 9) Database & Security
 
@@ -122,7 +122,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] App icon placeholder
 - [x] Logo + favicon (replace placeholder)
 - [x] Landing blurb polishing
-- [ ] Expired-page copy (tone, clarity)
+- [x] Expired-page copy (tone, clarity)
 - [x] Privacy & ToS final copy
       -> MVP: logo/favicon; review contact email if it changes
 
