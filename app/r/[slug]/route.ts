@@ -13,7 +13,7 @@ function expiredHtml(): string {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Link expired • Limi.to</title>
+    <title>This link has expired • Limi.to</title>
     <meta name="color-scheme" content="light dark" />
     <style>
       :root {
@@ -80,8 +80,9 @@ function expiredHtml(): string {
     <main class="wrap" role="main">
       <section class="card" aria-labelledby="expired-title">
         <span class="brand">Limi.to</span>
-        <h1 id="expired-title">Link expired</h1>
-        <p>This link is no longer available. It may have reached its expiration date or the maximum number of allowed clicks.</p>
+        <h1 id="expired-title">This link has expired</h1>
+        <p>The link you’re trying to open is no longer available. It may have reached its time limit or the maximum number of allowed clicks.</p>
+        <p style="margin-top:.5rem">You can head back to Limi.to or create your own expiring link in seconds.</p>
         <div class="actions">
           <a class="btn btn-primary" href="/">Go to Limi.to</a>
           <a class="btn btn-outline" href="/login">Create your own link</a>

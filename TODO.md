@@ -85,7 +85,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Tokenize pages to theme tokens (no hardcoded colors)
 - [x] Theme toggle (light/dark)
 - [x] Mobile-first pass at 360px viewport
-- [ ] Branded expired page content polish (use theme tokens, match branding)
+- [x] Branded expired page content polish (use theme tokens, match branding)
 - [x] Accessible form labels, focus states, and keyboard navigation
       -> MVP: ensure nav “View” works, expired badges reflect real state, and marketing pages have baseline SEO metadata.
       -> Done: polished /links and /links/new for small screens (stacked headers, wrapping tabs, responsive actions)
