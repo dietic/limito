@@ -1,5 +1,6 @@
 "use client";
 import { buttonVariants } from "@/components/ui/button";
+import { useToast } from "@/components/ui/toast";
 import { useAuth } from "@/hooks/use-auth";
 import { useLinks } from "@/hooks/use-links";
 import { isExpired } from "@/lib/expiration";
@@ -12,6 +13,7 @@ import { Suspense, useEffect, useState } from "react";
 function LinksPageInner() {
   const router = useRouter();
   const search = useSearchParams();
+  const { toast } = useToast();
   const initialLimit = (() => {
     const v = Number(search.get("limit") ?? 10);
     return Number.isFinite(v) && v > 0 && v <= 100 ? v : 10;
@@ -67,8 +69,10 @@ function LinksPageInner() {
     const url = `${window.location.origin}/r/${slug}`;
     try {
       await navigator.clipboard.writeText(url);
+      toast({ title: "Copied", description: "Link URL copied to clipboard", variant: "success" });
       setTimeout(() => setCopying(null), 2000);
     } catch {
+      toast({ title: "Copy failed", description: "We couldn't copy the URL", variant: "destructive" });
       setCopying(null);
     }
   };

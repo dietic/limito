@@ -1,4 +1,5 @@
 import ThemeProvider from "@/components/theme-provider";
+import { ToastProvider, Toaster } from "@/components/ui/toast";
 import { Analytics } from "@vercel/analytics/react";
 import type { ReactNode } from "react";
 import "../styles/globals.css";
@@ -53,8 +54,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body className="min-h-screen antialiased">
         <ThemeProvider>
-          {children}
-          {process.env["NEXT_RUNTIME"] !== "edge" && <Analytics />}
+          <ToastProvider>
+            {children}
+            <Toaster />
+            {process.env["NEXT_RUNTIME"] !== "edge" && <Analytics />}
+          </ToastProvider>
         </ThemeProvider>
       </body>
     </html>
