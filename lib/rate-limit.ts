@@ -23,11 +23,18 @@ export async function allowAndIncrement(scope: string, key: string, limit: numbe
   if (!row) {
     const resetAt = new Date(now.getTime() + windowMs).toISOString()
     await client.from('rate_limits').upsert({ scope, key, count: 1, window_expires_at: resetAt }).eq('scope', scope).eq('key', key)
+    // occasional TTL cleanup to keep the table small
+    if (Math.random() < 0.02) {
+      await client.from('rate_limits').delete().lt('window_expires_at', new Date().toISOString())
+    }
     return { allowed: true, remaining: Math.max(0, limit - 1), limit, resetAt }
   }
   if (new Date(row.window_expires_at).getTime() <= now.getTime()) {
     const resetAt = new Date(now.getTime() + windowMs).toISOString()
     await client.from('rate_limits').update({ count: 1, window_expires_at: resetAt }).eq('scope', scope).eq('key', key)
+    if (Math.random() < 0.02) {
+      await client.from('rate_limits').delete().lt('window_expires_at', new Date().toISOString())
+    }
     return { allowed: true, remaining: Math.max(0, limit - 1), limit, resetAt }
   }
   const current = Number(row.count) || 0
@@ -36,6 +43,9 @@ export async function allowAndIncrement(scope: string, key: string, limit: numbe
   }
   const next = current + 1
   await client.from('rate_limits').update({ count: next }).eq('scope', scope).eq('key', key)
+  if (Math.random() < 0.02) {
+    await client.from('rate_limits').delete().lt('window_expires_at', new Date().toISOString())
+  }
   return { allowed: true, remaining: Math.max(0, limit - next), limit, resetAt: row.window_expires_at }
 }
 

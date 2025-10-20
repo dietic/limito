@@ -165,5 +165,21 @@ export async function GET(
     }),
   ]);
 
+  // occasional cleanup of old analytics beyond retention for this link
+  try {
+    if (Math.random() < 0.02) {
+      const cutoff = new Date(
+        Date.now() - config.plans.free.analyticsRetentionDays * 24 * 60 * 60 * 1000
+      ).toISOString();
+      await sb
+        .from("click_events")
+        .delete()
+        .eq("link_id", link.id)
+        .lt("clicked_at", cutoff);
+    }
+  } catch {
+    // ignore cleanup failures
+  }
+
   return NextResponse.redirect(link.destination_url, { status: 302 });
 }
