@@ -1,6 +1,11 @@
 import type { Link } from '@/types/link'
 
-export function isExpired(link: Link, now: Date = new Date()): boolean {
+export type Expirable = Pick<
+  Link,
+  'is_active' | 'mode' | 'expires_at' | 'click_limit' | 'click_count'
+>
+
+export function isExpired(link: Expirable, now: Date = new Date()): boolean {
   if (!link.is_active) return true
   if (link.mode === 'by_date') {
     if (!link.expires_at) return false

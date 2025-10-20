@@ -125,7 +125,9 @@ export async function GET(
     });
   const { data: link } = await sb
     .from("links")
-    .select("*")
+    .select(
+      "id,destination_url,fallback_url,mode,expires_at,click_limit,click_count,is_active"
+    )
     .eq("slug", params.slug)
     .single();
   if (!link) {

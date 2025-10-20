@@ -55,6 +55,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Fallback redirect or branded expired page
 - [x] Click counting and last_clicked_at update
 - [ ] Optimize redirect for <100ms (minimal data fields, early return)
+  -> Partial: reduced DB select to minimal fields used by redirect flow
 
 ## 4) Rate Limiting
 
