@@ -390,6 +390,31 @@ function LinksPageInner() {
                       {/* Actions */}
                       <div className="ml-0 flex w-full flex-row gap-2 sm:ml-6 sm:w-auto sm:flex-col">
                         <NextLink
+                          href={`/r/${link.slug}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={cn(
+                            buttonVariants({ variant: "outline" }),
+                            "flex flex-1 items-center justify-center gap-2 sm:flex-none"
+                          )}
+                          aria-label={`Open public link ${link.slug}`}
+                        >
+                          <svg
+                            className="h-4 w-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M14 3h7m0 0v7m0-7L10 14m-1 7H5a2 2 0 01-2-2v-4"
+                            />
+                          </svg>
+                          View
+                        </NextLink>
+                        <NextLink
                           href={`/links/${link.id}`}
                           className={cn(
                             buttonVariants({ variant: "secondary" }),
