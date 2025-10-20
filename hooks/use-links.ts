@@ -12,6 +12,7 @@ interface LinksState {
   limit?: number;
   offset?: number;
   hasMore?: boolean;
+  counts?: { all?: number; active?: number; expired?: number };
 }
 
 type Filter = "all" | "active" | "expired";
@@ -71,6 +72,7 @@ export function useLinks(initial?: FetchOptions) {
             limit: data.limit as number,
             offset: data.offset as number,
             hasMore: data.hasMore as boolean,
+            counts: data.counts as { all?: number; active?: number; expired?: number },
           });
         }
       } catch {

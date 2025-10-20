@@ -17,21 +17,13 @@ function LinksPageInner() {
     return Number.isFinite(v) && v > 0 && v <= 100 ? v : 10;
   })();
   const { userId, loading: authLoading } = useAuth();
-  const {
-    items,
-    loading,
-    error,
-    deleteLink,
-    refresh,
-    total,
-    offset,
-    hasMore,
-  } = useLinks({
-    limit: initialLimit,
-    filter:
-      (search.get("filter") as "all" | "active" | "expired" | null) ?? "all",
-    offset: Number(search.get("offset") ?? 0),
-  });
+  const { items, loading, error, deleteLink, refresh, total, offset, hasMore, counts } =
+    useLinks({
+      limit: initialLimit,
+      filter:
+        (search.get("filter") as "all" | "active" | "expired" | null) ?? "all",
+      offset: Number(search.get("offset") ?? 0),
+    });
   const [copying, setCopying] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | "active" | "expired">(
@@ -235,7 +227,7 @@ function LinksPageInner() {
                     : "text-muted-foreground hover:bg-muted"
                 }`}
               >
-                All
+                All{typeof counts?.all === "number" ? ` (${counts.all})` : ""}
               </button>
               <button
                 onClick={() => {
@@ -248,7 +240,7 @@ function LinksPageInner() {
                     : "text-muted-foreground hover:bg-muted"
                 }`}
               >
-                Active
+                Active{typeof counts?.active === "number" ? ` (${counts.active})` : ""}
               </button>
               <button
                 onClick={() => {
@@ -261,7 +253,7 @@ function LinksPageInner() {
                     : "text-muted-foreground hover:bg-muted"
                 }`}
               >
-                Expired
+                Expired{typeof counts?.expired === "number" ? ` (${counts.expired})` : ""}
               </button>
             </div>
 
@@ -526,7 +518,8 @@ function LinksPageInner() {
                     ← Prev
                   </button>
                   <div className="rounded-lg border border-border bg-background px-3 py-2 text-muted-foreground">
-                    {typeof total === "number" && typeof pageSize === "number" ? (
+                    {typeof total === "number" &&
+                    typeof pageSize === "number" ? (
                       <>
                         Page{" "}
                         <span className="font-semibold text-foreground">

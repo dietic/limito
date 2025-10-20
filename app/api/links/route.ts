@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
       query = query.range(offset, offset + (limit - 1));
     }
 
-    const { data, error, count } = await query;
+  const { data, error, count } = await query;
     if (error) {
       const errMsg = String((error as { message?: string }).message || "");
       const isMissingTable =
@@ -71,10 +71,45 @@ export async function GET(request: NextRequest) {
         500
       );
     }
+    // counts for tabs (all/active/expired)
+    let counts: { all?: number; active?: number; expired?: number } = {};
+    try {
+      const [allRes, activeRes, expiredRes] = await Promise.all([
+        sb
+          .from("links")
+          .select("*", { count: "exact", head: true })
+          .eq("owner_id", userId),
+        sb
+          .from("links_with_status")
+          .select("*", { count: "exact", head: true })
+          .eq("owner_id", userId)
+          .eq("is_expired", false),
+        sb
+          .from("links_with_status")
+          .select("*", { count: "exact", head: true })
+          .eq("owner_id", userId)
+          .eq("is_expired", true),
+      ]);
+      counts = {
+        all: allRes.count ?? undefined,
+        active: activeRes.count ?? undefined,
+        expired: expiredRes.count ?? undefined,
+      };
+    } catch {
+      counts = {};
+    }
+
     if (limit) {
       const total = typeof count === "number" ? count : data?.length ?? 0;
       const hasMore = offset + (data?.length ?? 0) < total;
-      return jsonSuccess({ items: data ?? [], total, limit, offset, hasMore });
+      return jsonSuccess({
+        items: data ?? [],
+        total,
+        limit,
+        offset,
+        hasMore,
+        counts,
+      });
     }
     return jsonSuccess(data);
   } catch (e) {
