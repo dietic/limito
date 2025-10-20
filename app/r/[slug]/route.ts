@@ -99,6 +99,22 @@ export async function GET(
 ) {
   const params = await props.params;
   const sb = getServiceClient();
+  // 1) Fetch the link first to avoid unnecessary rate-limit writes for unknown slugs
+  const { data: link } = await sb
+    .from("links")
+    .select(
+      "id,destination_url,fallback_url,mode,expires_at,click_limit,click_count,is_active"
+    )
+    .eq("slug", params.slug)
+    .single();
+  if (!link) {
+    return new NextResponse(expiredHtml(), {
+      status: 404,
+      headers: { "content-type": "text/html; charset=utf-8" },
+    });
+  }
+
+  // 2) Apply rate limits only for existing slugs
   const ip = ipFromRequestHeaders(request.headers);
   const perIp = await allowAndIncrement(
     "redirect_ip",
@@ -124,19 +140,6 @@ export async function GET(
       status: 429,
       headers: { "Retry-After": "60" },
     });
-  const { data: link } = await sb
-    .from("links")
-    .select(
-      "id,destination_url,fallback_url,mode,expires_at,click_limit,click_count,is_active"
-    )
-    .eq("slug", params.slug)
-    .single();
-  if (!link) {
-    return new NextResponse(expiredHtml(), {
-      status: 404,
-      headers: { "content-type": "text/html; charset=utf-8" },
-    });
-  }
 
   const expired = isExpired(link);
   if (expired) {
@@ -168,22 +171,7 @@ export async function GET(
     }),
   ]);
 
-  // occasional cleanup of old analytics beyond retention for this link
-  try {
-    if (Math.random() < 0.02) {
-      const cutoff = new Date(
-        Date.now() -
-          config.plans.free.analyticsRetentionDays * 24 * 60 * 60 * 1000
-      ).toISOString();
-      await sb
-        .from("click_events")
-        .delete()
-        .eq("link_id", link.id)
-        .lt("clicked_at", cutoff);
-    }
-  } catch {
-    // ignore cleanup failures
-  }
+  // Cleanup is now handled by a scheduled job (pg_cron). No opportunistic deletions here.
 
   return NextResponse.redirect(link.destination_url, { status: 302 });
 }
