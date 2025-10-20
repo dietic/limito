@@ -1,6 +1,7 @@
 import ThemeProvider from "@/components/theme-provider";
 import type { ReactNode } from "react";
 import "../styles/globals.css";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata = {
   metadataBase: new URL(process.env["APP_URL"] || "http://localhost:3000"),
@@ -49,7 +50,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         />
       </head>
       <body className="min-h-screen antialiased">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          {children}
+          {process.env["NEXT_RUNTIME"] !== "edge" && <Analytics />}
+        </ThemeProvider>
       </body>
     </html>
   );

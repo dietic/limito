@@ -12,7 +12,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
   - Add `app/robots.ts` and `app/sitemap.ts` with basic entries for marketing routes
 - [x] SEO metadata baseline
   - Title/description and OG tags in `app/layout.tsx` and marketing pages
-- [ ] Enable Vercel Analytics (basic telemetry only)
+- [x] Enable Vercel Analytics (basic telemetry only)
 - [ ] Tests for confidence
   - Integration: CRUD routes (happy/invalid/unauthorized)
   - E2E (Playwright): login → create link → redirect → click count increases
@@ -105,7 +105,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 
 ## 10) Monitoring & Ops
 
-- [ ] Vercel Analytics enabled
+- [x] Vercel Analytics enabled
 - [ ] Optional Sentry instrumentation (server only)
 - [ ] Health/uptime plan (Vercel checks, alerting)
 
