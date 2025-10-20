@@ -17,10 +17,10 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
   - Integration: CRUD routes (happy/invalid/unauthorized)
   - E2E (Playwright): login → create link → redirect → click count increases
     -> Scaffolded Playwright config and a skipped core flow test; wire server + auth next
-- [ ] Brand polish
+- [x] Brand polish
   - Replace placeholder logo/favicon; finalize Privacy & Terms copy
     -> Done: Privacy & Terms copy updated on marketing pages
-    -> Done: Added basic logo.svg, favicon.ico, and OG image; iterate post-launch if needed
+    -> Done: Replaced logo.svg, favicon.ico, and OG image with finalized assets
 - [ ] Ops hygiene (optional for invite, recommended)
   - TTL cleanup for `rate_limits` windows; sweep old `click_events` beyond free-plan retention
     -> Partial: added probabilistic cleanup in runtime (2% sampling) for both `rate_limits` and `click_events` on traffic paths
@@ -118,7 +118,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 ## 11) Content & Branding
 
 - [x] App icon placeholder
-- [ ] Logo + favicon (replace placeholder)
+- [x] Logo + favicon (replace placeholder)
 - [x] Landing blurb polishing
 - [ ] Expired-page copy (tone, clarity)
 - [x] Privacy & ToS final copy
