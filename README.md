@@ -33,3 +33,26 @@ APP_URL=http://localhost:3000
   ```
 
 If you see “Database not initialized: run Supabase migrations” in the app, it means step 2 hasn’t been done yet.
+
+## E2E workflow (Playwright)
+
+You can run E2E tests against a running dev server or let Playwright start one.
+
+Reuse an existing dev server:
+
+```zsh
+pnpm dev
+PW_NO_WEBSERVER=1 APP_URL="http://localhost:3000" E2E_EMAIL="you@example.com" E2E_PASSWORD="yoursecret" pnpm test:e2e --reporter=list
+```
+
+Let Playwright manage the server (dev by default):
+
+```zsh
+E2E_EMAIL="you@example.com" E2E_PASSWORD="yoursecret" pnpm test:e2e --reporter=list
+```
+
+To keep the created link for manual inspection, set:
+
+```zsh
+E2E_KEEP=1 E2E_EMAIL="you@example.com" E2E_PASSWORD="yoursecret" pnpm test:e2e --reporter=list
+```
