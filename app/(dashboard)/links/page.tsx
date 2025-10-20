@@ -389,6 +389,29 @@ function LinksPageInner() {
 
                       {/* Actions */}
                       <div className="ml-0 flex w-full flex-row gap-2 sm:ml-6 sm:w-auto sm:flex-col">
+                        <NextLink
+                          href={`/links/${link.id}`}
+                          className={cn(
+                            buttonVariants({ variant: "secondary" }),
+                            "flex flex-1 items-center justify-center gap-2 sm:flex-none"
+                          )}
+                          aria-label={`Edit link ${link.slug}`}
+                        >
+                          <svg
+                            className="h-4 w-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M11 4h2m-7 7h2m-2 4h8m2-9l3 3m0 0l-7 7H8l-1-4 7-7z"
+                            />
+                          </svg>
+                          Edit
+                        </NextLink>
                         <button
                           onClick={() => copyToClipboard(link.slug)}
                           disabled={copying === link.slug}

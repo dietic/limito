@@ -23,7 +23,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
     -> Done: Replaced logo.svg, favicon.ico, and OG image with finalized assets
 - [ ] Ops hygiene (optional for invite, recommended)
   - TTL cleanup for `rate_limits` windows; sweep old `click_events` beyond free-plan retention
-    -> Partial: added probabilistic cleanup in runtime (2% sampling) for both `rate_limits` and `click_events` on traffic paths
+    -> Done: pg_cron scheduled cleanup job; removed opportunistic runtime cleanup from redirect
 
 ## 1) Auth
 
@@ -41,6 +41,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Fix use-links.ts authHeaders implementation (critical bug - useMemo with async)
 - [x] Create /links/page.tsx to display user's links list
 - [x] Edit page UI (prefill form, save)
+  -> List page now includes an Edit button for direct navigation to the details page
 - [x] Copy-to-clipboard with visual feedback
 - [x] Pagination on links list
 - [x] Filter tabs: All / Active / Expired
