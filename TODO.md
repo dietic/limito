@@ -16,7 +16,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [ ] Tests for confidence
   - Integration: CRUD routes (happy/invalid/unauthorized)
   - E2E (Playwright): login → create link → redirect → click count increases
-      -> Scaffolded Playwright config and a skipped core flow test; wire server + auth next
+    -> Scaffolded Playwright config and a skipped core flow test; wire server + auth next
 - [ ] Brand polish
   - Replace placeholder logo/favicon; finalize Privacy & Terms copy
 - [ ] Ops hygiene (optional for invite, recommended)
