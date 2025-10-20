@@ -75,7 +75,7 @@ test("login → create link → redirect increments click count", async ({
   ) as (L & { click_count?: number }) | undefined;
   expect(updated, "Updated link should be found").toBeTruthy();
   const updatedLink = updated!;
-  expect((updatedLink.click_count ?? 0)).toBe(beforeClicks + 1);
+  expect(updatedLink.click_count ?? 0).toBe(beforeClicks + 1);
 
   // 5) Cleanup (delete link) to keep environment tidy
   const id = updatedLink.id;

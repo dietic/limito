@@ -32,8 +32,8 @@ export default function LinkForm({
     destination_url: initialValues?.destination_url ?? "",
     fallback_url: initialValues?.fallback_url,
     mode: initialValues?.mode ?? "by_date",
-  expires_at: initialValues?.expires_at,
-  click_limit: initialValues?.click_limit,
+    expires_at: initialValues?.expires_at,
+    click_limit: initialValues?.click_limit,
     slug: initialValues?.slug,
   });
 
@@ -120,7 +120,11 @@ export default function LinkForm({
           <Input
             id="expires_at"
             type="datetime-local"
-            defaultValue={values.expires_at ? new Date(values.expires_at).toISOString().slice(0,16) : undefined}
+            defaultValue={
+              values.expires_at
+                ? new Date(values.expires_at).toISOString().slice(0, 16)
+                : undefined
+            }
             onChange={(e) =>
               setValues((v) => ({
                 ...v,
