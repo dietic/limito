@@ -87,8 +87,10 @@ export function useLinks(initial?: FetchOptions) {
 
   useEffect(() => {
     if (!userId) return;
-    refresh(initial);
-  }, [userId, refresh, initial]);
+    // Call refresh relying on the stable values captured in its closure.
+    // Avoid depending on the unstable `initial` object reference to prevent re-fetch loops.
+    refresh();
+  }, [userId, refresh]);
 
   const createLink = useCallback(
     async (input: CreateLinkInput) => {

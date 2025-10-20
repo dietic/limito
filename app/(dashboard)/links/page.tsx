@@ -51,7 +51,14 @@ function LinksPageInner() {
     if (typeof pageSize === "number" && pageSize > 0)
       params.set("limit", String(pageSize));
     const qs = params.toString();
-    router.replace(qs ? `/links?${qs}` : "/links");
+    const next = qs ? `/links?${qs}` : "/links";
+    // Only replace if the URL would actually change, to avoid redundant navigations
+    if (typeof window !== "undefined") {
+      const current = window.location.pathname + window.location.search;
+      if (current !== next) router.replace(next);
+    } else {
+      router.replace(next);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter, offset, pageSize]);
 

@@ -172,3 +172,6 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Real server-side pagination for links (API + hook + UI)
 - [x] Server-side filtering for links (API + hook + UI) and URL synchronization
 - [x] Typed API response contracts (`types/api.ts`) and `use-links` refactor to use them
+- [x] Fix /links infinite refresh loop when no data
+  - Stabilized `useLinks` initial fetch to avoid dependency churn
+  - Guarded `router.replace` on `/links` to only run when URL actually changes
