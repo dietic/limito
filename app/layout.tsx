@@ -17,7 +17,7 @@ export const metadata = {
       "Create links that automatically expire by date or clicks. Simple, fast, privacy-first.",
     url: "/",
     siteName: "Limi.to",
-    images: [{ url: "/icon.svg", width: 256, height: 256, alt: "Limi.to" }],
+    images: [{ url: "/og-image.svg", width: 1200, height: 630, alt: "Limi.to" }],
     locale: "en_US",
     type: "website",
   },
@@ -26,7 +26,7 @@ export const metadata = {
     title: "Limi.to — Expiring links, done right",
     description:
       "Create links that automatically expire by date or clicks. Simple, fast, privacy-first.",
-    images: ["/icon.svg"],
+    images: ["/og-image.svg"],
   },
 };
 
