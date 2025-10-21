@@ -71,6 +71,8 @@ export const updateLinkSchema = z
     click_limit: z.number().int().positive().optional().nullable(),
     // Allow empty string to signal "regenerate slug"
     slug: z.union([slugSchema, z.literal("")]).optional(),
+    // Special action: reactivate an expired link while keeping the same slug
+    reactivate: z.boolean().optional(),
   })
   .superRefine((val, ctx) => {
     if (val.mode === "by_date") {
@@ -79,6 +81,47 @@ export const updateLinkSchema = z
           code: z.ZodIssueCode.custom,
           message: "expires_at must be in the future",
         });
+    }
+    // When reactivating, enforce requirements
+    if (val.reactivate) {
+      // Reactivation requires setting a valid future expiration configuration
+      if (!val.mode) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "mode is required when reactivating",
+          path: ["mode"],
+        });
+      } else if (val.mode === "by_date") {
+        if (!val.expires_at) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "expires_at is required when reactivating by date",
+            path: ["expires_at"],
+          });
+        } else if (new Date(val.expires_at).getTime() <= Date.now()) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "expires_at must be in the future",
+            path: ["expires_at"],
+          });
+        }
+      } else if (val.mode === "by_clicks") {
+        if (!val.click_limit || val.click_limit <= 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "click_limit must be > 0 when reactivating by clicks",
+            path: ["click_limit"],
+          });
+        }
+      }
+      // Keep slug unchanged on reactivation
+      if (typeof val.slug !== "undefined") {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "slug cannot be changed when reactivating",
+          path: ["slug"],
+        });
+      }
     }
   });
 

@@ -186,3 +186,8 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
   - Wired into `app/page.tsx` Visual section; build/lint green
 - [x] Links page UX: tabs persist across loading; spinner placed below tabs; minor manual edit committed
 - [x] Redirect correctness: set `is_active=false` atomically when click_limit reached to avoid race conditions
+- [x] Toast readability: removed translucent variant backgrounds; use solid card bg + colored borders (fixes washed-out/opacity issue)
+- [x] Expired links: Add Reactivate flow (keep slug) with required new expiration (by date or by clicks); server PATCH supports reactivate flag
+      -> Reactivate now creates a new activation (campaign) in link_activations and sets links.current_activation_id
+      -> Redirect route mirrors counts into current activation and closes it when limit reached
+      -> Removed "Duplicate as new" UI; new link creation remains available standalone

@@ -203,6 +203,26 @@ export async function POST(request: NextRequest) {
       if (error.code === "23505") return jsonError("Slug already exists", 409);
       return jsonError("Failed to create link", 500);
     }
+    // Create an initial activation record for history and set current_activation_id
+    const nowIso = new Date().toISOString();
+    const { data: act, error: actErr } = await sb
+      .from("link_activations")
+      .insert({
+        link_id: data.id,
+        mode: data.mode,
+        expires_at: data.mode === "by_date" ? data.expires_at : null,
+        click_limit: data.mode === "by_clicks" ? data.click_limit : null,
+        click_count: 0,
+        activated_at: nowIso,
+      })
+      .select("id")
+      .single();
+    if (!actErr && act?.id) {
+      await sb
+        .from("links")
+        .update({ current_activation_id: act.id })
+        .eq("id", data.id);
+    }
     return jsonSuccess(data, 201);
   } catch (e) {
     if ((e as Error).message === "Unauthorized")

@@ -4,7 +4,7 @@ import { jsonError, jsonSuccess } from "@/lib/http";
 import { generateSlug, isValidCustomSlug } from "@/lib/slug";
 import { getServiceClient } from "@/lib/supabase";
 import { sanitizeUrl } from "@/lib/url";
-import { updateLinkSchema } from "@/lib/validators/link";
+import { updateLinkSchema, type UpdateLinkInput } from "@/lib/validators/link";
 import { NextRequest } from "next/server";
 
 export async function GET(
@@ -51,8 +51,10 @@ export async function PATCH(
       .single();
     if (getErr || !existing) return jsonError("Not found", 404);
 
-    // Disallow editing expired links to keep history consistent.
-    if (isExpired(existing)) {
+    // Disallow editing expired links to keep history consistent unless reactivating.
+    const wantsReactivate =
+      parsed.success && (parsed.data as UpdateLinkInput).reactivate === true;
+    if (isExpired(existing) && !wantsReactivate) {
       return jsonError(
         "Cannot edit an expired link. Please duplicate it instead.",
         409
@@ -90,6 +92,62 @@ export async function PATCH(
       payload["click_limit"] = parsed.data.click_limit;
     if (parsed.data.is_active !== undefined)
       payload["is_active"] = parsed.data.is_active;
+
+    // Reactivation flow keeps slug and resets counters/activation
+    if (wantsReactivate) {
+      // Ensure slug cannot be changed during reactivation
+      delete payload["slug"];
+
+      // 1) Close previous activation if any
+      const nowIso = new Date().toISOString();
+      if (existing.current_activation_id) {
+        await sb
+          .from("link_activations")
+          .update({ deactivated_at: nowIso, ended_reason: "reactivated" })
+          .eq("id", existing.current_activation_id);
+      }
+
+      // 2) Create a new activation with the incoming config
+      const activationInsert = {
+        link_id: existing.id,
+        mode: payload["mode"] ?? existing.mode,
+        expires_at:
+          (payload["mode"] ?? existing.mode) === "by_date"
+            ? payload["expires_at"] ?? existing.expires_at ?? null
+            : null,
+        click_limit:
+          (payload["mode"] ?? existing.mode) === "by_clicks"
+            ? payload["click_limit"] ?? existing.click_limit ?? null
+            : null,
+        click_count: 0,
+        activated_at: nowIso,
+      } as Record<string, unknown>;
+
+      const { data: act, error: actErr } = await sb
+        .from("link_activations")
+        .insert(activationInsert)
+        .select("id")
+        .single();
+      if (actErr || !act) return jsonError("Failed to create activation", 500);
+
+      // 3) Reactivate link, reset counters, set current_activation_id
+      const reactivatePayload = {
+        ...payload,
+        is_active: true,
+        click_count: 0,
+        current_activation_id: act.id,
+      } as Record<string, unknown>;
+
+      const { data, error } = await sb
+        .from("links")
+        .update(reactivatePayload)
+        .eq("id", params.id)
+        .eq("owner_id", userId)
+        .select("*")
+        .single();
+      if (error) return jsonError("Failed to reactivate link", 500);
+      return jsonSuccess(data);
+    }
 
     const { data, error } = await sb
       .from("links")

@@ -194,8 +194,9 @@ export default function LinkDetailsPage() {
                 </h2>
                 {expired ? (
                   <p className="text-sm text-muted-foreground">
-                    This link has expired. You can duplicate it to create a new
-                    active link with the same settings.
+                    This link has expired. Reactivate it to keep the same slug
+                    and start a new campaign. Your previous campaign metrics
+                    will be preserved in history.
                   </p>
                 ) : (
                   <p className="text-sm text-muted-foreground">
@@ -210,30 +211,80 @@ export default function LinkDetailsPage() {
             {expired ? (
               <div className="space-y-4">
                 <div className="rounded-xl border border-warning/30 bg-warning/10 p-4 text-warning">
-                  You cannot edit an expired link. Create a new link using the
-                  same settings.
+                  You cannot edit an expired link. Reactivate to create a new
+                  campaign while keeping the slug.
                 </div>
                 <div className="grid gap-3 sm:flex">
                   <button
-                    onClick={() => {
-                      // Prefill the new link page via query params
-                      const params = new URLSearchParams();
-                      params.set("destination_url", link.destination_url);
-                      if (link.fallback_url)
-                        params.set("fallback_url", link.fallback_url);
-                      params.set("mode", link.mode);
-                      if (link.mode === "by_date" && link.expires_at)
-                        params.set(
-                          "expires_at",
-                          new Date(link.expires_at).toISOString()
+                    onClick={async () => {
+                      // Reactivate flow: prompt for new expiration config based on current mode
+                      try {
+                        if (link.mode === "by_date") {
+                          const def = new Date(
+                            Date.now() + 7 * 24 * 60 * 60 * 1000
+                          ).toISOString();
+                          const input = prompt(
+                            "Set a new expiration date (ISO, e.g., 2025-11-01T12:00:00Z)",
+                            def
+                          );
+                          if (!input) return;
+                          const ts = Date.parse(input);
+                          if (!Number.isFinite(ts) || ts <= Date.now()) {
+                            alert("Please enter a future ISO datetime.");
+                            return;
+                          }
+                          setSaving(true);
+                          const res = await updateLink(link.id, {
+                            reactivate: true,
+                            mode: "by_date",
+                            expires_at: new Date(ts).toISOString(),
+                          });
+                          setSaving(false);
+                          if (!res.ok) {
+                            alert(res.message || "Failed to reactivate link");
+                            return;
+                          }
+                          setLink(res.data as Link);
+                          await refresh();
+                        } else {
+                          const def = String(link.click_limit ?? 10);
+                          const input = prompt(
+                            "Set a new click limit (> 0)",
+                            def
+                          );
+                          if (!input) return;
+                          const n = Number(input);
+                          if (!Number.isFinite(n) || n <= 0) {
+                            alert("Click limit must be a positive number.");
+                            return;
+                          }
+                          setSaving(true);
+                          const res = await updateLink(link.id, {
+                            reactivate: true,
+                            mode: "by_clicks",
+                            click_limit: Math.floor(n),
+                          });
+                          setSaving(false);
+                          if (!res.ok) {
+                            alert(res.message || "Failed to reactivate link");
+                            return;
+                          }
+                          setLink(res.data as Link);
+                          await refresh();
+                        }
+                      } catch (e) {
+                        setSaving(false);
+                        alert(
+                          (e as Error).message || "Failed to reactivate link"
                         );
-                      if (link.mode === "by_clicks" && link.click_limit != null)
-                        params.set("click_limit", String(link.click_limit));
-                      router.push(`/links/new?${params.toString()}`);
+                      }
                     }}
-                    className={cn(buttonVariants({ variant: "default" }))}
+                    className={cn(
+                      buttonVariants({ variant: "outline" }),
+                      "border-success text-success hover:bg-success/10"
+                    )}
                   >
-                    Duplicate as new
+                    Reactivate (keep slug)
                   </button>
                   <NextLink
                     href="/links"

@@ -103,7 +103,7 @@ export async function GET(
   const { data: link } = await sb
     .from("links")
     .select(
-      "id,destination_url,fallback_url,mode,expires_at,click_limit,click_count,is_active"
+      "id,destination_url,fallback_url,mode,expires_at,click_limit,click_count,is_active,current_activation_id"
     )
     .eq("slug", params.slug)
     .single();
@@ -164,22 +164,35 @@ export async function GET(
     typeof link.click_limit === "number" &&
     newCount >= link.click_limit;
 
-  await Promise.all([
-    sb
-      .from("links")
+  // 3) Persist counters (sequentially for type safety)
+  await sb
+    .from("links")
+    .update({
+      click_count: newCount,
+      last_clicked_at: nowIso,
+      ...(shouldDeactivate ? { is_active: false } : {}),
+    })
+    .eq("id", link.id);
+
+  // If there's a current activation, mirror counts and end it when threshold reached
+  if (link.current_activation_id) {
+    await sb
+      .from("link_activations")
       .update({
         click_count: newCount,
-        last_clicked_at: nowIso,
-        ...(shouldDeactivate ? { is_active: false } : {}),
+        ...(shouldDeactivate
+          ? { deactivated_at: nowIso, ended_reason: "limit_reached" }
+          : {}),
       })
-      .eq("id", link.id),
-    sb.from("click_events").insert({
-      link_id: link.id,
-      clicked_at: nowIso,
-      referrer,
-      user_agent: userAgent,
-    }),
-  ]);
+      .eq("id", link.current_activation_id);
+  }
+
+  await sb.from("click_events").insert({
+    link_id: link.id,
+    clicked_at: nowIso,
+    referrer,
+    user_agent: userAgent,
+  });
 
   // Cleanup is now handled by a scheduled job (pg_cron). No opportunistic deletions here.
 

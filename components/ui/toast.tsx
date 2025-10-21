@@ -99,13 +99,13 @@ export function Toaster() {
         <div
           key={t.id}
           className={cn(
+            // Solid surface for readability; avoid semi-transparent variant backgrounds
             "pointer-events-auto rounded-xl border p-3 shadow-lg transition-all",
             "bg-card text-card-foreground border-border",
-            t.variant === "destructive" &&
-              "border-destructive/40 bg-destructive/10 text-destructive",
-            t.variant === "success" &&
-              "border-success/40 bg-success/10 text-success",
-            t.variant === "info" && "border-info/40 bg-info/10 text-info"
+            // Variant accents via border only (no bg opacity) to prevent washed-out toasts
+            t.variant === "destructive" && "border-destructive/50",
+            t.variant === "success" && "border-success/50",
+            t.variant === "info" && "border-info/50"
           )}
           role="status"
         >
