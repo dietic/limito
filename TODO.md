@@ -73,6 +73,11 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Basic analytics endpoint (click_count, last_clicked_at)
 - [x] Dashboard card: total clicks
 - [x] Show last click date (latest across links) in dashboard
+- [x] Link analytics: activations list + lifetime_clicks via `/api/links/[id]/analytics`
+      -> New hook `use-link-analytics` fetches per-card data lazily
+      -> Link card shows lifetime total and current campaign clicks
+      -> Bottom-left campaign arrows polished (rounded, icons, disabled for single campaign)
+      -> Reactivation backfills a previous campaign if none existed (for legacy links)
 - [ ] Add small trends: last 24h count (optional v1)
 
 ## 6) UI/UX
@@ -95,6 +100,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
       -> Done: /links tabs always visible; loading spinner moved below tabs; committed final manual tweak
       -> Done: Link details page uses modals (Reactivate/Delete/Notice); removed alerts/prompts and fixed hook-order bug
       -> Done: Reactivate button visibility improved (success styling)
+      -> Done: Link card UX: bottom-left arrows to browse campaigns (instances) and inline total clicks metric
       -> Done: Theme toggle added to Dashboard header actions
 
 ## 7) Validation & Types
@@ -197,3 +203,5 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Link details UX: replaced alerts with modals (Reactivate/Delete/Notice), stronger Reactivate CTA, fixed hook-order error
 - [x] Dashboard UX: added Theme toggle button in header
 - [x] DB migrations: link_activations migration fixed for PG (policy DO blocks), applied successfully
+- [x] Branding icons: fix prod favicon/logo resolution by guarding metadataBase
+  - Only set `metadataBase` when `APP_URL` is defined; avoids generating absolute localhost URLs in production

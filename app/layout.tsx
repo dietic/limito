@@ -1,11 +1,15 @@
 import ThemeProvider from "@/components/theme-provider";
 import { ToastProvider, Toaster } from "@/components/ui/toast";
 import { Analytics } from "@vercel/analytics/react";
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import "../styles/globals.css";
 
-export const metadata = {
-  metadataBase: new URL(process.env["APP_URL"] || "http://localhost:3000"),
+// Only set metadataBase when APP_URL is provided to avoid absolute localhost URLs in production
+const appUrl = process.env["APP_URL"];
+
+export const metadata: Metadata = {
+  ...(appUrl ? { metadataBase: new URL(appUrl) } : {}),
   title: {
     default: "Limi.to — Expiring links, done right",
     template: "%s — Limi.to",

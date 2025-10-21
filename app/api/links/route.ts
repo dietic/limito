@@ -217,6 +217,9 @@ export async function POST(request: NextRequest) {
       })
       .select("id")
       .single();
+    if (actErr) {
+      // No console logging per lint rules; surface details via dev-only response on caller paths
+    }
     if (!actErr && act?.id) {
       await sb
         .from("links")

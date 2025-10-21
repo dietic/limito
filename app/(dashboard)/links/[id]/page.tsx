@@ -1,6 +1,14 @@
 "use client";
-import LinkForm, { type LinkFormValues } from "@/components/link-form";
-import { buttonVariants } from "@/components/ui/button";
+import LinkForm from "@/components/link-form";
+import Button, { buttonVariants } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
 import { useLinks } from "@/hooks/use-links";
 import { isExpired } from "@/lib/expiration";
@@ -18,14 +26,25 @@ export default function LinkDetailsPage() {
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [link, setLink] = useState<Link | null>(null);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [messageOpen, setMessageOpen] = useState(false);
+  const [messageText, setMessageText] = useState<string>("");
 
+  // Reactivate dialog state
+  const [reactivateOpen, setReactivateOpen] = useState(false);
+  const [reactivateMode, setReactivateMode] = useState<"by_date" | "by_clicks">(
+    "by_date"
+  );
+  const [reactivateDate, setReactivateDate] = useState<string>("");
+  const [reactivateClicks, setReactivateClicks] = useState<string>("10");
+  const [reactivateError, setReactivateError] = useState<string>("");
+
+  // Load link details
   useEffect(() => {
     let canceled = false;
     async function load() {
       try {
-        // Wait for auth to be ready and require a token
         const token = await getAccessToken();
         if (!token) {
           throw new Error("Unauthorized");
@@ -34,34 +53,47 @@ export default function LinkDetailsPage() {
           headers: { Authorization: `Bearer ${token}` },
         });
         const payload = await res.json();
-        if (!res.ok) throw new Error(payload.message || "Failed to load");
-        if (!canceled) setLink(payload.data as Link);
+        if (!res.ok) {
+          throw new Error(payload?.message || "Failed to load link");
+        }
+        if (!canceled) {
+          const l = payload.data as Link;
+          setLink(l);
+          // seed reactivate defaults from existing
+          if (l.mode === "by_date") {
+            const def = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+              .toISOString()
+              .slice(0, 16);
+            setReactivateDate(def);
+            setReactivateMode("by_date");
+          } else {
+            setReactivateClicks(String(l.click_limit ?? 10));
+            setReactivateMode("by_clicks");
+          }
+        }
       } catch (e) {
-        if (!canceled) setError((e as Error).message);
+        if (!canceled) {
+          setMessageText((e as Error).message || "Failed to load link");
+          setMessageOpen(true);
+        }
       } finally {
         if (!canceled) setLoading(false);
       }
     }
-    if (!params?.id) return;
-    if (authLoading) return; // wait for auth ready
-    if (!userId) {
-      setLoading(false);
-      return;
-    }
-    load();
+    if (params?.id) load();
     return () => {
       canceled = true;
     };
-  }, [params?.id, authLoading, userId, getAccessToken]);
+  }, [params?.id, getAccessToken]);
 
-  if (authLoading || loading) {
+  if (authLoading) {
     return (
       <main className="min-h-screen bg-gradient-to-br from-background to-muted px-6 py-8">
         <div className="mx-auto max-w-4xl">
           <div className="flex items-center justify-center py-20">
             <div className="flex items-center gap-3 text-muted-foreground">
               <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
-              <span>Loading link...</span>
+              <span>Loading link…</span>
             </div>
           </div>
         </div>
@@ -74,36 +106,7 @@ export default function LinkDetailsPage() {
     return null;
   }
 
-  if (error) {
-    return (
-      <main className="min-h-screen bg-gradient-to-br from-background to-muted px-6 py-8">
-        <div className="mx-auto max-w-4xl">
-          <div className="mb-6 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-destructive">
-            {error}
-          </div>
-          <NextLink
-            href="/links"
-            className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-muted hover:shadow-md"
-          >
-            ← Back to Links
-          </NextLink>
-        </div>
-      </main>
-    );
-  }
-
-  if (!link) return null;
-
-  const expired = isExpired(link);
-
-  const initial: Partial<LinkFormValues> = {
-    destination_url: link.destination_url,
-    fallback_url: link.fallback_url ?? undefined,
-    mode: link.mode,
-    expires_at: link.expires_at ?? undefined,
-    click_limit: link.click_limit ?? undefined,
-    slug: link.slug,
-  };
+  const expired = link ? isExpired(link) : false;
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-background to-muted">
@@ -115,7 +118,9 @@ export default function LinkDetailsPage() {
               <h1 className="text-3xl font-bold text-foreground">
                 {expired ? "Link Expired" : "Edit Link"}
               </h1>
-              <p className="mt-1 text-muted-foreground">/{link.slug}</p>
+              {link && (
+                <p className="mt-1 text-muted-foreground">/{link.slug}</p>
+              )}
             </div>
             <div className="flex gap-3">
               <NextLink
@@ -124,27 +129,17 @@ export default function LinkDetailsPage() {
               >
                 ← Back to Links
               </NextLink>
-              <button
-                onClick={async () => {
-                  if (
-                    !confirm("Delete this link? This action cannot be undone.")
-                  )
-                    return;
-                  const res = await deleteLink(link.id);
-                  if (!res.ok) {
-                    alert(res.message || "Failed to delete");
-                    return;
-                  }
-                  await refresh();
-                  router.push("/links");
-                }}
+              <Button
+                type="button"
+                onClick={() => setDeleteOpen(true)}
                 className={cn(
                   buttonVariants({ variant: "outline" }),
                   "border-destructive text-destructive hover:bg-destructive/10"
                 )}
+                disabled={!link}
               >
                 Delete
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -208,84 +203,30 @@ export default function LinkDetailsPage() {
           </div>
 
           <div className="p-8">
-            {expired ? (
+            {loading || !link ? (
+              <div className="flex items-center justify-center py-12 text-muted-foreground">
+                <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+              </div>
+            ) : expired ? (
               <div className="space-y-4">
                 <div className="rounded-xl border border-warning/30 bg-warning/10 p-4 text-warning">
                   You cannot edit an expired link. Reactivate to create a new
                   campaign while keeping the slug.
                 </div>
                 <div className="grid gap-3 sm:flex">
-                  <button
-                    onClick={async () => {
-                      // Reactivate flow: prompt for new expiration config based on current mode
-                      try {
-                        if (link.mode === "by_date") {
-                          const def = new Date(
-                            Date.now() + 7 * 24 * 60 * 60 * 1000
-                          ).toISOString();
-                          const input = prompt(
-                            "Set a new expiration date (ISO, e.g., 2025-11-01T12:00:00Z)",
-                            def
-                          );
-                          if (!input) return;
-                          const ts = Date.parse(input);
-                          if (!Number.isFinite(ts) || ts <= Date.now()) {
-                            alert("Please enter a future ISO datetime.");
-                            return;
-                          }
-                          setSaving(true);
-                          const res = await updateLink(link.id, {
-                            reactivate: true,
-                            mode: "by_date",
-                            expires_at: new Date(ts).toISOString(),
-                          });
-                          setSaving(false);
-                          if (!res.ok) {
-                            alert(res.message || "Failed to reactivate link");
-                            return;
-                          }
-                          setLink(res.data as Link);
-                          await refresh();
-                        } else {
-                          const def = String(link.click_limit ?? 10);
-                          const input = prompt(
-                            "Set a new click limit (> 0)",
-                            def
-                          );
-                          if (!input) return;
-                          const n = Number(input);
-                          if (!Number.isFinite(n) || n <= 0) {
-                            alert("Click limit must be a positive number.");
-                            return;
-                          }
-                          setSaving(true);
-                          const res = await updateLink(link.id, {
-                            reactivate: true,
-                            mode: "by_clicks",
-                            click_limit: Math.floor(n),
-                          });
-                          setSaving(false);
-                          if (!res.ok) {
-                            alert(res.message || "Failed to reactivate link");
-                            return;
-                          }
-                          setLink(res.data as Link);
-                          await refresh();
-                        }
-                      } catch (e) {
-                        setSaving(false);
-                        alert(
-                          (e as Error).message || "Failed to reactivate link"
-                        );
-                      }
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      setReactivateError("");
+                      setReactivateOpen(true);
                     }}
                     className={cn(
-                      buttonVariants({ variant: "outline" }),
-                      "border-success text-success hover:bg-success/10"
+                      buttonVariants({ variant: "default" }),
+                      "bg-success text-success-foreground hover:bg-success/90"
                     )}
                   >
                     Reactivate (keep slug)
-                  </button>
+                  </Button>
                   <NextLink
                     href="/links"
                     className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-muted hover:shadow-md"
@@ -296,14 +237,24 @@ export default function LinkDetailsPage() {
               </div>
             ) : (
               <LinkForm
-                initialValues={initial}
+                initialValues={
+                  link
+                    ? {
+                        destination_url: link.destination_url,
+                        fallback_url: link.fallback_url ?? undefined,
+                        mode: link.mode,
+                        expires_at: link.expires_at ?? undefined,
+                        click_limit: link.click_limit ?? undefined,
+                        slug: link.slug,
+                      }
+                    : {}
+                }
                 submitLabel="Save"
                 loading={saving}
                 onSubmit={async (values) => {
                   setSaving(true);
                   const normalized = {
                     ...values,
-                    // If user leaves slug empty => request regeneration by sending empty string
                     slug:
                       values.slug === undefined
                         ? undefined
@@ -314,7 +265,8 @@ export default function LinkDetailsPage() {
                   const res = await updateLink(link.id, normalized);
                   setSaving(false);
                   if (!res.ok) {
-                    alert(res.message || "Failed to save changes");
+                    setMessageText(res.message || "Failed to save changes");
+                    setMessageOpen(true);
                     return;
                   }
                   await refresh();
@@ -325,6 +277,194 @@ export default function LinkDetailsPage() {
           </div>
         </div>
       </div>
+
+      {/* Reactivate Dialog */}
+      <Dialog open={reactivateOpen} onOpenChange={setReactivateOpen}>
+        <DialogHeader>
+          <DialogTitle>Reactivate link (keep slug)</DialogTitle>
+          <DialogDescription>
+            Set a new expiration configuration for this campaign.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4 px-1">
+          <div className="flex gap-2">
+            <Button
+              type="button"
+              variant={reactivateMode === "by_date" ? "default" : "ghost"}
+              onClick={() => setReactivateMode("by_date")}
+            >
+              By date
+            </Button>
+            <Button
+              type="button"
+              variant={reactivateMode === "by_clicks" ? "default" : "ghost"}
+              onClick={() => setReactivateMode("by_clicks")}
+            >
+              By clicks
+            </Button>
+          </div>
+          {reactivateMode === "by_date" ? (
+            <div>
+              <label className="block text-sm font-medium text-foreground">
+                Expires at
+              </label>
+              <Input
+                type="datetime-local"
+                className="mt-1"
+                value={reactivateDate}
+                onChange={(e) => setReactivateDate(e.target.value)}
+              />
+              <p className="mt-1 text-xs text-muted-foreground">
+                Must be a future date/time.
+              </p>
+            </div>
+          ) : (
+            <div>
+              <label className="block text-sm font-medium text-foreground">
+                Click limit
+              </label>
+              <Input
+                type="number"
+                min={1}
+                step={1}
+                className="mt-1"
+                value={reactivateClicks}
+                onChange={(e) => setReactivateClicks(e.target.value)}
+              />
+              <p className="mt-1 text-xs text-muted-foreground">
+                Must be a positive integer.
+              </p>
+            </div>
+          )}
+          {reactivateError && (
+            <div className="rounded-md border border-destructive/30 bg-destructive/10 p-2 text-sm text-destructive">
+              {reactivateError}
+            </div>
+          )}
+        </div>
+        <DialogFooter>
+          <Button variant="ghost" onClick={() => setReactivateOpen(false)}>
+            Cancel
+          </Button>
+          <Button
+            onClick={async () => {
+              try {
+                if (!link) return;
+                setReactivateError("");
+                if (reactivateMode === "by_date") {
+                  if (!reactivateDate) {
+                    setReactivateError("Please pick a date/time.");
+                    return;
+                  }
+                  const iso = new Date(reactivateDate).toISOString();
+                  if (!isValidFutureIso(iso)) {
+                    setReactivateError("Please enter a future date/time.");
+                    return;
+                  }
+                  setSaving(true);
+                  const res = await updateLink(link.id, {
+                    reactivate: true,
+                    mode: "by_date",
+                    expires_at: iso,
+                  });
+                  setSaving(false);
+                  if (!res.ok) {
+                    setMessageText(res.message || "Failed to reactivate link");
+                    setMessageOpen(true);
+                    return;
+                  }
+                  setLink(res.data as Link);
+                  setReactivateOpen(false);
+                  await refresh();
+                } else {
+                  const n = Number(reactivateClicks);
+                  if (!Number.isFinite(n) || n <= 0) {
+                    setReactivateError(
+                      "Click limit must be a positive number."
+                    );
+                    return;
+                  }
+                  setSaving(true);
+                  const res = await updateLink(link.id, {
+                    reactivate: true,
+                    mode: "by_clicks",
+                    click_limit: Math.floor(n),
+                  });
+                  setSaving(false);
+                  if (!res.ok) {
+                    setMessageText(res.message || "Failed to reactivate link");
+                    setMessageOpen(true);
+                    return;
+                  }
+                  setLink(res.data as Link);
+                  setReactivateOpen(false);
+                  await refresh();
+                }
+              } catch (e) {
+                setSaving(false);
+                setMessageText(
+                  (e as Error).message || "Failed to reactivate link"
+                );
+                setMessageOpen(true);
+              }
+            }}
+            className={cn(
+              buttonVariants({ variant: "default" }),
+              "bg-success text-success-foreground hover:bg-success/90"
+            )}
+          >
+            Save & Reactivate
+          </Button>
+        </DialogFooter>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <DialogHeader>
+          <DialogTitle>Delete link</DialogTitle>
+          <DialogDescription>
+            This action cannot be undone. This will permanently delete the link
+            and its campaign history.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button variant="ghost" onClick={() => setDeleteOpen(false)}>
+            Cancel
+          </Button>
+          <Button
+            className={cn(buttonVariants({ variant: "destructive" }))}
+            onClick={async () => {
+              if (!link) return;
+              const res = await deleteLink(link.id);
+              if (!res.ok) {
+                setMessageText(res.message || "Failed to delete link");
+                setMessageOpen(true);
+                return;
+              }
+              await refresh();
+              router.push("/links");
+            }}
+          >
+            Delete
+          </Button>
+        </DialogFooter>
+      </Dialog>
+
+      {/* Message Dialog (errors/info) */}
+      <Dialog open={messageOpen} onOpenChange={setMessageOpen}>
+        <DialogHeader>
+          <DialogTitle>Notice</DialogTitle>
+        </DialogHeader>
+        <div className="px-1 text-sm text-foreground">{messageText}</div>
+        <DialogFooter>
+          <Button onClick={() => setMessageOpen(false)}>OK</Button>
+        </DialogFooter>
+      </Dialog>
     </main>
   );
+}
+
+function isValidFutureIso(ts: string): boolean {
+  const d = Date.parse(ts);
+  return Number.isFinite(d) && d > Date.now();
 }

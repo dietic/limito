@@ -1,4 +1,5 @@
 "use client";
+import ThemeToggle from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { useLinks } from "@/hooks/use-links";
@@ -62,6 +63,7 @@ export default function DashboardPage() {
               )}
             </div>
             <div className="flex gap-3">
+              <ThemeToggle />
               <NextLink
                 href="/links"
                 className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-muted hover:shadow-md"

@@ -98,13 +98,37 @@ export async function PATCH(
       // Ensure slug cannot be changed during reactivation
       delete payload["slug"];
 
-      // 1) Close previous activation if any
+      // 1) Close previous activation if any, otherwise backfill one if none exists
       const nowIso = new Date().toISOString();
       if (existing.current_activation_id) {
         await sb
           .from("link_activations")
           .update({ deactivated_at: nowIso, ended_reason: "reactivated" })
           .eq("id", existing.current_activation_id);
+      } else {
+        // If the project started before migrations were applied, there might be no activation yet.
+        // Backfill a historical activation so campaign navigation shows both previous and current.
+        const { data: hasAnyActs, error: hasActsErr } = await sb
+          .from("link_activations")
+          .select("id", { count: "exact" })
+          .eq("link_id", existing.id)
+          .limit(1);
+        const countActs = hasAnyActs?.length ?? 0;
+        if (!hasActsErr && countActs === 0) {
+          await sb.from("link_activations").insert({
+            link_id: existing.id,
+            mode: existing.mode,
+            expires_at:
+              existing.mode === "by_date" ? existing.expires_at : null,
+            click_limit:
+              existing.mode === "by_clicks" ? existing.click_limit : null,
+            click_count: existing.click_count ?? 0,
+            activated_at:
+              (existing as { created_at?: string }).created_at ?? nowIso,
+            deactivated_at: nowIso,
+            ended_reason: "backfill",
+          });
+        }
       }
 
       // 2) Create a new activation with the incoming config
@@ -128,7 +152,22 @@ export async function PATCH(
         .insert(activationInsert)
         .select("id")
         .single();
-      if (actErr || !act) return jsonError("Failed to create activation", 500);
+      if (actErr || !act) {
+        const raw = (actErr as { message?: string; code?: string }) || {};
+        const errMsg = String(raw.message || "");
+        const isMissingTable =
+          (errMsg.toLowerCase().includes("relation") &&
+            errMsg.toLowerCase().includes("link_activations")) ||
+          raw.code === "42P01"; // undefined_table
+        return jsonError(
+          process.env.NODE_ENV === "production"
+            ? "Failed to create activation"
+            : isMissingTable
+            ? "Database not initialized: run Supabase migrations (link_activations missing)"
+            : `Failed to create activation${errMsg ? ": " + errMsg : ""}`,
+          500
+        );
+      }
 
       // 3) Reactivate link, reset counters, set current_activation_id
       const reactivatePayload = {
