@@ -93,6 +93,9 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
       -> Done: polished /links and /links/new for small screens (stacked headers, wrapping tabs, responsive actions)
       -> Done: code-based Hero Visual component integrated into landing hero (Create → Share → Expire composite)
       -> Done: /links tabs always visible; loading spinner moved below tabs; committed final manual tweak
+      -> Done: Link details page uses modals (Reactivate/Delete/Notice); removed alerts/prompts and fixed hook-order bug
+      -> Done: Reactivate button visibility improved (success styling)
+      -> Done: Theme toggle added to Dashboard header actions
 
 ## 7) Validation & Types
 
@@ -191,3 +194,6 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
       -> Reactivate now creates a new activation (campaign) in link_activations and sets links.current_activation_id
       -> Redirect route mirrors counts into current activation and closes it when limit reached
       -> Removed "Duplicate as new" UI; new link creation remains available standalone
+- [x] Link details UX: replaced alerts with modals (Reactivate/Delete/Notice), stronger Reactivate CTA, fixed hook-order error
+- [x] Dashboard UX: added Theme toggle button in header
+- [x] DB migrations: link_activations migration fixed for PG (policy DO blocks), applied successfully
