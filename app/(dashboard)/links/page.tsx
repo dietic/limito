@@ -204,94 +204,146 @@ function LinksPageInner() {
             </div>
           </div>
         )}
+        {/* Filter Tabs (always visible) */}
+        <div className="mb-6 flex flex-wrap gap-2 rounded-xl border border-border bg-card p-1 shadow-sm sm:flex-nowrap">
+          <button
+            onClick={() => {
+              setFilter("all");
+              refresh({ limit: pageSize, offset: 0, filter: "all" });
+            }}
+            disabled={loading}
+            className={cn(
+              "flex-1 rounded-lg px-3 py-2 sm:px-4 text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-60",
+              filter === "all"
+                ? "bg-primary text-primary-foreground shadow-md"
+                : "text-muted-foreground hover:bg-muted"
+            )}
+          >
+            All{typeof counts?.all === "number" ? ` (${counts.all})` : ""}
+          </button>
+          <button
+            onClick={() => {
+              setFilter("active");
+              refresh({ limit: pageSize, offset: 0, filter: "active" });
+            }}
+            disabled={loading}
+            className={cn(
+              "flex-1 rounded-lg px-3 py-2 sm:px-4 text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-60",
+              filter === "active"
+                ? "bg-success text-success-foreground shadow-md"
+                : "text-muted-foreground hover:bg-muted"
+            )}
+          >
+            Active
+            {typeof counts?.active === "number" ? ` (${counts.active})` : ""}
+          </button>
+          <button
+            onClick={() => {
+              setFilter("expired");
+              refresh({ limit: pageSize, offset: 0, filter: "expired" });
+            }}
+            disabled={loading}
+            className={cn(
+              "flex-1 rounded-lg px-3 py-2 sm:px-4 text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-60",
+              filter === "expired"
+                ? "bg-muted text-foreground shadow-md"
+                : "text-muted-foreground hover:bg-muted"
+            )}
+          >
+            Expired
+            {typeof counts?.expired === "number"
+              ? ` (${counts.expired})`
+              : ""}
+          </button>
+        </div>
 
+        {/* Empty states tailored to filter */}
         {!loading && items.length === 0 && (
           <div className="mt-12 text-center">
-            <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-accent shadow-2xl shadow-primary/30">
-              <svg
-                className="h-12 w-12 text-primary-foreground"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-                />
-              </svg>
-            </div>
-            <h3 className="mt-6 text-2xl font-bold text-foreground">
-              No links yet
-            </h3>
-            <p className="mt-2 text-muted-foreground">
-              Create your first expiring link to get started
-            </p>
-            <NextLink
-              href="/links/new"
-              className={cn(
-                buttonVariants({ variant: "default", size: "lg" }),
-                "mt-6 inline-flex shadow-lg shadow-primary/30"
-              )}
-            >
-              Create Your First Link
-            </NextLink>
+            {filter === "all" ? (
+              <>
+                <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-accent shadow-2xl shadow-primary/30">
+                  <svg
+                    className="h-12 w-12 text-primary-foreground"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                    />
+                  </svg>
+                </div>
+                <h3 className="mt-6 text-2xl font-bold text-foreground">
+                  No links yet
+                </h3>
+                <p className="mt-2 text-muted-foreground">
+                  Create your first expiring link to get started
+                </p>
+                <NextLink
+                  href="/links/new"
+                  className={cn(
+                    buttonVariants({ variant: "default", size: "lg" }),
+                    "mt-6 inline-flex shadow-lg shadow-primary/30"
+                  )}
+                >
+                  Create Your First Link
+                </NextLink>
+              </>
+            ) : (
+              <div className="rounded-2xl border border-border bg-card p-12 text-center shadow-sm">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-xl bg-muted">
+                  <svg
+                    className="h-8 w-8 text-muted-foreground"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </div>
+                <h3 className="mt-4 text-lg font-semibold text-foreground">
+                  No {filter} links
+                </h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Try another filter or create a new link
+                </p>
+                <div className="mt-4 flex items-center justify-center gap-3">
+                  <button
+                    onClick={() => {
+                      setFilter("all");
+                      refresh({ limit: pageSize, offset: 0, filter: "all" });
+                    }}
+                    className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-muted"
+                  >
+                    View all
+                  </button>
+                  <NextLink
+                    href="/links/new"
+                    className={cn(
+                      buttonVariants({ variant: "default" }),
+                      "px-4 py-2 text-sm"
+                    )}
+                  >
+                    + Create Link
+                  </NextLink>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
+        {/* Links Grid (server-paginated) */}
         {!loading && items.length > 0 && (
           <>
-            {/* Filter Tabs */}
-            <div className="mb-6 flex flex-wrap gap-2 rounded-xl border border-border bg-card p-1 shadow-sm sm:flex-nowrap">
-              <button
-                onClick={() => {
-                  setFilter("all");
-                  refresh({ limit: pageSize, offset: 0, filter: "all" });
-                }}
-                className={`flex-1 rounded-lg px-3 py-2 sm:px-4 text-sm font-medium transition-all ${
-                  filter === "all"
-                    ? "bg-primary text-primary-foreground shadow-md"
-                    : "text-muted-foreground hover:bg-muted"
-                }`}
-              >
-                All{typeof counts?.all === "number" ? ` (${counts.all})` : ""}
-              </button>
-              <button
-                onClick={() => {
-                  setFilter("active");
-                  refresh({ limit: pageSize, offset: 0, filter: "active" });
-                }}
-                className={`flex-1 rounded-lg px-3 py-2 sm:px-4 text-sm font-medium transition-all ${
-                  filter === "active"
-                    ? "bg-success text-success-foreground shadow-md"
-                    : "text-muted-foreground hover:bg-muted"
-                }`}
-              >
-                Active
-                {typeof counts?.active === "number"
-                  ? ` (${counts.active})`
-                  : ""}
-              </button>
-              <button
-                onClick={() => {
-                  setFilter("expired");
-                  refresh({ limit: pageSize, offset: 0, filter: "expired" });
-                }}
-                className={`flex-1 rounded-lg px-3 py-2 sm:px-4 text-sm font-medium transition-all ${
-                  filter === "expired"
-                    ? "bg-muted text-foreground shadow-md"
-                    : "text-muted-foreground hover:bg-muted"
-                }`}
-              >
-                Expired
-                {typeof counts?.expired === "number"
-                  ? ` (${counts.expired})`
-                  : ""}
-              </button>
-            </div>
-
-            {/* Links Grid (server-paginated) */}
             <div className="space-y-3">
               {shownItems.map((link: LinkType) => (
                 <div
@@ -514,32 +566,6 @@ function LinksPageInner() {
                 </div>
               ))}
             </div>
-
-            {shownItems.length === 0 && (
-              <div className="rounded-2xl border border-border bg-card p-12 text-center shadow-sm">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-xl bg-muted">
-                  <svg
-                    className="h-8 w-8 text-muted-foreground"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </div>
-                <h3 className="mt-4 text-lg font-semibold text-foreground">
-                  No {filter} links
-                </h3>
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Try changing the filter or create a new link
-                </p>
-              </div>
-            )}
 
             {/* Pagination Controls (server) */}
             {shownItems.length > 0 && (
