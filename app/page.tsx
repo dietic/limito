@@ -1,7 +1,7 @@
 import Faq from "@/components/faq-section";
 import Pricing from "@/components/pricing-section";
 import ThemeToggle from "@/components/theme-toggle";
-import Image from "next/image";
+import Brand from "@/components/brand";
 export default function Page() {
   return (
     <div className="relative min-h-screen bg-background">
@@ -16,17 +16,7 @@ export default function Page() {
       <nav className="sticky top-0 z-20 border-b border-border/60 bg-background/70 backdrop-blur-md">
         <div className="mx-auto max-w-7xl px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Image
-                src="/logo.png"
-                alt="Limi.to"
-                width={120}
-                height={28}
-                className="h-6 w-auto"
-                priority
-              />
-              <span className="sr-only">Limi.to</span>
-            </div>
+            <Brand height={24} className="flex items-center" priority />
             <div className="flex items-center gap-4">
               <a
                 href="/login"
@@ -427,17 +417,7 @@ export default function Page() {
       <footer className="border-t border-border bg-muted px-6 py-12">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
-            <div className="flex items-center gap-2">
-              <Image
-                src="/logo.png"
-                alt="Limi.to"
-                width={120}
-                height={28}
-                className="h-5 w-auto"
-                priority={false}
-              />
-              <span className="sr-only">Limi.to</span>
-            </div>
+            <Brand height={20} className="flex items-center" />
             <div className="flex gap-8 text-sm text-muted-foreground">
               <a href="/privacy" className="hover:text-foreground">
                 Privacy

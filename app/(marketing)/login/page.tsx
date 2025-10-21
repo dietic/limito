@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
+import Image from "next/image";
 
 function LoginForm() {
   const router = useRouter();
@@ -175,14 +176,15 @@ function LoginForm() {
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-primary via-primary/90 to-accent p-12 flex-col justify-between">
         <div>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-foreground/10 backdrop-blur-sm">
-              <span className="text-lg font-bold text-primary-foreground">
-                L
-              </span>
-            </div>
-            <span className="text-2xl font-bold text-primary-foreground">
-              Limi.to
-            </span>
+            <Image
+              src="/logo.png"
+              alt="Limi.to"
+              width={160}
+              height={36}
+              className="h-9 w-auto drop-shadow"
+              priority={false}
+            />
+            <span className="sr-only">Limi.to</span>
           </div>
         </div>
 
@@ -233,12 +235,15 @@ function LoginForm() {
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <div className="mb-8 flex items-center gap-2 lg:hidden">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/80">
-              <span className="text-sm font-bold text-primary-foreground">
-                L
-              </span>
-            </div>
-            <span className="text-xl font-bold text-foreground">Limi.to</span>
+            <Image
+              src="/logo.png"
+              alt="Limi.to"
+              width={140}
+              height={32}
+              className="h-6 w-auto"
+              priority={false}
+            />
+            <span className="sr-only">Limi.to</span>
           </div>
 
           <div>
