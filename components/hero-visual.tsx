@@ -6,7 +6,7 @@ export default function HeroVisual() {
       {/* Soft gradient background (keeps current aesthetic) */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-accent/15 to-info/15" />
       {/* Subtle grid mask for texture */}
-      <div className="absolute inset-0 grid grid-cols-12 opacity-20 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]">
+      <div className="absolute inset-0 grid grid-cols-12 opacity-15 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]">
         {Array.from({ length: 12 }).map((_, i) => (
           <div key={i} className="border-l border-border/60" />
         ))}

@@ -51,7 +51,7 @@ export default function Page() {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden px-6 pb-24 pt-16 sm:pt-28">
-        <div className="absolute inset-0 bg-gradient-to-b from-muted/60 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-muted/40 to-background" />
         <div className="relative mx-auto max-w-7xl">
           <div className="mx-auto max-w-3xl text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-4 py-1.5 text-sm text-muted-foreground shadow-sm backdrop-blur">
@@ -357,7 +357,7 @@ export default function Page() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative border-t border-border bg-gradient-to-br from-primary via-primary to-accent px-6 py-24 text-primary-foreground">
+      <section className="relative border-t border-border bg-gradient-to-br from-primary/90 via-primary to-accent/90 px-6 py-24 text-primary-foreground">
         <div className="absolute inset-0 opacity-20 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]">
           <div className="mx-auto h-full max-w-7xl">
             <div className="grid h-full grid-cols-12">
