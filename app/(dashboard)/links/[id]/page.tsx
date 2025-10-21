@@ -112,7 +112,9 @@ export default function LinkDetailsPage() {
         <div className="mx-auto max-w-4xl px-6 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-foreground">{expired ? "Link Expired" : "Edit Link"}</h1>
+              <h1 className="text-3xl font-bold text-foreground">
+                {expired ? "Link Expired" : "Edit Link"}
+              </h1>
               <p className="mt-1 text-muted-foreground">/{link.slug}</p>
             </div>
             <div className="flex gap-3">
@@ -192,7 +194,8 @@ export default function LinkDetailsPage() {
                 </h2>
                 {expired ? (
                   <p className="text-sm text-muted-foreground">
-                    This link has expired. You can duplicate it to create a new active link with the same settings.
+                    This link has expired. You can duplicate it to create a new
+                    active link with the same settings.
                   </p>
                 ) : (
                   <p className="text-sm text-muted-foreground">
@@ -207,7 +210,8 @@ export default function LinkDetailsPage() {
             {expired ? (
               <div className="space-y-4">
                 <div className="rounded-xl border border-warning/30 bg-warning/10 p-4 text-warning">
-                  You cannot edit an expired link. Create a new link using the same settings.
+                  You cannot edit an expired link. Create a new link using the
+                  same settings.
                 </div>
                 <div className="grid gap-3 sm:flex">
                   <button
@@ -215,10 +219,14 @@ export default function LinkDetailsPage() {
                       // Prefill the new link page via query params
                       const params = new URLSearchParams();
                       params.set("destination_url", link.destination_url);
-                      if (link.fallback_url) params.set("fallback_url", link.fallback_url);
+                      if (link.fallback_url)
+                        params.set("fallback_url", link.fallback_url);
                       params.set("mode", link.mode);
                       if (link.mode === "by_date" && link.expires_at)
-                        params.set("expires_at", new Date(link.expires_at).toISOString());
+                        params.set(
+                          "expires_at",
+                          new Date(link.expires_at).toISOString()
+                        );
                       if (link.mode === "by_clicks" && link.click_limit != null)
                         params.set("click_limit", String(link.click_limit));
                       router.push(`/links/new?${params.toString()}`);

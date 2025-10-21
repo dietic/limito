@@ -7,7 +7,9 @@ import { Suspense, useState } from "react";
 
 export default function NewLinkPage() {
   return (
-    <Suspense fallback={<div className="px-6 py-8 text-muted-foreground">Loading…</div>}>
+    <Suspense
+      fallback={<div className="px-6 py-8 text-muted-foreground">Loading…</div>}
+    >
       <NewLinkInner />
     </Suspense>
   );
@@ -25,7 +27,9 @@ function NewLinkInner() {
     fallback_url: sp.get("fallback_url") || undefined,
     mode: (sp.get("mode") as "by_date" | "by_clicks" | null) || undefined,
     expires_at: sp.get("expires_at") || undefined,
-    click_limit: sp.get("click_limit") ? Number(sp.get("click_limit")) : undefined,
+    click_limit: sp.get("click_limit")
+      ? Number(sp.get("click_limit"))
+      : undefined,
   } as const;
 
   return (
