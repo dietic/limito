@@ -85,18 +85,21 @@ export default function SiteHeader() {
           </div>
           <a
             href="/login"
+            onClick={() => setOpen(false)}
             className="rounded-lg border border-border bg-card px-4 py-2 text-sm"
           >
             Sign in
           </a>
           <a
             href="#pricing"
+            onClick={() => setOpen(false)}
             className="rounded-lg border border-border bg-card px-4 py-2 text-sm"
           >
             Pricing
           </a>
           <a
             href="#faq"
+            onClick={() => setOpen(false)}
             className="rounded-lg border border-border bg-card px-4 py-2 text-sm"
           >
             FAQ
@@ -104,6 +107,7 @@ export default function SiteHeader() {
           <DialogActions className="justify-between">
             <a
               href="/login"
+              onClick={() => setOpen(false)}
               className="inline-flex flex-1 items-center justify-center rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground shadow-sm hover:bg-accent/90"
             >
               Get Started

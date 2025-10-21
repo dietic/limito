@@ -210,3 +210,4 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Mobile polish: header + hero visual
   - Added `components/site-header.tsx` with a mobile menu (Dialog) and Theme toggle; desktop layout unchanged.
   - Tweaked hero heading size on mobile and updated `HeroVisual` to center and stack cards on small screens; original layout preserved at `sm:` breakpoint and up.
+    - Mobile menu now closes automatically when selecting any nav item (Sign in, Pricing, FAQ, Get Started) for better UX.
