@@ -14,13 +14,6 @@ playwright-report
 test-results
 playwright-report/**
 test-results/**
-*.png
-*.jpg
-*.jpeg
-*.webp
-*.zip
-*.webm
-*.mp4
 trace.zip
 *.trace.zip
 .playwright/
