@@ -206,4 +206,4 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Branding icons: fix prod favicon/logo resolution by guarding metadataBase
   - Only set `metadataBase` when `APP_URL` is defined; avoids generating absolute localhost URLs in production
 - [x] Branding: logo not visible in production fixed
-  - Switched `components/brand.tsx` to a static import from `public/logo.png` so Next serves a hashed asset path instead of `/logo.png`; avoids CDN/hosting path issues.
+  - Final fix: use public path `/logo.png` and remove `h-[inherit]` height override in `components/brand.tsx` (which could yield zero height); keep intrinsic sizing via width/height attributes.

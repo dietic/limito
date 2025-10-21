@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import logo from "../public/logo.png";
 
 type BrandProps = {
   height?: number; // pixel height, width auto
@@ -17,11 +16,11 @@ export default function Brand({
   return (
     <div className={className} aria-label="Limi.to">
       <Image
-        src={logo}
+        src="/logo.png"
         alt="Limi.to"
         width={width}
         height={height}
-        className="h-[inherit] w-auto"
+        className="h-auto w-auto"
         priority={priority}
       />
     </div>
