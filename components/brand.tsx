@@ -20,6 +20,7 @@ export default function Brand({
         alt="Limi.to"
         width={width}
         height={height}
+        unoptimized
         className="h-[inherit] w-auto"
         priority={priority}
       />

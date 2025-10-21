@@ -181,6 +181,7 @@ function LoginForm() {
               alt="Limi.to"
               width={40}
               height={40}
+              unoptimized
               className="h-10 w-10 rounded-md drop-shadow"
               priority={false}
             />
@@ -240,6 +241,7 @@ function LoginForm() {
               alt="Limi.to"
               width={32}
               height={32}
+              unoptimized
               className="h-8 w-8 rounded-md"
               priority={false}
             />
