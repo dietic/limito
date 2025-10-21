@@ -158,10 +158,20 @@ export async function GET(
   const newCount = (link.click_count ?? 0) + 1;
   const nowIso = new Date().toISOString();
 
+  // If this click reaches or exceeds the limit, mark as inactive atomically
+  const shouldDeactivate =
+    link.mode === "by_clicks" &&
+    typeof link.click_limit === "number" &&
+    newCount >= link.click_limit;
+
   await Promise.all([
     sb
       .from("links")
-      .update({ click_count: newCount, last_clicked_at: nowIso })
+      .update({
+        click_count: newCount,
+        last_clicked_at: nowIso,
+        ...(shouldDeactivate ? { is_active: false } : {}),
+      })
       .eq("id", link.id),
     sb.from("click_events").insert({
       link_id: link.id,

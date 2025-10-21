@@ -1,5 +1,6 @@
 import Brand from "@/components/brand";
 import Faq from "@/components/faq-section";
+import HeroVisual from "@/components/hero-visual";
 import Pricing from "@/components/pricing-section";
 import ThemeToggle from "@/components/theme-toggle";
 export default function Page() {
@@ -131,20 +132,7 @@ export default function Page() {
           <div className="mx-auto mt-16 max-w-4xl">
             <div className="rounded-2xl border border-border bg-card p-2 shadow-2xl shadow-primary/10">
               <div className="relative aspect-video overflow-hidden rounded-lg">
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-accent/15 to-info/15" />
-                <div className="absolute inset-0 grid grid-cols-12 opacity-20 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]">
-                  {Array.from({ length: 12 }).map((_, i) => (
-                    <div key={i} className="border-l border-border/60" />
-                  ))}
-                </div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="rounded-xl border border-border bg-background/70 px-6 py-4 text-center shadow-sm backdrop-blur">
-                    <div className="text-sm text-muted-foreground">Preview</div>
-                    <div className="mt-1 text-lg font-semibold text-foreground">
-                      limi.to/r/launch
-                    </div>
-                  </div>
-                </div>
+                <HeroVisual />
               </div>
             </div>
           </div>

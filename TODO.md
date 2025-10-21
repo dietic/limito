@@ -90,6 +90,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Accessible form labels, focus states, and keyboard navigation
       -> MVP: ensure nav “View” works, expired badges reflect real state, and marketing pages have baseline SEO metadata.
       -> Done: polished /links and /links/new for small screens (stacked headers, wrapping tabs, responsive actions)
+      -> Done: code-based Hero Visual component integrated into landing hero (Create → Share → Expire composite)
 
 ## 7) Validation & Types
 
@@ -178,3 +179,6 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Fix /links infinite refresh loop when no data
   - Stabilized `useLinks` initial fetch to avoid dependency churn
   - Guarded `router.replace` on `/links` to only run when URL actually changes
+- [x] Landing hero visual
+  - Implemented `components/hero-visual.tsx` (pure JSX/SVG, token-aligned)
+  - Wired into `app/page.tsx` Visual section; build/lint green
