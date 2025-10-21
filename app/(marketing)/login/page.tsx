@@ -177,11 +177,11 @@ function LoginForm() {
         <div>
           <div className="flex items-center gap-3">
             <Image
-              src="/logo.png"
+              src="/favicon.png"
               alt="Limi.to"
-              width={160}
-              height={36}
-              className="h-9 w-auto drop-shadow"
+              width={40}
+              height={40}
+              className="h-10 w-10 rounded-md drop-shadow"
               priority={false}
             />
             <span className="sr-only">Limi.to</span>
@@ -236,11 +236,11 @@ function LoginForm() {
           {/* Mobile Logo */}
           <div className="mb-8 flex items-center gap-2 lg:hidden">
             <Image
-              src="/logo.png"
+              src="/favicon.png"
               alt="Limi.to"
-              width={140}
+              width={32}
               height={32}
-              className="h-6 w-auto"
+              className="h-8 w-8 rounded-md"
               priority={false}
             />
             <span className="sr-only">Limi.to</span>
