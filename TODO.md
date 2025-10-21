@@ -207,3 +207,6 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
   - Only set `metadataBase` when `APP_URL` is defined; avoids generating absolute localhost URLs in production
 - [x] Branding: logo not visible in production fixed
   - Final fix: use public path `/logo.png` and remove `h-[inherit]` height override in `components/brand.tsx` (which could yield zero height); keep intrinsic sizing via width/height attributes.
+ - [x] Mobile polish: header + hero visual
+   - Added `components/site-header.tsx` with a mobile menu (Dialog) and Theme toggle; desktop layout unchanged.
+   - Tweaked hero heading size on mobile and updated `HeroVisual` to center and stack cards on small screens; original layout preserved at `sm:` breakpoint and up.

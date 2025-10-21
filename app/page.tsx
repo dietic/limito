@@ -1,8 +1,8 @@
-import Brand from "@/components/brand";
+import SiteHeader from "@/components/site-header";
 import Faq from "@/components/faq-section";
 import HeroVisual from "@/components/hero-visual";
 import Pricing from "@/components/pricing-section";
-import ThemeToggle from "@/components/theme-toggle";
+import Brand from "@/components/brand";
 export default function Page() {
   return (
     <div className="relative min-h-screen bg-background">
@@ -13,41 +13,7 @@ export default function Page() {
         <div className="absolute bottom-0 left-1/4 h-40 w-40 rounded-full bg-info/10 blur-2xl" />
       </div>
 
-      {/* Navigation */}
-      <nav className="sticky top-0 z-20 border-b border-border/60 bg-background/70 backdrop-blur-md">
-        <div className="mx-auto max-w-7xl px-6 py-4">
-          <div className="flex items-center justify-between">
-            <Brand height={16} className="flex items-center" priority />
-            <div className="flex items-center gap-4">
-              <a
-                href="/login"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground"
-              >
-                Sign in
-              </a>
-              <a
-                href="#pricing"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground"
-              >
-                Pricing
-              </a>
-              <a
-                href="#faq"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground"
-              >
-                FAQ
-              </a>
-              <a
-                href="/login"
-                className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground shadow-sm transition hover:bg-accent/90"
-              >
-                Get Started
-              </a>
-              <ThemeToggle />
-            </div>
-          </div>
-        </div>
-      </nav>
+      <SiteHeader />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden px-6 pb-24 pt-16 sm:pt-28">
@@ -58,7 +24,7 @@ export default function Page() {
               <span className="inline-flex h-2 w-2 rounded-full bg-success" />
               New: Click or date-based expiration, your choice
             </div>
-            <h1 className="bg-gradient-to-br from-foreground via-foreground/80 to-foreground/60 bg-clip-text text-5xl font-bold tracking-tight text-transparent sm:text-6xl md:text-7xl">
+            <h1 className="bg-gradient-to-br from-foreground via-foreground/80 to-foreground/60 bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-6xl md:text-7xl">
               Create links that know when to stop
             </h1>
             <p className="mt-6 text-xl leading-8 text-muted-foreground">
@@ -129,7 +95,7 @@ export default function Page() {
           </div>
 
           {/* Visual */}
-          <div className="mx-auto mt-16 max-w-4xl">
+          <div className="mx-auto mt-12 max-w-4xl">
             <div className="rounded-2xl border border-border bg-card p-2 shadow-2xl shadow-primary/10">
               <div className="relative aspect-video overflow-hidden rounded-lg">
                 <HeroVisual />
