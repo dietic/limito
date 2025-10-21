@@ -1,6 +1,7 @@
 import Faq from "@/components/faq-section";
 import Pricing from "@/components/pricing-section";
 import ThemeToggle from "@/components/theme-toggle";
+import Image from "next/image";
 export default function Page() {
   return (
     <div className="relative min-h-screen bg-background">
@@ -16,11 +17,14 @@ export default function Page() {
         <div className="mx-auto max-w-7xl px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/80">
-                <span className="text-sm font-bold text-primary-foreground">
-                  L
-                </span>
-              </div>
+              <Image
+                src="/logo.png"
+                alt="Limi.to"
+                width={32}
+                height={32}
+                className="h-8 w-8 rounded-lg"
+                priority
+              />
               <span className="text-xl font-bold text-foreground">Limi.to</span>
             </div>
             <div className="flex items-center gap-4">
@@ -424,11 +428,14 @@ export default function Page() {
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
             <div className="flex items-center gap-2">
-              <div className="flex h-6 w-6 items-center justify-center rounded bg-gradient-to-br from-primary to-primary/80">
-                <span className="text-xs font-bold text-primary-foreground">
-                  L
-                </span>
-              </div>
+              <Image
+                src="/logo.png"
+                alt="Limi.to"
+                width={24}
+                height={24}
+                className="h-6 w-6 rounded"
+                priority={false}
+              />
               <span className="font-semibold text-foreground">Limi.to</span>
             </div>
             <div className="flex gap-8 text-sm text-muted-foreground">

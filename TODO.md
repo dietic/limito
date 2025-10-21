@@ -20,7 +20,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Brand polish
   - Replace placeholder logo/favicon; finalize Privacy & Terms copy
     -> Done: Privacy & Terms copy updated on marketing pages
-    -> Done: Replaced logo.svg, favicon.ico, and OG image with finalized assets
+    -> Done: Wired new logo.png, favicon.ico/png, and existing OG image in metadata and UI
 - [ ] Ops hygiene (optional for invite, recommended)
   - TTL cleanup for `rate_limits` windows; sweep old `click_events` beyond free-plan retention
     -> Done: pg_cron scheduled cleanup job; removed opportunistic runtime cleanup from redirect
