@@ -1,5 +1,4 @@
 "use client";
-import logo from "@/public/logo.png";
 import Image from "next/image";
 
 type BrandProps = {
@@ -17,7 +16,7 @@ export default function Brand({
   return (
     <div className={className} aria-label="Limi.to">
       <Image
-        src={logo}
+        src="/logo.png"
         alt="Limi.to"
         width={width}
         height={height}
