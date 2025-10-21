@@ -1,6 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 
 interface DialogProps {
   open: boolean;
@@ -17,22 +18,25 @@ export function Dialog({ open, onOpenChange, children }: DialogProps) {
     return () => document.removeEventListener("keydown", onKey);
   }, [open, onOpenChange]);
 
-  if (!open) return null;
-  return (
+  if (!open || typeof document === "undefined") return null;
+
+  const content = (
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center"
+      className="fixed inset-0 z-[100] flex items-start justify-center pt-16 sm:items-center sm:pt-0"
       onClick={(e) => {
         if (e.target === e.currentTarget) onOpenChange?.(false);
       }}
     >
       <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
-      <div className="relative z-10 w-full max-w-lg rounded-xl border border-border bg-card p-6 text-card-foreground shadow-xl">
+      <div className="relative z-10 mx-4 w-full max-w-lg rounded-xl border border-border bg-card p-6 text-card-foreground shadow-xl">
         {children}
       </div>
     </div>
   );
+
+  return createPortal(content, document.body);
 }
 
 export function DialogHeader({ children }: { children?: React.ReactNode }) {
