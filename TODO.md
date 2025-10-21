@@ -57,6 +57,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Click counting and last_clicked_at update
 - [ ] Optimize redirect for <100ms (minimal data fields, early return)
       -> Partial: reduced DB select to minimal fields used by redirect flow
+      -> Done: atomic deactivate when click_limit reached to prevent race flapping
 
 ## 4) Rate Limiting
 
@@ -91,6 +92,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
       -> MVP: ensure nav “View” works, expired badges reflect real state, and marketing pages have baseline SEO metadata.
       -> Done: polished /links and /links/new for small screens (stacked headers, wrapping tabs, responsive actions)
       -> Done: code-based Hero Visual component integrated into landing hero (Create → Share → Expire composite)
+      -> Done: /links tabs always visible; loading spinner moved below tabs; committed final manual tweak
 
 ## 7) Validation & Types
 
@@ -182,3 +184,5 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Landing hero visual
   - Implemented `components/hero-visual.tsx` (pure JSX/SVG, token-aligned)
   - Wired into `app/page.tsx` Visual section; build/lint green
+- [x] Links page UX: tabs persist across loading; spinner placed below tabs; minor manual edit committed
+- [x] Redirect correctness: set `is_active=false` atomically when click_limit reached to avoid race conditions
