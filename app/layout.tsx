@@ -13,10 +13,7 @@ export const metadata = {
   description:
     "Create links that automatically expire by date or clicks. Simple, fast, privacy-first.",
   icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
+    icon: [{ url: "/favicon.ico" }, { url: "/favicon.png", type: "image/png" }],
   },
   openGraph: {
     title: "Limi.to — Expiring links, done right",

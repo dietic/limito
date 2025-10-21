@@ -1,7 +1,7 @@
+import Brand from "@/components/brand";
 import Faq from "@/components/faq-section";
 import Pricing from "@/components/pricing-section";
 import ThemeToggle from "@/components/theme-toggle";
-import Brand from "@/components/brand";
 export default function Page() {
   return (
     <div className="relative min-h-screen bg-background">
@@ -16,7 +16,7 @@ export default function Page() {
       <nav className="sticky top-0 z-20 border-b border-border/60 bg-background/70 backdrop-blur-md">
         <div className="mx-auto max-w-7xl px-6 py-4">
           <div className="flex items-center justify-between">
-            <Brand height={24} className="flex items-center" priority />
+            <Brand height={16} className="flex items-center" priority />
             <div className="flex items-center gap-4">
               <a
                 href="/login"
@@ -417,7 +417,7 @@ export default function Page() {
       <footer className="border-t border-border bg-muted px-6 py-12">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
-            <Brand height={20} className="flex items-center" />
+            <Brand height={22} className="flex items-center" />
             <div className="flex gap-8 text-sm text-muted-foreground">
               <a href="/privacy" className="hover:text-foreground">
                 Privacy

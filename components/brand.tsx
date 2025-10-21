@@ -7,7 +7,11 @@ type BrandProps = {
   priority?: boolean;
 };
 
-export default function Brand({ height = 24, className = "", priority = false }: BrandProps) {
+export default function Brand({
+  height = 24,
+  className = "",
+  priority = false,
+}: BrandProps) {
   const width = Math.round((height / 28) * 120); // maintain approx wordmark ratio
   return (
     <div className={className} aria-label="Limi.to">
