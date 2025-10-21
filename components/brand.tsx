@@ -7,6 +7,8 @@ type BrandProps = {
   priority?: boolean;
 };
 
+const image = await import("/public/logo.png");
+
 export default function Brand({
   height = 24,
   className = "",
@@ -16,7 +18,7 @@ export default function Brand({
   return (
     <div className={className} aria-label="Limi.to">
       <Image
-        src="/logo.png"
+        src={image}
         alt="Limi.to"
         width={width}
         height={height}
