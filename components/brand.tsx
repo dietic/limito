@@ -1,4 +1,5 @@
 "use client";
+import logo from "@/public/logo.png";
 import Image from "next/image";
 
 type BrandProps = {
@@ -6,8 +7,6 @@ type BrandProps = {
   className?: string;
   priority?: boolean;
 };
-
-const image = await import("/public/logo.png");
 
 export default function Brand({
   height = 24,
@@ -18,7 +17,7 @@ export default function Brand({
   return (
     <div className={className} aria-label="Limi.to">
       <Image
-        src={image}
+        src={logo}
         alt="Limi.to"
         width={width}
         height={height}
