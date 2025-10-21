@@ -13,7 +13,7 @@ export default function HeroVisual() {
       </div>
 
       {/* Create Link form card */}
-  <div className="absolute left-1/2 top-[6%] w-[90%] max-w-[520px] -translate-x-1/2 rounded-xl border border-border bg-card/90 p-4 shadow-xl backdrop-blur-sm sm:left-[6%] sm:top-[10%] sm:w-[46%] sm:translate-x-0">
+      <div className="absolute left-1/2 top-[6%] w-[90%] max-w-[520px] -translate-x-1/2 rounded-xl border border-border bg-card/90 p-4 shadow-xl backdrop-blur-sm sm:left-[6%] sm:top-[10%] sm:w-[46%] sm:translate-x-0">
         <div className="mb-3 text-sm font-semibold text-card-foreground">
           Create link
         </div>
@@ -57,7 +57,7 @@ export default function HeroVisual() {
       {/* Flow hint removed per feedback (keep scene minimal and clean) */}
 
       {/* Recent Links card */}
-  <div className="absolute bottom-[6%] left-1/2 w-[90%] max-w-[500px] -translate-x-1/2 rounded-xl border border-border bg-card/90 p-4 shadow-xl backdrop-blur-sm sm:bottom-[10%] sm:left-auto sm:right-[6%] sm:w-[44%] sm:translate-x-0">
+      <div className="absolute bottom-[6%] left-1/2 w-[90%] max-w-[500px] -translate-x-1/2 rounded-xl border border-border bg-card/90 p-4 shadow-xl backdrop-blur-sm sm:bottom-[10%] sm:left-auto sm:right-[6%] sm:w-[44%] sm:translate-x-0">
         <div className="mb-3 flex items-center justify-between">
           <div className="text-sm font-semibold text-card-foreground">
             Recent link

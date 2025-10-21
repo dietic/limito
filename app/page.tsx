@@ -1,8 +1,8 @@
-import SiteHeader from "@/components/site-header";
+import Brand from "@/components/brand";
 import Faq from "@/components/faq-section";
 import HeroVisual from "@/components/hero-visual";
 import Pricing from "@/components/pricing-section";
-import Brand from "@/components/brand";
+import SiteHeader from "@/components/site-header";
 export default function Page() {
   return (
     <div className="relative min-h-screen bg-background">

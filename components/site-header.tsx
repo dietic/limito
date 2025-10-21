@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
 import Brand from "@/components/brand";
 import ThemeToggle from "@/components/theme-toggle";
 import Dialog, { DialogActions } from "@/components/ui/dialog";
+import { useState } from "react";
 
 export default function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -10,7 +10,7 @@ export default function SiteHeader() {
     <nav className="sticky top-0 z-20 border-b border-border/60 bg-background/70 backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-3">
         <div className="flex items-center justify-between gap-2">
-          <Brand height={16} className="flex items-center" priority />
+          <Brand responsive className="flex items-center" priority />
 
           {/* Desktop nav */}
           <div className="hidden items-center gap-4 sm:flex">
@@ -66,7 +66,7 @@ export default function SiteHeader() {
       <Dialog open={open} onOpenChange={setOpen}>
         <div className="flex w-full flex-col gap-4">
           <div className="flex items-center justify-between">
-            <Brand height={18} className="flex items-center" />
+            <Brand responsive className="flex items-center" />
             <button
               onClick={() => setOpen(false)}
               className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border bg-card"
@@ -83,13 +83,22 @@ export default function SiteHeader() {
               </svg>
             </button>
           </div>
-          <a href="/login" className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
+          <a
+            href="/login"
+            className="rounded-lg border border-border bg-card px-4 py-2 text-sm"
+          >
             Sign in
           </a>
-          <a href="#pricing" className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
+          <a
+            href="#pricing"
+            className="rounded-lg border border-border bg-card px-4 py-2 text-sm"
+          >
             Pricing
           </a>
-          <a href="#faq" className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
+          <a
+            href="#faq"
+            className="rounded-lg border border-border bg-card px-4 py-2 text-sm"
+          >
             FAQ
           </a>
           <DialogActions className="justify-between">
