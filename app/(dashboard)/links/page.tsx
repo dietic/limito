@@ -196,14 +196,7 @@ function LinksPageInner() {
           </div>
         )}
 
-        {loading && (
-          <div className="flex items-center justify-center py-20">
-            <div className="flex items-center gap-3 text-muted-foreground">
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
-              <span>Loading links...</span>
-            </div>
-          </div>
-        )}
+        {/* Loading state moved below tabs */}
         {/* Filter Tabs (always visible) */}
         <div className="mb-6 flex flex-wrap gap-2 rounded-xl border border-border bg-card p-1 shadow-sm sm:flex-nowrap">
           <button
@@ -256,6 +249,15 @@ function LinksPageInner() {
               : ""}
           </button>
         </div>
+
+        {loading && (
+          <div className="flex items-center justify-center py-12">
+            <div className="flex items-center gap-3 text-muted-foreground">
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+              <span>Loading links...</span>
+            </div>
+          </div>
+        )}
 
         {/* Empty states tailored to filter */}
         {!loading && items.length === 0 && (
