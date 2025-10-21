@@ -205,3 +205,5 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] DB migrations: link_activations migration fixed for PG (policy DO blocks), applied successfully
 - [x] Branding icons: fix prod favicon/logo resolution by guarding metadataBase
   - Only set `metadataBase` when `APP_URL` is defined; avoids generating absolute localhost URLs in production
+- [x] Branding: logo not visible in production fixed
+  - Switched `components/brand.tsx` to a static import from `public/logo.png` so Next serves a hashed asset path instead of `/logo.png`; avoids CDN/hosting path issues.
