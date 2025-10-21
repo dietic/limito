@@ -1,6 +1,7 @@
 import { requireAuth } from "@/lib/auth";
 import { jsonError, jsonSuccess } from "@/lib/http";
 import { generateSlug, isValidCustomSlug } from "@/lib/slug";
+import { isExpired } from "@/lib/expiration";
 import { getServiceClient } from "@/lib/supabase";
 import { sanitizeUrl } from "@/lib/url";
 import { updateLinkSchema } from "@/lib/validators/link";
@@ -49,6 +50,14 @@ export async function PATCH(
       .eq("owner_id", userId)
       .single();
     if (getErr || !existing) return jsonError("Not found", 404);
+
+    // Disallow editing expired links to keep history consistent.
+    if (isExpired(existing)) {
+      return jsonError(
+        "Cannot edit an expired link. Please duplicate it instead.",
+        409
+      );
+    }
 
     const payload: Record<string, unknown> = {};
     if (parsed.data.destination_url) {

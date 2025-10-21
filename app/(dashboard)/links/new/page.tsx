@@ -2,15 +2,31 @@
 import LinkForm from "@/components/link-form";
 import { useLinks } from "@/hooks/use-links";
 import NextLink from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
 
 export default function NewLinkPage() {
+  return (
+    <Suspense fallback={<div className="px-6 py-8 text-muted-foreground">Loading…</div>}>
+      <NewLinkInner />
+    </Suspense>
+  );
+}
+
+function NewLinkInner() {
   const { createLink } = useLinks();
   const router = useRouter();
+  const sp = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const prefill = {
+    destination_url: sp.get("destination_url") || undefined,
+    fallback_url: sp.get("fallback_url") || undefined,
+    mode: (sp.get("mode") as "by_date" | "by_clicks" | null) || undefined,
+    expires_at: sp.get("expires_at") || undefined,
+    click_limit: sp.get("click_limit") ? Number(sp.get("click_limit")) : undefined,
+  } as const;
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-background to-muted">
@@ -158,6 +174,13 @@ export default function NewLinkPage() {
 
           <div className="p-4 sm:p-8">
             <LinkForm
+              initialValues={{
+                destination_url: prefill.destination_url,
+                fallback_url: prefill.fallback_url,
+                mode: prefill.mode,
+                expires_at: prefill.expires_at,
+                click_limit: prefill.click_limit,
+              }}
               loading={loading}
               onSubmit={async (values) => {
                 setLoading(true);

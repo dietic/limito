@@ -3,6 +3,7 @@ import LinkForm, { type LinkFormValues } from "@/components/link-form";
 import { buttonVariants } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { useLinks } from "@/hooks/use-links";
+import { isExpired } from "@/lib/expiration";
 import { cn } from "@/lib/utils";
 import type { Link } from "@/types/link";
 import NextLink from "next/link";
@@ -93,6 +94,8 @@ export default function LinkDetailsPage() {
 
   if (!link) return null;
 
+  const expired = isExpired(link);
+
   const initial: Partial<LinkFormValues> = {
     destination_url: link.destination_url,
     fallback_url: link.fallback_url ?? undefined,
@@ -109,7 +112,7 @@ export default function LinkDetailsPage() {
         <div className="mx-auto max-w-4xl px-6 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-foreground">Edit Link</h1>
+              <h1 className="text-3xl font-bold text-foreground">{expired ? "Link Expired" : "Edit Link"}</h1>
               <p className="mt-1 text-muted-foreground">/{link.slug}</p>
             </div>
             <div className="flex gap-3">
@@ -185,42 +188,81 @@ export default function LinkDetailsPage() {
               </div>
               <div>
                 <h2 className="text-xl font-bold text-foreground">
-                  Link Details
+                  {expired ? "Expired Link" : "Link Details"}
                 </h2>
-                <p className="text-sm text-muted-foreground">
-                  Update destination, expiration, and options
-                </p>
+                {expired ? (
+                  <p className="text-sm text-muted-foreground">
+                    This link has expired. You can duplicate it to create a new active link with the same settings.
+                  </p>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    Update destination, expiration, and options
+                  </p>
+                )}
               </div>
             </div>
           </div>
 
           <div className="p-8">
-            <LinkForm
-              initialValues={initial}
-              submitLabel="Save"
-              loading={saving}
-              onSubmit={async (values) => {
-                setSaving(true);
-                const normalized = {
-                  ...values,
-                  // If user leaves slug empty => request regeneration by sending empty string
-                  slug:
-                    values.slug === undefined
-                      ? undefined
-                      : values.slug.trim().length > 0
-                      ? values.slug.trim()
-                      : "",
-                };
-                const res = await updateLink(link.id, normalized);
-                setSaving(false);
-                if (!res.ok) {
-                  alert(res.message || "Failed to save changes");
-                  return;
-                }
-                await refresh();
-                router.push("/links");
-              }}
-            />
+            {expired ? (
+              <div className="space-y-4">
+                <div className="rounded-xl border border-warning/30 bg-warning/10 p-4 text-warning">
+                  You cannot edit an expired link. Create a new link using the same settings.
+                </div>
+                <div className="grid gap-3 sm:flex">
+                  <button
+                    onClick={() => {
+                      // Prefill the new link page via query params
+                      const params = new URLSearchParams();
+                      params.set("destination_url", link.destination_url);
+                      if (link.fallback_url) params.set("fallback_url", link.fallback_url);
+                      params.set("mode", link.mode);
+                      if (link.mode === "by_date" && link.expires_at)
+                        params.set("expires_at", new Date(link.expires_at).toISOString());
+                      if (link.mode === "by_clicks" && link.click_limit != null)
+                        params.set("click_limit", String(link.click_limit));
+                      router.push(`/links/new?${params.toString()}`);
+                    }}
+                    className={cn(buttonVariants({ variant: "default" }))}
+                  >
+                    Duplicate as new
+                  </button>
+                  <NextLink
+                    href="/links"
+                    className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-muted hover:shadow-md"
+                  >
+                    Back to Links
+                  </NextLink>
+                </div>
+              </div>
+            ) : (
+              <LinkForm
+                initialValues={initial}
+                submitLabel="Save"
+                loading={saving}
+                onSubmit={async (values) => {
+                  setSaving(true);
+                  const normalized = {
+                    ...values,
+                    // If user leaves slug empty => request regeneration by sending empty string
+                    slug:
+                      values.slug === undefined
+                        ? undefined
+                        : values.slug.trim().length > 0
+                        ? values.slug.trim()
+                        : "",
+                  };
+                  const res = await updateLink(link.id, normalized);
+                  setSaving(false);
+                  if (!res.ok) {
+                    alert(res.message || "Failed to save changes");
+                    return;
+                  }
+                  await refresh();
+                  router.push("/links");
+                }}
+              />
+            )}
           </div>
         </div>
       </div>
