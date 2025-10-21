@@ -244,9 +244,7 @@ function LinksPageInner() {
             )}
           >
             Expired
-            {typeof counts?.expired === "number"
-              ? ` (${counts.expired})`
-              : ""}
+            {typeof counts?.expired === "number" ? ` (${counts.expired})` : ""}
           </button>
         </div>
 
