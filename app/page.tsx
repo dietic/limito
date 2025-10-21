@@ -20,12 +20,12 @@ export default function Page() {
               <Image
                 src="/logo.png"
                 alt="Limi.to"
-                width={32}
-                height={32}
-                className="h-8 w-8 rounded-lg"
+                width={120}
+                height={28}
+                className="h-6 w-auto"
                 priority
               />
-              <span className="text-xl font-bold text-foreground">Limi.to</span>
+              <span className="sr-only">Limi.to</span>
             </div>
             <div className="flex items-center gap-4">
               <a
@@ -431,12 +431,12 @@ export default function Page() {
               <Image
                 src="/logo.png"
                 alt="Limi.to"
-                width={24}
-                height={24}
-                className="h-6 w-6 rounded"
+                width={120}
+                height={28}
+                className="h-5 w-auto"
                 priority={false}
               />
-              <span className="font-semibold text-foreground">Limi.to</span>
+              <span className="sr-only">Limi.to</span>
             </div>
             <div className="flex gap-8 text-sm text-muted-foreground">
               <a href="/privacy" className="hover:text-foreground">
