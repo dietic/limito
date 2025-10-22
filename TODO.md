@@ -24,6 +24,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [ ] Ops hygiene (optional for invite, recommended)
   - TTL cleanup for `rate_limits` windows; sweep old `click_events` beyond free-plan retention
     -> Done: pg_cron scheduled cleanup job; removed opportunistic runtime cleanup from redirect
+    -> Done: added idempotent DB migration to normalize `profiles` schema and drop extraneous columns
 
 ## 1) Auth
 
@@ -122,6 +123,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Indexes for slug and owner_id
 - [x] rate_limits table (service role access only)
 - [ ] Confirm RLS policies with real auth context in staging
+      -> Profiles table normalized via migration; RLS policies ensured idempotently
 
 ## 10) Monitoring & Ops
 
@@ -211,3 +213,5 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
   - Added `components/site-header.tsx` with a mobile menu (Dialog) and Theme toggle; desktop layout unchanged.
   - Tweaked hero heading size on mobile and updated `HeroVisual` to center and stack cards on small screens; original layout preserved at `sm:` breakpoint and up.
     - Mobile menu now closes automatically when selecting any nav item (Sign in, Pricing, FAQ, Get Started) for better UX.
+- [x] DB hygiene: normalize profiles schema
+  - Added `supabase/migrations/0005_profiles_normalize.sql` to enforce minimal `profiles` shape (id, plan, created_at), ensure FK and RLS policies, and remove any extraneous columns dynamically. Idempotent and safe to re-run.
