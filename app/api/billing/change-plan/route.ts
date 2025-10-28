@@ -25,7 +25,9 @@ export async function POST(req: Request) {
       .select("id, provider_subscription_id, is_active")
       .eq("user_id", userId)
       .order("created_at", { ascending: false });
-    if (subErr) return jsonError("Failed to fetch subscription", 500);
+    if (subErr) {
+      return jsonError(`DB error: ${subErr.message ?? "Failed to fetch subscription"}`, 500);
+    }
 
     const active =
       (
@@ -41,8 +43,13 @@ export async function POST(req: Request) {
       if (!active?.provider_subscription_id)
         return jsonSuccess({ changed: false });
       // Reuse cancel endpoint logic indirectly by deactivating here; using lemon helper is simpler to avoid duplication
-      const { cancelSubscription } = await import("@/lib/lemon");
-      await cancelSubscription(active.provider_subscription_id);
+      try {
+        const { cancelSubscription } = await import("@/lib/lemon");
+        await cancelSubscription(active.provider_subscription_id);
+      } catch (lemonErr) {
+        const msg = lemonErr instanceof Error ? lemonErr.message : "Failed to cancel with provider";
+        return jsonError(msg, 500);
+      }
       await sb
         .from("billing_subscriptions")
         .update({ is_active: false, status: "cancelled" })
@@ -63,26 +70,39 @@ export async function POST(req: Request) {
 
     if (active?.provider_subscription_id) {
       // In-place swap (upgrade/downgrade between Plus/Pro)
-      await changeSubscriptionVariant(
-        active.provider_subscription_id,
-        variantId
-      );
+      try {
+        await changeSubscriptionVariant(
+          active.provider_subscription_id,
+          variantId
+        );
+      } catch (lemonErr) {
+        const msg = lemonErr instanceof Error ? lemonErr.message : "Failed to change plan with provider";
+        return jsonError(msg, 500);
+      }
       return jsonSuccess({ changed: true });
     }
 
     // No active sub: start a checkout flow
-    const storeId = getStoreId();
-    const { redirectUrl, cancelUrl } = getRedirectUrls(plan);
-    const checkout = await createCheckout({
-      storeId,
-      variantId,
-      custom: { user_id: userId },
-      redirectUrl,
-      cancelUrl,
-    });
-    return jsonSuccess({ url: checkout.url });
+    try {
+      const storeId = getStoreId();
+      const { redirectUrl, cancelUrl } = getRedirectUrls(plan);
+      const checkout = await createCheckout({
+        storeId,
+        variantId,
+        custom: { user_id: userId },
+        redirectUrl,
+        cancelUrl,
+      });
+      return jsonSuccess({ url: checkout.url });
+    } catch (lemonErr) {
+      const msg = lemonErr instanceof Error ? lemonErr.message : "Failed to create checkout";
+      return jsonError(msg, 500);
+    }
   } catch (e) {
+    if (e instanceof Error && e.message === "Unauthorized") {
+      return jsonError("Unauthorized", 401);
+    }
     const message = e instanceof Error ? e.message : "Unknown error";
-    return jsonError(message, 400);
+    return jsonError(message, 500);
   }
 }

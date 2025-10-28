@@ -13,22 +13,34 @@ export async function POST(request: Request) {
       .eq("user_id", userId)
       .eq("is_active", true)
       .limit(1);
-    if (error) return jsonError("Failed to fetch subscription", 500);
+    if (error) {
+      return jsonError(`DB error: ${error.message ?? "Failed to fetch subscription"}`, 500);
+    }
     const sub = rows?.[0];
     if (!sub || !sub.provider_subscription_id) {
       return jsonError("No active subscription", 400);
     }
-    await cancelSubscription(sub.provider_subscription_id);
+    try {
+      await cancelSubscription(sub.provider_subscription_id);
+    } catch (lemonErr) {
+      const msg = lemonErr instanceof Error ? lemonErr.message : "Failed to cancel with provider";
+      return jsonError(msg, 500);
+    }
     // Mark as not active; webhook will later set final status and dates
     const { error: upErr } = await sb
       .from("billing_subscriptions")
       .update({ is_active: false, status: "cancelled" })
       .eq("id", sub.id);
-    if (upErr) return jsonError("Failed to update subscription", 500);
+    if (upErr) {
+      return jsonError(`DB error: ${upErr.message ?? "Failed to update subscription"}`, 500);
+    }
     // Downgrade plan to free at period end: leaving to webhook for accuracy.
     return jsonSuccess({ cancelled: true });
   } catch (e) {
+    if (e instanceof Error && e.message === "Unauthorized") {
+      return jsonError("Unauthorized", 401);
+    }
     const msg = e instanceof Error ? e.message : "Unknown error";
-    return jsonError(msg, 400);
+    return jsonError(msg, 500);
   }
 }
