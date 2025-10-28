@@ -143,20 +143,41 @@ export async function POST(request: NextRequest) {
       return jsonError("Server error", 500);
     }
 
+    // Determine the user's plan to apply correct limits
+    let plan: "free" | "plus" | "pro" = "free";
+    try {
+      const { data: profile } = await sb
+        .from("profiles")
+        .select("plan")
+        .eq("id", userId)
+        .maybeSingle();
+      const p = (profile?.plan || "free").toLowerCase();
+      if (p === "plus" || p === "pro") plan = p;
+    } catch {
+      // default to free on failure
+      plan = "free";
+    }
+    const limits =
+      plan === "pro"
+        ? config.plans.pro
+        : plan === "plus"
+        ? config.plans.plus
+        : config.plans.free;
+
     const { count: activeCount } = await sb
       .from("links")
       .select("*", { count: "exact", head: true })
       .eq("owner_id", userId)
       .eq("is_active", true);
 
-    if ((activeCount ?? 0) >= config.plans.free.maxActiveLinks) {
-      return jsonError("Free plan limit reached", 403);
+    if ((activeCount ?? 0) >= limits.maxActiveLinks) {
+      return jsonError("Plan limit reached", 403);
     }
 
     const rl = await allowAndIncrement(
       "create_link",
       `user:${userId}`,
-      config.plans.free.dailyCreations,
+      limits.dailyCreations,
       24 * 60 * 60 * 1000,
       sb
     );
