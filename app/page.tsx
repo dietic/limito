@@ -3,6 +3,9 @@ import Faq from "@/components/faq-section";
 import HeroVisual from "@/components/hero-visual";
 import Pricing from "@/components/pricing-section";
 import SiteHeader from "@/components/site-header";
+import { Suspense } from "react";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 export default function Page() {
   return (
     <div className="relative min-h-screen bg-background">
@@ -52,10 +55,10 @@ export default function Page() {
                 </svg>
               </a>
               <a
-                href="#how-it-works"
+                href="/pricing"
                 className="flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-background px-8 py-4 text-base font-semibold text-foreground shadow-sm transition hover:bg-muted sm:w-auto"
               >
-                See how it works
+                View pricing
                 <svg
                   className="h-5 w-5"
                   fill="none"
@@ -66,7 +69,7 @@ export default function Page() {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
                   />
                 </svg>
               </a>
@@ -270,8 +273,10 @@ export default function Page() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <Pricing />
+      {/* Pricing Section (wrap in Suspense for client router hooks) */}
+      <Suspense fallback={null}>
+        <Pricing />
+      </Suspense>
 
       {/* FAQ Section */}
       <Faq />

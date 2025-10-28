@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 
 function LoginForm() {
   const router = useRouter();
@@ -26,15 +26,18 @@ function LoginForm() {
   } | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  // Auto-redirect when already authenticated
-  if (typeof window !== "undefined" && userId) {
-    // Best-effort immediate redirect; UI below serves as a fallback if navigation is blocked
+  // Auto-redirect when already authenticated: perform navigation in an effect
+  const didRedirectRef = useRef(false);
+  useEffect(() => {
+    if (!userId || didRedirectRef.current) return;
+    didRedirectRef.current = true;
+    const to = redirect && redirect.startsWith("/") ? redirect : "/dashboard";
     try {
-      router.replace(redirect);
+      router.replace(to);
     } catch {
-      window.location.href = redirect;
+      window.location.href = to;
     }
-  }
+  }, [userId, redirect, router]);
 
   if (userId) {
     return (
@@ -105,10 +108,11 @@ function LoginForm() {
     if (!res.ok) {
       setMessage({ type: "error", text: res.message || "Sign in failed" });
     } else {
+      const to = redirect && redirect.startsWith("/") ? redirect : "/dashboard";
       try {
-        router.replace(redirect);
+        router.replace(to);
       } catch {
-        window.location.href = redirect;
+        window.location.href = to;
       }
     }
   };

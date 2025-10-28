@@ -1,10 +1,17 @@
 "use client";
 import { buttonVariants } from "@/components/ui/button";
+import { useToast } from "@/components/ui/toast";
+import { useAuth } from "@/hooks/use-auth";
 import { useAbVariant } from "@/lib/ab";
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export default function PricingSection() {
+  const { userId, getAccessToken } = useAuth();
+  const router = useRouter();
+  const { toast } = useToast();
+  const autoRanRef = useRef(false);
   const priceDefault = useAbVariant(
     "pricing_default",
     ["monthly", "yearly"],
@@ -41,7 +48,7 @@ export default function PricingSection() {
         "Click trends (24h)",
         "Email support (soon)",
       ],
-      cta: { label: "Join waitlist", href: "/login" },
+      cta: { label: "Upgrade to Plus", href: "/api/upgrade/plus" },
       highlight: true,
     },
     {
@@ -55,10 +62,66 @@ export default function PricingSection() {
         "Advanced analytics (soon)",
         "Priority support (soon)",
       ],
-      cta: { label: "Join waitlist", href: "/login" },
+      cta: { label: "Upgrade to Pro", href: "/api/upgrade/pro" },
       highlight: false,
     },
   ];
+
+  const startCheckout = useCallback(
+    async (plan: "plus" | "pro") => {
+      if (!userId) {
+        const redirect = encodeURIComponent(`/pricing?upgrade=${plan}`);
+        router.push(`/login?redirect=${redirect}`);
+        return;
+      }
+      const token = await getAccessToken();
+      if (!token) {
+        const redirect = encodeURIComponent(`/pricing?upgrade=${plan}`);
+        router.push(`/login?redirect=${redirect}`);
+        return;
+      }
+      const res = await fetch("/api/billing/checkouts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ plan }),
+      });
+      const json = (await res.json()) as {
+        success?: boolean;
+        data?: { url: string };
+        message?: string;
+      };
+      if (!res.ok || !json.success || !json.data) {
+        const message =
+          json?.message || "Unable to start checkout. Please try again.";
+        toast({
+          title: "Checkout error",
+          description: message,
+          variant: "destructive",
+          durationMs: 4000,
+        });
+        return;
+      }
+      window.location.href = json.data.url;
+    },
+    [userId, getAccessToken, router, toast]
+  );
+
+  // Auto-start checkout if we were redirected back with ?upgrade=plus|pro and the user is authenticated
+  useEffect(() => {
+    if (autoRanRef.current) return;
+    const u =
+      typeof window !== "undefined"
+        ? new URLSearchParams(window.location.search).get("upgrade")
+        : null;
+    if (!u) return;
+    if (!userId) return; // will run after login
+    if (u !== "plus" && u !== "pro") return;
+    autoRanRef.current = true;
+    startCheckout(u);
+  }, [userId, startCheckout]);
 
   return (
     <section
@@ -147,18 +210,33 @@ export default function PricingSection() {
                   ))}
                 </ul>
                 <div className="mt-8">
-                  <a
-                    href={p.cta.href}
-                    className={cn(
-                      buttonVariants({
-                        variant: p.highlight ? "default" : "outline",
-                        size: "lg",
-                      }),
-                      "w-full"
-                    )}
-                  >
-                    {p.cta.label}
-                  </a>
+                  {p.name === "Free" ? (
+                    <a
+                      href={p.cta.href}
+                      className={cn(
+                        buttonVariants({ variant: "outline", size: "lg" }),
+                        "w-full"
+                      )}
+                    >
+                      {p.cta.label}
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        startCheckout(p.name.toLowerCase() as "plus" | "pro")
+                      }
+                      className={cn(
+                        buttonVariants({
+                          variant: p.highlight ? "default" : "outline",
+                          size: "lg",
+                        }),
+                        "w-full"
+                      )}
+                    >
+                      {p.cta.label}
+                    </button>
+                  )}
                 </div>
               </div>
             );

@@ -21,7 +21,7 @@ export default function SiteHeader() {
               Sign in
             </a>
             <a
-              href="#pricing"
+              href="/pricing"
               className="text-sm font-medium text-muted-foreground hover:text-foreground"
             >
               Pricing
@@ -91,7 +91,7 @@ export default function SiteHeader() {
             Sign in
           </a>
           <a
-            href="#pricing"
+            href="/pricing"
             onClick={() => setOpen(false)}
             className="rounded-lg border border-border bg-card px-4 py-2 text-sm"
           >
