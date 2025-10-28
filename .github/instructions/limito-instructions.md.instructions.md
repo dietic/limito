@@ -225,11 +225,11 @@ LEMONSQUEEZY_PLUS_VARIANT_ID=
 LEMONSQUEEZY_PRO_VARIANT_ID=
 
 # Optional plan limits overrides
+FREE_PLAN_MAX_ACTIVE_LINKS=
+FREE_PLAN_ANALYTICS_RETENTION_DAYS=
 PLUS_PLAN_MAX_ACTIVE_LINKS=
-PLUS_PLAN_DAILY_CREATIONS=
 PLUS_PLAN_ANALYTICS_RETENTION_DAYS=
 PRO_PLAN_MAX_ACTIVE_LINKS=
-PRO_PLAN_DAILY_CREATIONS=
 PRO_PLAN_ANALYTICS_RETENTION_DAYS=
 ```
 
@@ -267,6 +267,14 @@ Build for **simplicity, speed, and premium feel**:
 - Every view answers: "What can I do here?"
 - Landing must include Pricing and FAQ sections for clarity and conversion. Pricing supports a monthly/yearly toggle and may default via A/B testing (`useAbVariant`).
 - Launch before perfection - MVP first, iterate fast
+
+### QR Codes for Plus & Pro plans
+
+- Surface a QR action on link cards and within the link detail drawer for users on the Plus and Pro plans.
+- Generate a high-resolution QR code that points to the canonical redirect URL `https://limi.to/r/{slug}`.
+- Provide copy and download affordances (SVG/PNG) inside a responsive, accessible modal.
+- For Free users, gate the action with an upgrade prompt wired to the existing Lemon Squeezy checkout flow.
+- Cover the QR generation helper with unit tests and add UI coverage (integration or Playwright) for the Plus/Pro happy path.
 
 ## Role Expectations and Quality Bar
 

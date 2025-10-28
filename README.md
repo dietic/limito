@@ -68,7 +68,7 @@ LEMONSQUEEZY_PRO_VARIANT_ID=222222
 - `POST /api/billing/cancel` → cancels the current active subscription
 - `POST /api/billing/webhook` → webhook receiver to upsert subscription status and map to users
 
-Plan-based limits are enforced server-side via `profiles.plan`. You can optionally override defaults with env vars like `PLUS_PLAN_MAX_ACTIVE_LINKS`, `PRO_PLAN_DAILY_CREATIONS`, etc. (see `.env.example`).
+Plan-based limits are enforced server-side via `profiles.plan`. You can optionally override defaults with env vars like `PLUS_PLAN_MAX_ACTIVE_LINKS`, `PRO_PLAN_MAX_ACTIVE_LINKS` (supports `unlimited`), etc. (see `.env.example`).
 
 ## E2E workflow (Playwright)
 

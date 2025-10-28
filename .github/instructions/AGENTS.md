@@ -189,6 +189,11 @@ No single-file blobs. No unstructured folders.
 - Responsive UI.
 - Branded “link expired” page.
 - Copy/QR functionality.
+- Plus & Pro QR experience:
+  - Add a QR trigger on link cards and detail drawers for Plus and Pro users.
+  - Generate high-resolution codes for `https://limi.to/r/{slug}` with copy/download options.
+  - Free users see an upgrade prompt that deep-links into the Lemon Squeezy checkout flow.
+  - Cover QR helpers with unit tests and UI flow with integration/Playwright coverage.
 - Light/dark theme toggle.
 - Pricing section on landing page with Monthly/Yearly toggle. Keep copy simple and benefits-driven. Use shadcn tokens and accessible contrast. Keep CTAs wired to /login or checkout when available.
 - FAQ section with 5–7 concise questions (limits, analytics, redirects speed, privacy, expiry behavior). Use lightweight accordion and tokenized styles.
@@ -395,11 +400,11 @@ LEMONSQUEEZY_PLUS_VARIANT_ID=
 LEMONSQUEEZY_PRO_VARIANT_ID=
 
 # Optional plan limits overrides
+FREE_PLAN_MAX_ACTIVE_LINKS=
+FREE_PLAN_ANALYTICS_RETENTION_DAYS=
 PLUS_PLAN_MAX_ACTIVE_LINKS=
-PLUS_PLAN_DAILY_CREATIONS=
 PLUS_PLAN_ANALYTICS_RETENTION_DAYS=
 PRO_PLAN_MAX_ACTIVE_LINKS=
-PRO_PLAN_DAILY_CREATIONS=
 PRO_PLAN_ANALYTICS_RETENTION_DAYS=
 ```
 
