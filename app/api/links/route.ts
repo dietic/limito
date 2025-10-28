@@ -1,7 +1,6 @@
 import { requireAuth } from "@/lib/auth";
-import { config } from "@/lib/config";
 import { jsonError, jsonSuccess } from "@/lib/http";
-import { allowAndIncrement } from "@/lib/rate-limit";
+import { getPlanLimits, resolvePlan } from "@/lib/plans";
 import { generateSlug, isValidCustomSlug } from "@/lib/slug";
 import { getServiceClient } from "@/lib/supabase";
 import { sanitizeUrl } from "@/lib/url";
@@ -151,18 +150,11 @@ export async function POST(request: NextRequest) {
         .select("plan")
         .eq("id", userId)
         .maybeSingle();
-      const p = (profile?.plan || "free").toLowerCase();
-      if (p === "plus" || p === "pro") plan = p;
+      plan = resolvePlan(profile?.plan);
     } catch {
-      // default to free on failure
       plan = "free";
     }
-    const limits =
-      plan === "pro"
-        ? config.plans.pro
-        : plan === "plus"
-        ? config.plans.plus
-        : config.plans.free;
+    const limits = getPlanLimits(plan);
 
     const { count: activeCount } = await sb
       .from("links")
@@ -173,19 +165,6 @@ export async function POST(request: NextRequest) {
     if ((activeCount ?? 0) >= limits.maxActiveLinks) {
       return jsonError("Plan limit reached", 403);
     }
-
-    const rl = await allowAndIncrement(
-      "create_link",
-      `user:${userId}`,
-      limits.dailyCreations,
-      24 * 60 * 60 * 1000,
-      sb
-    );
-    if (!rl.allowed)
-      return jsonError("Daily creation limit reached", {
-        status: 429,
-        headers: { "Retry-After": "86400" },
-      });
 
     let slug = parsed.data.slug?.toLowerCase().trim() || "";
     if (slug && !isValidCustomSlug(slug)) return jsonError("Invalid slug", 400);
