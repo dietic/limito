@@ -5,6 +5,7 @@ import {
   createCheckout,
   getRedirectUrls,
   getStoreId,
+  getSubscriptionWithCustomer,
 } from "@/lib/lemon";
 import { updatePlanAndEnforce } from "@/lib/plans";
 import { getServiceClient } from "@/lib/supabase";
@@ -82,18 +83,65 @@ export async function POST(req: Request) {
       return jsonSuccess({ changed: true });
     }
 
-    // We have a paid target plan
-    const variantEnv =
-      plan === "plus"
-        ? process.env["LEMONSQUEEZY_PLUS_VARIANT_ID"]
-        : process.env["LEMONSQUEEZY_PRO_VARIANT_ID"];
-    const variantId = Number(variantEnv);
-    if (!variantEnv || Number.isNaN(variantId)) {
-      return jsonError("Billing not configured (missing variant id).", 500);
-    }
+    // Helper to resolve the desired variant using MONTHLY/YEARLY envs
+    const pickVariant = (
+      targetPlan: "plus" | "pro",
+      interval: "monthly" | "yearly"
+    ): number | null => {
+      const envName =
+        targetPlan === "plus"
+          ? interval === "yearly"
+            ? "LEMONSQUEEZY_PLUS_YEARLY_VARIANT_ID"
+            : "LEMONSQUEEZY_PLUS_MONTHLY_VARIANT_ID"
+          : interval === "yearly"
+          ? "LEMONSQUEEZY_PRO_YEARLY_VARIANT_ID"
+          : "LEMONSQUEEZY_PRO_MONTHLY_VARIANT_ID";
+      const v = process.env[envName];
+      const n = Number(v);
+      return v && !Number.isNaN(n) ? n : null;
+    };
 
     if (active?.provider_subscription_id) {
-      // In-place swap (upgrade/downgrade between Plus/Pro)
+      // In-place swap (upgrade/downgrade between Plus/Pro), preserve interval
+      // Determine current interval by inspecting current variant id
+      let interval: "monthly" | "yearly" = "monthly";
+      try {
+        const sub = await getSubscriptionWithCustomer(
+          active.provider_subscription_id
+        );
+        const currentVariant = sub.variantId ?? null;
+        const plusMonthly = Number(
+          process.env["LEMONSQUEEZY_PLUS_MONTHLY_VARIANT_ID"] ?? NaN
+        );
+        const plusYearly = Number(
+          process.env["LEMONSQUEEZY_PLUS_YEARLY_VARIANT_ID"] ?? NaN
+        );
+        const proMonthly = Number(
+          process.env["LEMONSQUEEZY_PRO_MONTHLY_VARIANT_ID"] ?? NaN
+        );
+        const proYearly = Number(
+          process.env["LEMONSQUEEZY_PRO_YEARLY_VARIANT_ID"] ?? NaN
+        );
+        if (
+          currentVariant !== null &&
+          (currentVariant === plusYearly || currentVariant === proYearly)
+        ) {
+          interval = "yearly";
+        } else if (
+          currentVariant !== null &&
+          (currentVariant === plusMonthly || currentVariant === proMonthly)
+        ) {
+          interval = "monthly";
+        }
+      } catch {
+        // default to monthly if we can't determine
+      }
+      const variantId =
+        pickVariant(plan, interval) ?? pickVariant(plan, "monthly");
+      if (!variantId) {
+        return jsonError("Billing not configured (variant ids)", 500);
+      }
+      // Perform swap
       try {
         await changeSubscriptionVariant(
           active.provider_subscription_id,
@@ -116,10 +164,15 @@ export async function POST(req: Request) {
       return jsonSuccess({ changed: true });
     }
 
-    // No active sub: start a checkout flow
+    // No active sub: start a checkout flow (default monthly)
     try {
       const storeId = getStoreId();
       const { redirectUrl, cancelUrl } = getRedirectUrls(plan);
+      const variantId =
+        pickVariant(plan, "monthly") ?? pickVariant(plan, "yearly");
+      if (!variantId) {
+        return jsonError("Billing not configured (variant ids)", 500);
+      }
       const checkout = await createCheckout({
         storeId,
         variantId,

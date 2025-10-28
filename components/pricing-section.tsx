@@ -87,7 +87,7 @@ export default function PricingSection() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ plan, interval: yearly ? "annual" : "monthly" }),
+        body: JSON.stringify({ plan, interval: yearly ? "yearly" : "monthly" }),
       });
       const json = (await res.json()) as {
         success?: boolean;

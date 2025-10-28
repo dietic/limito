@@ -160,7 +160,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 
 - [x] Checkout setup (Plus/Pro) via Lemon Squeezy API
   - Endpoint: `POST /api/billing/checkouts` (auth required) returns checkout URL
-  - Client: Pricing section wired to trigger checkout for Plus/Pro, passes `interval` (monthly/annual) based on toggle
+  - Client: Pricing section wired to trigger checkout for Plus/Pro, passes `interval` (monthly/yearly) based on toggle
 - [x] Webhook receiver for subscription lifecycle
   - Endpoint: `POST /api/billing/webhook` with HMAC verification
   - Upserts `billing_subscriptions` and updates `profiles.plan`
@@ -190,12 +190,9 @@ Env required:
 - `LEMONSQUEEZY_API_KEY` (or `LEMON_SQUEEZY_API_KEY`) (test OK)
 - `LEMONSQUEEZY_STORE_ID`
 - `LEMONSQUEEZY_WEBHOOK_SECRET`
-- Monthly/Annual variant IDs (preferred):
-  - `LEMONSQUEEZY_PLUS_MONTHLY_VARIANT_ID`, `LEMONSQUEEZY_PLUS_ANNUAL_VARIANT_ID`
-  - `LEMONSQUEEZY_PRO_MONTHLY_VARIANT_ID`, `LEMONSQUEEZY_PRO_ANNUAL_VARIANT_ID`
-- Legacy fallback (if monthly/annual not set):
-  - `LEMONSQUEEZY_PLUS_VARIANT_ID`
-  - `LEMONSQUEEZY_PRO_VARIANT_ID`
+- Monthly/Yearly variant IDs (required):
+  - `LEMONSQUEEZY_PLUS_MONTHLY_VARIANT_ID`, `LEMONSQUEEZY_PLUS_YEARLY_VARIANT_ID`
+  - `LEMONSQUEEZY_PRO_MONTHLY_VARIANT_ID`, `LEMONSQUEEZY_PRO_YEARLY_VARIANT_ID`
 
 Optional (plan limits overrides):
 

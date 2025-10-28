@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     const { userId } = await requireAuth(request);
     const body = (await request.json().catch(() => ({}))) as {
       plan?: "plus" | "pro";
-      interval?: "monthly" | "annual" | "yearly";
+      interval?: "monthly" | "yearly" | "annual"; // accept legacy 'annual' but normalize to 'yearly'
     };
     const plan = body.plan;
     if (plan !== "plus" && plan !== "pro") {
@@ -15,30 +15,20 @@ export async function POST(request: Request) {
     }
     // Normalize interval (default to monthly if unspecified)
     const intervalRaw = (body.interval ?? "monthly").toLowerCase();
-    const interval = intervalRaw === "yearly" ? "annual" : intervalRaw; // accept both terms
-    if (interval !== "monthly" && interval !== "annual") {
+    const interval = intervalRaw === "annual" ? "yearly" : intervalRaw;
+    if (interval !== "monthly" && interval !== "yearly") {
       return jsonError("Invalid interval", 400);
     }
     const storeId = getStoreId();
-    // Prefer interval-specific envs; fall back to legacy single-variant ids if not provided
-    let variantEnv: string | undefined;
-    if (plan === "plus") {
-      variantEnv =
-        interval === "annual"
-          ? process.env["LEMONSQUEEZY_PLUS_ANNUAL_VARIANT_ID"]
-          : process.env["LEMONSQUEEZY_PLUS_MONTHLY_VARIANT_ID"];
-      if (!variantEnv) {
-        variantEnv = process.env["LEMONSQUEEZY_PLUS_VARIANT_ID"]; // legacy fallback
-      }
-    } else {
-      variantEnv =
-        interval === "annual"
-          ? process.env["LEMONSQUEEZY_PRO_ANNUAL_VARIANT_ID"]
-          : process.env["LEMONSQUEEZY_PRO_MONTHLY_VARIANT_ID"];
-      if (!variantEnv) {
-        variantEnv = process.env["LEMONSQUEEZY_PRO_VARIANT_ID"]; // legacy fallback
-      }
-    }
+    // Select variant strictly via MONTHLY/YEARLY envs (no legacy fallbacks)
+    const variantEnv =
+      plan === "plus"
+        ? interval === "yearly"
+          ? process.env["LEMONSQUEEZY_PLUS_YEARLY_VARIANT_ID"]
+          : process.env["LEMONSQUEEZY_PLUS_MONTHLY_VARIANT_ID"]
+        : interval === "yearly"
+        ? process.env["LEMONSQUEEZY_PRO_YEARLY_VARIANT_ID"]
+        : process.env["LEMONSQUEEZY_PRO_MONTHLY_VARIANT_ID"];
     const variantId = Number(variantEnv);
     if (!variantEnv || Number.isNaN(variantId)) {
       return jsonError("Billing not configured (missing variant id).", 500);

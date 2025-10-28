@@ -47,8 +47,10 @@ LEMONSQUEEZY_API_KEY=sk_test_...
 # LEMON_SQUEEZY_API_KEY=sk_test_...  # alternative env name also supported
 LEMONSQUEEZY_STORE_ID=12345
 LEMONSQUEEZY_WEBHOOK_SECRET=whsec_...
-LEMONSQUEEZY_PLUS_VARIANT_ID=111111
-LEMONSQUEEZY_PRO_VARIANT_ID=222222
+LEMONSQUEEZY_PLUS_MONTHLY_VARIANT_ID=111111
+LEMONSQUEEZY_PLUS_YEARLY_VARIANT_ID=111112
+LEMONSQUEEZY_PRO_MONTHLY_VARIANT_ID=222221
+LEMONSQUEEZY_PRO_YEARLY_VARIANT_ID=222222
 ```
 
 3. Configure a webhook in Lemon Squeezy pointing to:
@@ -64,7 +66,7 @@ LEMONSQUEEZY_PRO_VARIANT_ID=222222
 5. API routes involved:
 
 - `POST /api/billing/checkouts` → returns a checkout URL for Plus/Pro when no active subscription
-- `POST /api/billing/change-plan` → upgrades/downgrades in place by swapping the Lemon Squeezy subscription variant; downgrading to Free cancels the subscription
+- `POST /api/billing/change-plan` → upgrades/downgrades in place by swapping the Lemon Squeezy subscription variant (preserves monthly/yearly interval); downgrading to Free cancels the subscription
 - `POST /api/billing/cancel` → cancels the current active subscription
 - `POST /api/billing/webhook` → webhook receiver to upsert subscription status and map to users
 

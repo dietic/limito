@@ -211,10 +211,28 @@ export async function verifyWebhook(
 export function mapVariantToPlan(
   variantId: number | null | undefined
 ): "free" | "plus" | "pro" {
-  const plusId = Number(process.env["LEMONSQUEEZY_PLUS_VARIANT_ID"] ?? NaN);
-  const proId = Number(process.env["LEMONSQUEEZY_PRO_VARIANT_ID"] ?? NaN);
-  if (variantId && !Number.isNaN(plusId) && variantId === plusId) return "plus";
-  if (variantId && !Number.isNaN(proId) && variantId === proId) return "pro";
+  const ids = {
+    plusMonthly: Number(
+      process.env["LEMONSQUEEZY_PLUS_MONTHLY_VARIANT_ID"] ?? NaN
+    ),
+    plusYearly: Number(
+      process.env["LEMONSQUEEZY_PLUS_YEARLY_VARIANT_ID"] ?? NaN
+    ),
+    proMonthly: Number(
+      process.env["LEMONSQUEEZY_PRO_MONTHLY_VARIANT_ID"] ?? NaN
+    ),
+    proYearly: Number(process.env["LEMONSQUEEZY_PRO_YEARLY_VARIANT_ID"] ?? NaN),
+  } as const;
+  if (
+    variantId &&
+    (variantId === ids.plusMonthly || variantId === ids.plusYearly)
+  )
+    return "plus";
+  if (
+    variantId &&
+    (variantId === ids.proMonthly || variantId === ids.proYearly)
+  )
+    return "pro";
   return "free";
 }
 
