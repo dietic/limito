@@ -90,6 +90,21 @@ export default function BillingPage() {
     } catch {}
   }
 
+  async function cancelSubscription() {
+    try {
+      const token = await getAccessToken();
+      if (!token) return;
+      const res = await fetch("/api/billing/cancel", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) return;
+      window.location.reload();
+    } catch {}
+  }
+
   return (
     <main className="mx-auto max-w-2xl px-6 py-10">
       <h1 className="text-2xl font-semibold text-foreground">Billing</h1>
@@ -116,71 +131,81 @@ export default function BillingPage() {
               </span>
             )}
           </div>
-          {me.activeSubscription && (
-            <div className="flex flex-wrap items-center gap-3">
-              {/* Upgrade/Downgrade actions */}
-              {me.plan === "plus" && (
-                <>
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Upgrade/Downgrade actions */}
+            {me.plan === "plus" && (
+              <>
+                <button
+                  type="button"
+                  className={cn(buttonVariants({ variant: "default" }))}
+                  onClick={() => changePlan("pro")}
+                >
+                  Upgrade to Pro
+                </button>
+                <button
+                  type="button"
+                  className={cn(buttonVariants({ variant: "outline" }))}
+                  onClick={() => changePlan("free")}
+                >
+                  Downgrade to Free
+                </button>
+                {me.activeSubscription && (
                   <button
                     type="button"
-                    className={cn(buttonVariants({ variant: "default" }))}
-                    onClick={() => changePlan("pro")}
+                    className={cn(buttonVariants({ variant: "ghost" }))}
+                    onClick={cancelSubscription}
                   >
-                    Upgrade to Pro
+                    Cancel subscription
                   </button>
+                )}
+              </>
+            )}
+            {me.plan === "pro" && (
+              <>
+                <button
+                  type="button"
+                  className={cn(buttonVariants({ variant: "default" }))}
+                  onClick={() => changePlan("plus")}
+                >
+                  Downgrade to Plus
+                </button>
+                <button
+                  type="button"
+                  className={cn(buttonVariants({ variant: "outline" }))}
+                  onClick={() => changePlan("free")}
+                >
+                  Downgrade to Free
+                </button>
+                {me.activeSubscription && (
                   <button
                     type="button"
-                    className={cn(buttonVariants({ variant: "outline" }))}
-                    onClick={() => changePlan("free")}
+                    className={cn(buttonVariants({ variant: "ghost" }))}
+                    onClick={cancelSubscription}
                   >
-                    Downgrade to Free
+                    Cancel subscription
                   </button>
-                </>
-              )}
-              {me.plan === "pro" && (
-                <>
-                  <button
-                    type="button"
-                    className={cn(buttonVariants({ variant: "default" }))}
-                    onClick={() => changePlan("plus")}
-                  >
-                    Downgrade to Plus
-                  </button>
-                  <button
-                    type="button"
-                    className={cn(buttonVariants({ variant: "outline" }))}
-                    onClick={() => changePlan("free")}
-                  >
-                    Downgrade to Free
-                  </button>
-                </>
-              )}
-              {me.plan !== "plus" && me.plan !== "pro" && (
-                <>
-                  <button
-                    type="button"
-                    className={cn(buttonVariants({ variant: "default" }))}
-                    onClick={() => changePlan("plus")}
-                  >
-                    Upgrade to Plus
-                  </button>
-                  <button
-                    type="button"
-                    className={cn(buttonVariants({ variant: "outline" }))}
-                    onClick={() => changePlan("pro")}
-                  >
-                    Upgrade to Pro
-                  </button>
-                </>
-              )}
-            </div>
-          )}
-          {!me.activeSubscription && (
-            <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-              Upgrade from the Pricing section to unlock higher limits, or use
-              the buttons above.
-            </div>
-          )}
+                )}
+              </>
+            )}
+            {me.plan !== "plus" && me.plan !== "pro" && (
+              <>
+                <button
+                  type="button"
+                  className={cn(buttonVariants({ variant: "default" }))}
+                  onClick={() => changePlan("plus")}
+                >
+                  Upgrade to Plus
+                </button>
+                <button
+                  type="button"
+                  className={cn(buttonVariants({ variant: "outline" }))}
+                  onClick={() => changePlan("pro")}
+                >
+                  Upgrade to Pro
+                </button>
+              </>
+            )}
+          </div>
         </div>
       ) : null}
     </main>
