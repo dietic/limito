@@ -1,28 +1,9 @@
 "use client";
 
+import { landingFaqs } from "@/lib/marketing-content";
+
 export default function FaqSection() {
-  const faqs = [
-    {
-      q: "How do expiring links work?",
-      a: "You set an expiration rule — by date/time or by total clicks. Once the rule is met, the link stops working or redirects to your fallback URL.",
-    },
-    {
-      q: "What happens after expiry?",
-      a: "If you set a fallback URL, visitors are redirected there. Otherwise they see a clean ‘link expired’ page.",
-    },
-    {
-      q: "Do you track users?",
-      a: "We collect minimal, privacy-conscious metrics — total clicks and last activity. No pixel bloat or cross-site tracking.",
-    },
-    {
-      q: "Can I change or delete a link?",
-      a: "Yes. You can edit, pause, or delete your links anytime from the dashboard.",
-    },
-    {
-      q: "How fast are redirects?",
-      a: "We aim for sub-100ms using edge runtime and a global network.",
-    },
-  ];
+  const faqs = landingFaqs;
 
   return (
     <section id="faq" className="border-t border-border bg-muted/40 px-6 py-24">

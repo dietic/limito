@@ -245,9 +245,13 @@ Notes:
 - [x] robots.txt (`app/robots.ts`)
 - [x] sitemap.xml (`app/sitemap.ts`)
 - [x] Baseline metadata/OG tags for marketing pages
+- [x] Structured data + canonical refresh
+  - Added JSON-LD for organization/product/FAQ, canonical metadata on key marketing pages, and tightened robots/sitemap visibility.
 
 ## 18) Recently Completed Chores (for release notes)
 
+- [x] SEO structured data & canonical refresh
+  - Added JSON-LD coverage (Organization, SoftwareApplication, FAQ, OfferCatalog) and canonical metadata for marketing routes; adjusted robots and sitemap for crawl hygiene.
 - [x] README: Supabase setup and migrations instructions
 - [x] API DX: clearer dev error messages (missing service role key / schema not initialized)
 - [x] Real server-side pagination for links (API + hook + UI)

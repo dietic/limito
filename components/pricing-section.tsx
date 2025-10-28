@@ -3,6 +3,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { useAuth } from "@/hooks/use-auth";
 import { useAbVariant } from "@/lib/ab";
+import { pricingPlans } from "@/lib/marketing-content";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -21,52 +22,6 @@ export default function PricingSection() {
   useEffect(() => {
     setYearly(priceDefault === "yearly");
   }, [priceDefault]);
-
-  const plans = [
-    {
-      name: "Free",
-      monthly: 0,
-      yearly: 0,
-      description:
-        "Set up a couple of expiring links and try Limi.to risk-free.",
-      features: [
-        "Up to 2 active links",
-        "Time or click-based expirations",
-        "7-day analytics history",
-        "limi.to domain included",
-      ],
-      cta: { label: "Start for free", href: "/login" },
-      highlight: false,
-    },
-    {
-      name: "Plus",
-      monthly: 6,
-      yearly: 60,
-      description: "Headroom for campaigns, QR handouts, and a custom domain.",
-      features: [
-        "Up to 50 active links",
-        "Standard QR codes for every link",
-        "90-day analytics history",
-        "1 custom domain + email support (24h)",
-      ],
-      cta: { label: "Upgrade to Plus", href: "/api/upgrade/plus" },
-      highlight: true,
-    },
-    {
-      name: "Pro",
-      monthly: 12,
-      yearly: 120,
-      description: "Unlimited links for teams and agencies that need scale.",
-      features: [
-        "Unlimited active links",
-        "Standard QR codes",
-        "365-day analytics history",
-        "Up to 5 custom domains + priority support",
-      ],
-      cta: { label: "Upgrade to Pro", href: "/api/upgrade/pro" },
-      highlight: false,
-    },
-  ];
 
   const startCheckout = useCallback(
     async (plan: "plus" | "pro") => {
@@ -170,8 +125,9 @@ export default function PricingSection() {
         </div>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {plans.map((p) => {
-            const price = yearly ? p.yearly : p.monthly;
+          {pricingPlans.map((p) => {
+            const isFree = p.slug === "free";
+            const price = yearly ? p.yearlyPrice : p.monthlyPrice;
             const suffix = yearly ? "/year" : "/mo";
             return (
               <div
@@ -211,7 +167,7 @@ export default function PricingSection() {
                   ))}
                 </ul>
                 <div className="mt-8">
-                  {p.name === "Free" ? (
+                  {isFree ? (
                     <a
                       href={p.cta.href}
                       className={cn(
@@ -224,9 +180,7 @@ export default function PricingSection() {
                   ) : (
                     <button
                       type="button"
-                      onClick={() =>
-                        startCheckout(p.name.toLowerCase() as "plus" | "pro")
-                      }
+                      onClick={() => startCheckout(p.slug as "plus" | "pro")}
                       className={cn(
                         buttonVariants({
                           variant: p.highlight ? "default" : "outline",

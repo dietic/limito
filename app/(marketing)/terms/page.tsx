@@ -1,3 +1,26 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms of Service",
+  description:
+    "Review the rules for using Limi.to, including account responsibilities, billing, and acceptable use.",
+  alternates: {
+    canonical: "/terms",
+  },
+  openGraph: {
+    title: "Limi.to Terms of Service",
+    description:
+      "Understand the terms that govern your use of expiring links, billing, and support in Limi.to.",
+    url: "/terms",
+  },
+  twitter: {
+    card: "summary",
+    title: "Limi.to Terms of Service",
+    description:
+      "Understand the terms that govern your use of expiring links, billing, and support in Limi.to.",
+  },
+};
+
 export default function TermsPage() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">

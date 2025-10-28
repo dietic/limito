@@ -2,13 +2,64 @@ import Brand from "@/components/brand";
 import Faq from "@/components/faq-section";
 import HeroVisual from "@/components/hero-visual";
 import Pricing from "@/components/pricing-section";
+import SeoJsonLd from "@/components/seo-jsonld";
 import SiteHeader from "@/components/site-header";
+import { env } from "@/lib/env";
+import { landingFaqs, pricingPlans } from "@/lib/marketing-content";
+import {
+  createFaqJsonLd,
+  createOrganizationJsonLd,
+  createSoftwareApplicationJsonLd,
+  createWebsiteJsonLd,
+} from "@/lib/seo";
+import type { Metadata } from "next";
 import { Suspense } from "react";
+
+const baseUrl = env.APP_URL.replace(/\/$/, "");
+const organizationJsonLd = createOrganizationJsonLd(baseUrl);
+const websiteJsonLd = createWebsiteJsonLd(baseUrl);
+const softwareJsonLd = createSoftwareApplicationJsonLd(baseUrl, pricingPlans);
+const faqJsonLd = createFaqJsonLd(landingFaqs);
+
+export const metadata: Metadata = {
+  title: "Expiring links that boost launches and offers",
+  description:
+    "Limi.to helps you ship expiring links with click or time limits, real-time analytics, and smart fallbacks to convert every campaign.",
+  keywords: [
+    "expiring links",
+    "limited time offers",
+    "link shortener",
+    "campaign tracking",
+    "url redirection",
+    "link analytics",
+  ],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Limi.to — Expiring links that boost launches and offers",
+    description:
+      "Create expiring links with click or time limits and automate smart fallbacks. Save campaigns from stale links in seconds.",
+    url: "/",
+    images: [{ url: "/og-image.svg", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Limi.to — Expiring links that boost launches and offers",
+    description:
+      "Create expiring links with click or time limits and automate smart fallbacks.",
+    images: ["/og-image.svg"],
+  },
+};
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export default function Page() {
   return (
     <div className="relative min-h-screen bg-background">
+      <SeoJsonLd id="limito-organization" data={organizationJsonLd} />
+      <SeoJsonLd id="limito-website" data={websiteJsonLd} />
+      <SeoJsonLd id="limito-software" data={softwareJsonLd} />
+      <SeoJsonLd id="limito-faq" data={faqJsonLd} />
       {/* Ambient background */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-primary/20 blur-3xl" />

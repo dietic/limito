@@ -1,3 +1,26 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description:
+    "Understand how Limi.to collects, stores, and protects data for expiring links and analytics.",
+  alternates: {
+    canonical: "/privacy",
+  },
+  openGraph: {
+    title: "Limi.to Privacy Policy",
+    description:
+      "Learn how Limi.to handles account data, link analytics, and security for expiring links.",
+    url: "/privacy",
+  },
+  twitter: {
+    card: "summary",
+    title: "Limi.to Privacy Policy",
+    description:
+      "Learn how Limi.to handles account data, link analytics, and security for expiring links.",
+  },
+};
+
 export default function PrivacyPage() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
