@@ -48,8 +48,8 @@ export default function TermsPage() {
         <div>
           <h2 className="text-xl font-medium text-foreground">Subscriptions</h2>
           <p className="mt-3">
-            Some features may require a paid plan (handled via Stripe). Pricing
-            and inclusions may change with notice.
+            Some features may require a paid plan (handled via Lemon Squeezy).
+            Pricing and inclusions may change with notice.
           </p>
         </div>
 
