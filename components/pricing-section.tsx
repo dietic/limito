@@ -27,12 +27,13 @@ export default function PricingSection() {
       name: "Free",
       monthly: 0,
       yearly: 0,
-      description: "Everything you need to create and manage expiring links.",
+      description:
+        "Set up a couple of expiring links and try Limi.to risk-free.",
       features: [
-        "Create time or click-based links",
-        "Basic analytics",
-        "Smart fallback URL",
-        "Reasonable limits",
+        "Up to 2 active links",
+        "Time or click-based expirations",
+        "7-day analytics history",
+        "limi.to domain included",
       ],
       cta: { label: "Start for free", href: "/login" },
       highlight: false,
@@ -41,12 +42,12 @@ export default function PricingSection() {
       name: "Plus",
       monthly: 6,
       yearly: 60,
-      description: "More headroom for active projects and campaigns.",
+      description: "Headroom for campaigns, QR handouts, and a custom domain.",
       features: [
-        "Higher limits",
-        "Priority redirect capacity",
-        "Click trends (24h)",
-        "Email support (soon)",
+        "Up to 50 active links",
+        "Standard QR codes for every link",
+        "90-day analytics history",
+        "1 custom domain + email support (24h)",
       ],
       cta: { label: "Upgrade to Plus", href: "/api/upgrade/plus" },
       highlight: true,
@@ -55,12 +56,12 @@ export default function PricingSection() {
       name: "Pro",
       monthly: 12,
       yearly: 120,
-      description: "For power users and teams who need higher limits.",
+      description: "Unlimited links for teams and agencies that need scale.",
       features: [
-        "Max limits",
-        "Fastest redirects",
-        "Advanced analytics (soon)",
-        "Priority support (soon)",
+        "Unlimited active links",
+        "Standard QR codes",
+        "365-day analytics history",
+        "Up to 5 custom domains + priority support",
       ],
       cta: { label: "Upgrade to Pro", href: "/api/upgrade/pro" },
       highlight: false,
@@ -86,7 +87,7 @@ export default function PricingSection() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ plan }),
+        body: JSON.stringify({ plan, interval: yearly ? "annual" : "monthly" }),
       });
       const json = (await res.json()) as {
         success?: boolean;
@@ -106,7 +107,7 @@ export default function PricingSection() {
       }
       window.location.href = json.data.url;
     },
-    [userId, getAccessToken, router, toast]
+    [userId, getAccessToken, router, toast, yearly]
   );
 
   // Auto-start checkout if we were redirected back with ?upgrade=plus|pro and the user is authenticated

@@ -105,6 +105,16 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
       -> Done: Link card UX: bottom-left arrows to browse campaigns (instances) and inline total clicks metric
       -> Done: Theme toggle added to Dashboard header actions
       -> Done: Standalone Pricing page at /pricing and header/hero CTAs updated to link to it
+- [x] Plus & Pro QR code experience
+  - Surface a QR action on link cards and detail pages for users on Plus and Pro plans
+  - Render a modal with a high-resolution QR code targeting `limi.to/r/{slug}` plus copy/download affordances
+  - Gracefully gate the feature for Free users with an upgrade prompt wired to the existing Lemon checkout flow
+  - Ensure the QR dialog is responsive, accessible, and covered by at least one integration or unit test
+    -> Done: Added `lib/qr.ts` with scalable SVG output, responsive sizing, and data URL helpers
+    -> Done: Implemented `LinkQrDialog` with copy link, download SVG/PNG, and copy PNG
+    -> Done: Gating via `plan` prop on `LinkCard` and details page using `usePlan`
+    -> Done: Fixed sizing to fit container by making SVG scalable with `viewBox` and width/height 100%
+    -> Tests: unit test for QR helper + UI test for gating behavior; full suite green
 
 ## 7) Validation & Types
 
@@ -150,7 +160,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 
 - [x] Checkout setup (Plus/Pro) via Lemon Squeezy API
   - Endpoint: `POST /api/billing/checkouts` (auth required) returns checkout URL
-  - Client: Pricing section wired to trigger checkout for Plus/Pro
+  - Client: Pricing section wired to trigger checkout for Plus/Pro, passes `interval` (monthly/annual) based on toggle
 - [x] Webhook receiver for subscription lifecycle
   - Endpoint: `POST /api/billing/webhook` with HMAC verification
   - Upserts `billing_subscriptions` and updates `profiles.plan`
@@ -159,7 +169,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
   - Page: `/settings/billing` shows plan and allows Cancel
 - [x] Database: `billing_subscriptions` table with RLS
 - [x] Plan gating by limits (Plus/Pro overrides)
-      -> API: create-link now enforces maxActiveLinks and dailyCreations based on `profiles.plan` (free/plus/pro)
+      -> API: create-link enforces maxActiveLinks based on `profiles.plan` (free/plus/pro)
       -> Config: add env-overridable plan limits for Plus/Pro
 - [ ] Customer Portal (optional): generate/manage portal URL
 - [x] Map variant → plan via env and document setup
@@ -170,19 +180,28 @@ Upgrades/Downgrades:
   - Endpoint: `POST /api/billing/change-plan` (auth required)
   - Behavior: swaps Lemon Squeezy subscription variant in-place for Plus/Pro; cancels to downgrade to Free; if no active sub, starts a checkout and returns URL
   - UI: `/settings/billing` now shows Upgrade/Downgrade buttons (Plus ⇄ Pro, and to Free)
+  - Downgrading to Free immediately deactivates any links beyond the plan limit and records a `plan_downgrade` reason on closed activations
+    -> Billing UI now calls `POST /api/billing/change-plan { plan: "free" }` for instant downgrade (no portal roundtrip)
+    -> Safety net: `POST /api/billing/cancel` also downgrades to Free locally and enforces limits immediately; webhook still updates provider status
+    -> Enforcement now trims the oldest active links first and works in batches so large accounts still drop to the proper limit right away
 
 Env required:
 
 - `LEMONSQUEEZY_API_KEY` (or `LEMON_SQUEEZY_API_KEY`) (test OK)
 - `LEMONSQUEEZY_STORE_ID`
 - `LEMONSQUEEZY_WEBHOOK_SECRET`
-- `LEMONSQUEEZY_PLUS_VARIANT_ID`
-- `LEMONSQUEEZY_PRO_VARIANT_ID`
+- Monthly/Annual variant IDs (preferred):
+  - `LEMONSQUEEZY_PLUS_MONTHLY_VARIANT_ID`, `LEMONSQUEEZY_PLUS_ANNUAL_VARIANT_ID`
+  - `LEMONSQUEEZY_PRO_MONTHLY_VARIANT_ID`, `LEMONSQUEEZY_PRO_ANNUAL_VARIANT_ID`
+- Legacy fallback (if monthly/annual not set):
+  - `LEMONSQUEEZY_PLUS_VARIANT_ID`
+  - `LEMONSQUEEZY_PRO_VARIANT_ID`
 
 Optional (plan limits overrides):
 
-- `PLUS_PLAN_MAX_ACTIVE_LINKS`, `PLUS_PLAN_DAILY_CREATIONS`, `PLUS_PLAN_ANALYTICS_RETENTION_DAYS`
-- `PRO_PLAN_MAX_ACTIVE_LINKS`, `PRO_PLAN_DAILY_CREATIONS`, `PRO_PLAN_ANALYTICS_RETENTION_DAYS`
+- `FREE_PLAN_MAX_ACTIVE_LINKS`, `FREE_PLAN_ANALYTICS_RETENTION_DAYS`
+- `PLUS_PLAN_MAX_ACTIVE_LINKS`, `PLUS_PLAN_ANALYTICS_RETENTION_DAYS`
+- `PRO_PLAN_MAX_ACTIVE_LINKS`, `PRO_PLAN_ANALYTICS_RETENTION_DAYS`
 
 Notes:
 
