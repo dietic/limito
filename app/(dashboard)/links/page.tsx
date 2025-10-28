@@ -4,11 +4,12 @@ import { buttonVariants } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { useAuth } from "@/hooks/use-auth";
 import { useLinks } from "@/hooks/use-links";
+import { usePlan } from "@/hooks/use-plan";
 import { cn } from "@/lib/utils";
 import type { Link as LinkType } from "@/types/link";
 import NextLink from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 
 function LinksPageInner() {
   const router = useRouter();
@@ -19,6 +20,8 @@ function LinksPageInner() {
     return Number.isFinite(v) && v > 0 && v <= 100 ? v : 10;
   })();
   const { userId, loading: authLoading } = useAuth();
+  const { plan: userPlan, loading: planLoading, error: planError } = usePlan();
+  const planErrorShown = useRef(false);
   const {
     items,
     loading,
@@ -41,6 +44,19 @@ function LinksPageInner() {
     (search.get("filter") as "all" | "active" | "expired") || "all"
   );
   const [pageSize, setPageSize] = useState<number>(initialLimit);
+  useEffect(() => {
+    if (planError && !planErrorShown.current) {
+      toast({
+        title: "Plan info unavailable",
+        description: planError,
+        variant: "destructive",
+      });
+      planErrorShown.current = true;
+    }
+    if (!planError) {
+      planErrorShown.current = false;
+    }
+  }, [planError, toast]);
 
   // Keep URL in sync when filter, offset or page size changes
   useEffect(() => {
@@ -102,13 +118,11 @@ function LinksPageInner() {
 
   if (authLoading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-background to-muted px-6 py-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="flex items-center justify-center py-20">
-            <div className="flex items-center gap-3 text-muted-foreground">
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
-              <span>Loading your links...</span>
-            </div>
+      <main className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-background to-muted">
+        <div className="flex items-center justify-center py-20">
+          <div className="flex items-center gap-3 text-muted-foreground">
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+            <span>Loading your links...</span>
           </div>
         </div>
       </main>
@@ -121,14 +135,14 @@ function LinksPageInner() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-background to-muted">
-      {/* Header */}
-      <div className="border-b border-border bg-background/70 backdrop-blur-sm">
-        <div className="mx-auto max-w-7xl px-6 py-6">
-          <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+    <main className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-background to-muted">
+      {/* Page Header */}
+      <div className="border-b border-border/40 bg-background/30 backdrop-blur-sm">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+          <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div>
               <h1 className="text-3xl font-bold text-foreground">Your Links</h1>
-              <p className="mt-1 text-muted-foreground">
+              <p className="mt-1 text-sm text-muted-foreground">
                 {filter === "all" && typeof total === "number"
                   ? `${total} ${total === 1 ? "link" : "links"} total`
                   : `${shownItems.length} ${
@@ -136,28 +150,33 @@ function LinksPageInner() {
                     } on this page`}
               </p>
             </div>
-            <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:gap-3">
-              <NextLink
-                href="/dashboard"
-                className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-muted hover:shadow-md text-center"
+            <NextLink
+              href="/links/new"
+              className={cn(
+                buttonVariants({ variant: "default" }),
+                "inline-flex items-center gap-2 shadow-lg shadow-primary/30"
+              )}
+            >
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                ← Dashboard
-              </NextLink>
-              <NextLink
-                href="/links/new"
-                className={cn(
-                  buttonVariants({ variant: "default" }),
-                  "px-6 py-2 text-sm shadow-lg shadow-primary/30 text-center"
-                )}
-              >
-                + Create Link
-              </NextLink>
-            </div>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
+              </svg>
+              Create Link
+            </NextLink>
           </div>
         </div>
       </div>
 
-      <div className="mx-auto max-w-7xl px-6 py-8">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
         {error && (
           <div className="mb-6 flex items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-destructive">
             <svg
@@ -353,6 +372,8 @@ function LinksPageInner() {
                   onDelete={handleDelete}
                   copying={copying === link.slug}
                   deleting={deleting === link.id}
+                  plan={userPlan ?? "free"}
+                  planLoading={planLoading}
                 />
               ))}
             </div>
@@ -463,13 +484,11 @@ export default function LinksPage() {
   return (
     <Suspense
       fallback={
-        <main className="min-h-screen bg-gradient-to-br from-background to-muted px-6 py-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="flex items-center justify-center py-20">
-              <div className="flex items-center gap-3 text-muted-foreground">
-                <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
-                <span>Loading links...</span>
-              </div>
+        <main className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-background to-muted">
+          <div className="flex items-center justify-center py-20">
+            <div className="flex items-center gap-3 text-muted-foreground">
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+              <span>Loading links...</span>
             </div>
           </div>
         </main>

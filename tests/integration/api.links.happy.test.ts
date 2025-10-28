@@ -92,14 +92,6 @@ describe("api/links happy paths", () => {
     vi.doMock("@/lib/auth", () => ({
       requireAuth: async () => ({ userId: "u1" }),
     }));
-    vi.doMock("@/lib/rate-limit", () => ({
-      allowAndIncrement: async () => ({
-        allowed: true,
-        remaining: 9,
-        limit: 10,
-        resetAt: new Date().toISOString(),
-      }),
-    }));
     // active count head query, then insert returning created link
     const queue = [
       { data: null, error: null, count: 0 },

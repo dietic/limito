@@ -1,5 +1,6 @@
 "use client";
 import LinkForm from "@/components/link-form";
+import { LinkQrDialog } from "@/components/link-qr-dialog";
 import Button, { buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,8 +10,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { UpgradePromptDialog } from "@/components/upgrade-prompt-dialog";
 import { useAuth } from "@/hooks/use-auth";
 import { useLinks } from "@/hooks/use-links";
+import { usePlan } from "@/hooks/use-plan";
 import { isExpired } from "@/lib/expiration";
 import { cn } from "@/lib/utils";
 import type { Link } from "@/types/link";
@@ -23,6 +26,7 @@ export default function LinkDetailsPage() {
   const params = useParams<{ id: string }>();
   const { userId, loading: authLoading, getAccessToken } = useAuth();
   const { updateLink, deleteLink, refresh } = useLinks();
+  const { plan: userPlan, loading: planLoading } = usePlan();
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -30,6 +34,8 @@ export default function LinkDetailsPage() {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [messageOpen, setMessageOpen] = useState(false);
   const [messageText, setMessageText] = useState<string>("");
+  const [qrOpen, setQrOpen] = useState(false);
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
 
   // Reactivate dialog state
   const [reactivateOpen, setReactivateOpen] = useState(false);
@@ -107,6 +113,16 @@ export default function LinkDetailsPage() {
   }
 
   const expired = link ? isExpired(link) : false;
+  const canUseQr = userPlan === "plus" || userPlan === "pro";
+
+  const handleQrClick = () => {
+    if (!link || planLoading) return;
+    if (!canUseQr) {
+      setUpgradeOpen(true);
+      return;
+    }
+    setQrOpen(true);
+  };
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-background to-muted">
@@ -129,6 +145,28 @@ export default function LinkDetailsPage() {
               >
                 ← Back to Links
               </NextLink>
+              <Button
+                type="button"
+                onClick={handleQrClick}
+                disabled={!link || planLoading}
+                variant="outline"
+                className="flex items-center gap-2 border-primary text-primary hover:bg-primary/10"
+              >
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 2h2m0 0h2m-2 0v-2m0 2v2"
+                  />
+                </svg>
+                {canUseQr ? "QR code" : "Unlock QR"}
+              </Button>
               <Button
                 type="button"
                 onClick={() => setDeleteOpen(true)}
@@ -460,6 +498,10 @@ export default function LinkDetailsPage() {
           <Button onClick={() => setMessageOpen(false)}>OK</Button>
         </DialogFooter>
       </Dialog>
+      {link && (
+        <LinkQrDialog slug={link.slug} open={qrOpen} onOpenChange={setQrOpen} />
+      )}
+      <UpgradePromptDialog open={upgradeOpen} onOpenChange={setUpgradeOpen} />
     </main>
   );
 }

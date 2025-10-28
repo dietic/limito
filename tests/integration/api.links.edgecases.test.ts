@@ -120,14 +120,6 @@ describe("api/links edge cases", () => {
     vi.doMock("@/lib/auth", () => ({
       requireAuth: async () => ({ userId: "u1" }),
     }));
-    vi.doMock("@/lib/rate-limit", () => ({
-      allowAndIncrement: async () => ({
-        allowed: true,
-        remaining: 9,
-        limit: 10,
-        resetAt: new Date().toISOString(),
-      }),
-    }));
     const queue = [
       { data: null, error: null, count: 0 }, // active head count
       { data: null, error: { code: "23505" } }, // insert conflict
