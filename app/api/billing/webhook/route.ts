@@ -4,6 +4,7 @@ import {
   mapVariantToPlan,
   verifyWebhook,
 } from "@/lib/lemon";
+import { updatePlanAndEnforce } from "@/lib/plans";
 import { getServiceClient } from "@/lib/supabase";
 import { NextResponse } from "next/server";
 
@@ -96,7 +97,13 @@ export async function POST(request: Request) {
   // If we know the user, update their plan to match mapping when active; downgrade to free when not
   if (linkedUserId) {
     const newPlan = isActive ? plan : "free";
-    await sb.from("profiles").update({ plan: newPlan }).eq("id", linkedUserId);
+    try {
+      await updatePlanAndEnforce(linkedUserId, newPlan, { client: sb });
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "Failed to update plan";
+      return NextResponse.json({ error: true, message }, { status: 500 });
+    }
   }
 
   return NextResponse.json({ success: true });

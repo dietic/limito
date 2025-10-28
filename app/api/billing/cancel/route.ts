@@ -1,6 +1,7 @@
 import { requireAuth } from "@/lib/auth";
 import { jsonError, jsonSuccess } from "@/lib/http";
 import { cancelSubscription } from "@/lib/lemon";
+import { updatePlanAndEnforce } from "@/lib/plans";
 import { getServiceClient } from "@/lib/supabase";
 
 export async function POST(request: Request) {
@@ -14,7 +15,10 @@ export async function POST(request: Request) {
       .eq("is_active", true)
       .limit(1);
     if (error) {
-      return jsonError(`DB error: ${error.message ?? "Failed to fetch subscription"}`, 500);
+      return jsonError(
+        `DB error: ${error.message ?? "Failed to fetch subscription"}`,
+        500
+      );
     }
     const sub = rows?.[0];
     if (!sub || !sub.provider_subscription_id) {
@@ -23,7 +27,10 @@ export async function POST(request: Request) {
     try {
       await cancelSubscription(sub.provider_subscription_id);
     } catch (lemonErr) {
-      const msg = lemonErr instanceof Error ? lemonErr.message : "Failed to cancel with provider";
+      const msg =
+        lemonErr instanceof Error
+          ? lemonErr.message
+          : "Failed to cancel with provider";
       return jsonError(msg, 500);
     }
     // Mark as not active; webhook will later set final status and dates
@@ -32,10 +39,20 @@ export async function POST(request: Request) {
       .update({ is_active: false, status: "cancelled" })
       .eq("id", sub.id);
     if (upErr) {
-      return jsonError(`DB error: ${upErr.message ?? "Failed to update subscription"}`, 500);
+      return jsonError(
+        `DB error: ${upErr.message ?? "Failed to update subscription"}`,
+        500
+      );
     }
-    // Downgrade plan to free at period end: leaving to webhook for accuracy.
-    return jsonSuccess({ cancelled: true });
+    // Immediately downgrade locally and enforce limits to provide instant feedback.
+    try {
+      await updatePlanAndEnforce(userId, "free", { client: sb });
+    } catch (err) {
+      const msg =
+        err instanceof Error ? err.message : "Failed to enforce plan limits";
+      return jsonError(msg, 500);
+    }
+    return jsonSuccess({ cancelled: true, downgraded: true });
   } catch (e) {
     if (e instanceof Error && e.message === "Unauthorized") {
       return jsonError("Unauthorized", 401);
