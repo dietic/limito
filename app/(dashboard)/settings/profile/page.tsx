@@ -39,44 +39,58 @@ export default function ProfileSettingsPage() {
   }
 
   return (
-    <main className="mx-auto max-w-2xl px-6 py-10">
-      <h1 className="text-2xl font-semibold text-foreground">Profile</h1>
-      <div className="mt-6 space-y-6 rounded-lg border border-border bg-card p-6">
-        <div>
-          <div className="text-sm text-muted-foreground">Email</div>
-          <div className="text-lg font-medium text-foreground">
-            {email ?? ""}
+    <main className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-background to-muted">
+      {/* Page Header */}
+      <div className="border-b border-border/40 bg-background/30 backdrop-blur-sm">
+        <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6">
+          <h1 className="text-3xl font-bold text-foreground">Profile</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Manage your account settings and preferences
+          </p>
+        </div>
+      </div>
+
+      <div className="mx-auto max-w-2xl px-4 py-8 sm:px-6">
+        <div className="space-y-6 rounded-lg border border-border bg-card p-6">
+          <div>
+            <div className="text-sm text-muted-foreground">Email</div>
+            <div className="text-lg font-medium text-foreground">
+              {email ?? ""}
+            </div>
           </div>
-        </div>
-        <div>
-          <label
-            htmlFor="new-password"
-            className="block text-sm font-medium text-foreground"
-          >
-            New password
-          </label>
-          <Input
-            id="new-password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="mt-1"
-            placeholder="••••••••"
-          />
-          <button
-            onClick={changePassword}
-            disabled={submitting}
-            className={cn(buttonVariants({ variant: "default" }), "mt-3")}
-          >
-            Change password
-          </button>
-        </div>
-        <div className="text-sm text-muted-foreground">
-          Subscription settings are in{" "}
-          <a href="/settings/billing" className="text-primary hover:underline">
-            Billing
-          </a>
-          .
+          <div>
+            <label
+              htmlFor="new-password"
+              className="block text-sm font-medium text-foreground"
+            >
+              New password
+            </label>
+            <Input
+              id="new-password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="mt-1"
+              placeholder="••••••••"
+            />
+            <button
+              onClick={changePassword}
+              disabled={submitting}
+              className={cn(buttonVariants({ variant: "default" }), "mt-3")}
+            >
+              Change password
+            </button>
+          </div>
+          <div className="text-sm text-muted-foreground">
+            Subscription settings are in{" "}
+            <a
+              href="/settings/billing"
+              className="text-primary hover:underline"
+            >
+              Billing
+            </a>
+            .
+          </div>
         </div>
       </div>
     </main>

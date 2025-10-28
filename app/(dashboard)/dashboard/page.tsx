@@ -1,7 +1,6 @@
 "use client";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
-import ThemeToggle from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { useAuth } from "@/hooks/use-auth";
@@ -16,7 +15,7 @@ export default function DashboardPage() {
   const router = useRouter();
   const { toast } = useToast();
   const upgradeShownRef = useRef(false);
-  const { userId, email, loading: authLoading, signOut } = useAuth();
+  const { userId, loading: authLoading } = useAuth();
   const { items, loading } = useLinks();
 
   // Show upgrade toast if redirected from successful checkout (hook must be declared before any early returns)
@@ -61,95 +60,47 @@ export default function DashboardPage() {
   const lastClickLabel =
     lastClickAt > 0 ? new Date(lastClickAt).toLocaleString() : null;
 
+  if (authLoading || (!authLoading && !userId)) {
+    return (
+      <main className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-background to-muted">
+        <div className="flex items-center justify-center py-20">
+          <div className="flex items-center gap-3 text-muted-foreground">
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+            <span>Loading your dashboard...</span>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <Suspense
       fallback={
-        <main className="min-h-screen bg-gradient-to-br from-background to-muted px-6 py-8">
-          <div className="mx-auto max-w-7xl">
-            <div className="flex items-center justify-center py-20">
-              <div className="flex items-center gap-3 text-muted-foreground">
-                <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
-                <span>Loading your dashboard...</span>
-              </div>
+        <main className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-background to-muted">
+          <div className="flex items-center justify-center py-20">
+            <div className="flex items-center gap-3 text-muted-foreground">
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+              <span>Loading your dashboard...</span>
             </div>
           </div>
         </main>
       }
     >
-      <main className="min-h-screen bg-gradient-to-br from-background to-muted">
-        {(authLoading || (!authLoading && !userId)) && (
-          <div className="px-6 py-8">
-            <div className="mx-auto max-w-7xl">
-              <div className="flex items-center justify-center py-20">
-                <div className="flex items-center gap-3 text-muted-foreground">
-                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
-                  <span>Loading your dashboard...</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-        {/* Header */}
-        <div className="border-b border-border bg-background/70 backdrop-blur-sm">
-          <div className="mx-auto max-w-7xl px-6 py-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-foreground">
-                  Dashboard
-                </h1>
-                <p className="mt-1 text-muted-foreground">
-                  Welcome back, {email}
-                </p>
-                {lastClickLabel && (
-                  <p className="text-xs text-muted-foreground">
-                    Last activity: {lastClickLabel}
-                  </p>
-                )}
-              </div>
-              <div className="flex gap-3">
-                <ThemeToggle />
-                <NextLink
-                  href="/settings/billing"
-                  className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-muted hover:shadow-md"
-                >
-                  Billing
-                </NextLink>
-                <NextLink
-                  href="/settings/profile"
-                  className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-muted hover:shadow-md"
-                >
-                  Settings
-                </NextLink>
-                <button
-                  onClick={async () => {
-                    await signOut();
-                    router.push("/");
-                  }}
-                  className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-muted hover:shadow-md"
-                >
-                  Sign out
-                </button>
-                <NextLink
-                  href="/links"
-                  className="rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground shadow-sm transition-all hover:bg-muted hover:shadow-md"
-                >
-                  All Links
-                </NextLink>
-                <NextLink
-                  href="/links/new"
-                  className={cn(
-                    buttonVariants({ variant: "default" }),
-                    "px-6 py-2 text-sm shadow-lg shadow-primary/30"
-                  )}
-                >
-                  + Create Link
-                </NextLink>
-              </div>
+      <main className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-background to-muted">
+        {/* Page Header */}
+        <div className="border-b border-border/40 bg-background/30 backdrop-blur-sm">
+          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+            <div className="flex flex-col gap-2">
+              <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
+              <p className="text-sm text-muted-foreground">
+                Overview of your expiring links
+                {lastClickLabel && ` · Last activity: ${lastClickLabel}`}
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="mx-auto max-w-7xl px-6 py-8">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
           {/* Stats Grid */}
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {/* Total Links */}
