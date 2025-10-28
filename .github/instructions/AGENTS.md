@@ -37,7 +37,7 @@ Your mission: **build something clean, fast, and scalable**, not big and complic
 - **Database:** Supabase (PostgreSQL)
 - **Auth:** Supabase Auth (email/password + magic link)
 - **Email:** Resend + React Email (optional for notifications)
-- **Payments:** Stripe Checkout (added after launch)
+- **Payments:** Lemon Squeezy (subscriptions via API + webhook)
 - **Hosting:** Vercel (frontend + backend), Supabase (DB)
 - **Monitoring:** Sentry (optional), Vercel Analytics
 
@@ -115,6 +115,7 @@ No single-file blobs. No unstructured folders.
    - Components should only handle UI and minor state.
    - Move side effects, validation, and data fetching into hooks or server actions.
 10. **Use React Server Components** whenever possible; avoid unnecessary client components.
+    Note (Next.js 15 CSR/Suspense): If a client component needs `useSearchParams()`/`usePathname()` and the page may be prerendered, either read from `window.location` inside a `useEffect`, or ensure the usage site is wrapped in `<Suspense>` and, when appropriate, mark the page as dynamic (`export const dynamic = 'force-dynamic'`; `export const revalidate = 0`). Keep hook order stable and do redirects inside effects.
 11. **Always validate props with TypeScript interfaces.**
 12. **Mobile-first design:**
     - Test at 360px width minimum.
@@ -238,6 +239,15 @@ Rules:
 | `/api/links/:id`           | DELETE | Delete link                          |
 | `/api/links/:id/analytics` | GET    | Return link stats                    |
 | `/r/:slug`                 | GET    | Public redirect route (Edge runtime) |
+
+Billing endpoints (payments):
+
+| Endpoint                   | Method | Description                                         |
+| -------------------------- | ------ | --------------------------------------------------- |
+| `/api/billing/checkouts`   | POST   | Create checkout for Plus/Pro (returns checkout URL) |
+| `/api/billing/change-plan` | POST   | Upgrade/downgrade (swap variant) or cancel to Free  |
+| `/api/billing/cancel`      | POST   | Cancel active subscription                          |
+| `/api/billing/webhook`     | POST   | Webhook receiver (HMAC verified)                    |
 
 **Response format:**
 
@@ -374,8 +384,23 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 RESEND_API_KEY=
 APP_URL=https://limi.to
-STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
+
+# Lemon Squeezy (payments)
+# Either spelling is accepted for the API key; prefer LEMONSQUEEZY_API_KEY
+LEMONSQUEEZY_API_KEY=
+# LEMON_SQUEEZY_API_KEY=
+LEMONSQUEEZY_STORE_ID=
+LEMONSQUEEZY_WEBHOOK_SECRET=
+LEMONSQUEEZY_PLUS_VARIANT_ID=
+LEMONSQUEEZY_PRO_VARIANT_ID=
+
+# Optional plan limits overrides
+PLUS_PLAN_MAX_ACTIVE_LINKS=
+PLUS_PLAN_DAILY_CREATIONS=
+PLUS_PLAN_ANALYTICS_RETENTION_DAYS=
+PRO_PLAN_MAX_ACTIVE_LINKS=
+PRO_PLAN_DAILY_CREATIONS=
+PRO_PLAN_ANALYTICS_RETENTION_DAYS=
 ```
 
 ---

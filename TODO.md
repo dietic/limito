@@ -32,6 +32,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [ ] Add server-side session retrieval for server components when needed
 - [x] Protect dashboard routes (redirect to login when no session)
 - [x] Basic error/empty/loading states on auth views
+- [x] Logout control in Dashboard header
 
 ## 2) Links CRUD
 
@@ -103,6 +104,7 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
       -> Done: Reactivate button visibility improved (success styling)
       -> Done: Link card UX: bottom-left arrows to browse campaigns (instances) and inline total clicks metric
       -> Done: Theme toggle added to Dashboard header actions
+      -> Done: Standalone Pricing page at /pricing and header/hero CTAs updated to link to it
 
 ## 7) Validation & Types
 
@@ -116,6 +118,9 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Unit: validators
 - [x] Integration: CRUD routes (happy/invalid/unauthorized)
 - [x] E2E (Playwright): login → create link → redirect → counts
+- [ ] Billing coverage (unit + integration)
+  - Unit: webhook signature verification happy/invalid
+  - Integration: /api/billing/checkouts, /api/billing/cancel, /api/billing/change-plan (active swap vs. no-active checkout)
 
 ## 9) Database & Security
 
@@ -141,11 +146,47 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Privacy & ToS final copy
       -> MVP: logo/favicon; review contact email if it changes
 
-## 12) Payments (Deferred v2)
+## 12) Payments (Lemon Squeezy)
 
-- [ ] Stripe Checkout plan setup (free → pro)
-- [ ] Webhook receiver and tests
-- [ ] Feature flag limits by plan
+- [x] Checkout setup (Plus/Pro) via Lemon Squeezy API
+  - Endpoint: `POST /api/billing/checkouts` (auth required) returns checkout URL
+  - Client: Pricing section wired to trigger checkout for Plus/Pro
+- [x] Webhook receiver for subscription lifecycle
+  - Endpoint: `POST /api/billing/webhook` with HMAC verification
+  - Upserts `billing_subscriptions` and updates `profiles.plan`
+- [x] Cancel subscription endpoint and basic Billing page
+  - Endpoint: `POST /api/billing/cancel` (auth required)
+  - Page: `/settings/billing` shows plan and allows Cancel
+- [x] Database: `billing_subscriptions` table with RLS
+- [x] Plan gating by limits (Plus/Pro overrides)
+      -> API: create-link now enforces maxActiveLinks and dailyCreations based on `profiles.plan` (free/plus/pro)
+      -> Config: add env-overridable plan limits for Plus/Pro
+- [ ] Customer Portal (optional): generate/manage portal URL
+- [x] Map variant → plan via env and document setup
+
+Upgrades/Downgrades:
+
+- [x] Change plan without new checkout when already subscribed
+  - Endpoint: `POST /api/billing/change-plan` (auth required)
+  - Behavior: swaps Lemon Squeezy subscription variant in-place for Plus/Pro; cancels to downgrade to Free; if no active sub, starts a checkout and returns URL
+  - UI: `/settings/billing` now shows Upgrade/Downgrade buttons (Plus ⇄ Pro, and to Free)
+
+Env required:
+
+- `LEMONSQUEEZY_API_KEY` (or `LEMON_SQUEEZY_API_KEY`) (test OK)
+- `LEMONSQUEEZY_STORE_ID`
+- `LEMONSQUEEZY_WEBHOOK_SECRET`
+- `LEMONSQUEEZY_PLUS_VARIANT_ID`
+- `LEMONSQUEEZY_PRO_VARIANT_ID`
+
+Optional (plan limits overrides):
+
+- `PLUS_PLAN_MAX_ACTIVE_LINKS`, `PLUS_PLAN_DAILY_CREATIONS`, `PLUS_PLAN_ANALYTICS_RETENTION_DAYS`
+- `PRO_PLAN_MAX_ACTIVE_LINKS`, `PRO_PLAN_DAILY_CREATIONS`, `PRO_PLAN_ANALYTICS_RETENTION_DAYS`
+
+Notes:
+
+- Webhooks may not include custom fields; for now, rows without a resolvable `user_id` are stored as placeholders and are not visible to users. Checkout requests include `{ custom: { user_id } }` for future reconciliation.
 
 ## 13) Email (Deferred v2)
 
@@ -172,6 +213,13 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
 - [x] Env var sanity checks for service clients
 - [ ] Add "Definition of Done" to instructions
 - [ ] Add "Token usage primer" to instructions
+
+- [ ] Billing docs: add .env.example keys for Lemon Squeezy, setup steps, and webhook configuration
+
+  - Document `/api/billing/webhook` URL and recommended events to subscribe (subscription\_\*), and the HMAC secret
+  - Note API key env alias support (`LEMONSQUEEZY_API_KEY` or `LEMON_SQUEEZY_API_KEY`)
+    -> Done: Added `.env.example` with all billing envs and optional plan limit overrides
+    -> Done: README includes webhook URL, events, and HMAC verification details
 
 - [ ] Domain verification flow
 - [ ] Redirect route handling for custom hostnames
@@ -215,3 +263,20 @@ This is the implementation checklist for MVP (v1). Each feature has a focused, v
     - Mobile menu now closes automatically when selecting any nav item (Sign in, Pricing, FAQ, Get Started) for better UX.
 - [x] DB hygiene: normalize profiles schema
   - Added `supabase/migrations/0005_profiles_normalize.sql` to enforce minimal `profiles` shape (id, plan, created_at), ensure FK and RLS policies, and remove any extraneous columns dynamically. Idempotent and safe to re-run.
+- [x] Auth: fixed login redirect warning
+  - Moved `router.replace` out of render in `app/(marketing)/login/page.tsx` into a guarded `useEffect` to resolve React error: "Cannot update a component (Router) while rendering a different component (LoginForm)".
+- [x] Billing: plan change flow (upgrade/downgrade)
+  - New endpoint `/api/billing/change-plan` to swap variants or cancel to Free; Billing settings UI updated with actions
+- [x] Navigation/Marketing polish
+  - Standalone `/pricing` page, header and hero CTAs now link to pricing
+- [x] Dashboard UX
+  - Added Logout button in Dashboard header using Supabase Auth
+- [x] Checkout flow polish
+  - Auto-start checkout after login when user arrived from Pricing with `?upgrade=plus|pro`
+  - After successful purchase, redirect to `/dashboard?upgraded=<plan>` and show success toast
+  - Added Billing and Settings links in Dashboard header for discoverability
+- [x] Settings: Profile page
+  - Added `/settings/profile` with a minimal Change Password form (uses Supabase `auth.updateUser`); Billing remains at `/settings/billing`
+- [x] Instructions & docs: Next.js 15 CSR/Suspense guidance and billing envs
+  - Updated instructions to prefer `window.location` in effects for query reads, or wrap sites in `<Suspense>` and mark pages dynamic
+  - Replaced Stripe vars with Lemon Squeezy keys in instructions; added billing endpoints reference

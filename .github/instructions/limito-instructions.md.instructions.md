@@ -52,6 +52,31 @@ export async function GET(
 
 See: `app/api/links/[id]/route.ts`, `app/r/[slug]/route.ts`
 
+### Client URL hooks, Suspense, and CSR bailouts (Next.js 15)
+
+- Avoid using `useSearchParams()`/`usePathname()` directly in client components when pages may be prerendered/SSG.
+- If you must read query params in a client component, prefer reading from `window.location` inside a `useEffect` to avoid prerender constraints.
+- Alternatively, ensure the usage site wraps the client component in a `<Suspense>` boundary and, when appropriate, mark the page as dynamic:
+  - `export const dynamic = 'force-dynamic'`
+  - `export const revalidate = 0`
+- Keep hook order stable; do not conditionally call hooks. Perform redirects and URL mutations inside effects.
+
+Example (safe query reading in client component):
+
+```tsx
+"use client";
+import { useEffect, useState } from "react";
+
+export function Example() {
+  const [upgrade, setUpgrade] = useState<string | null>(null);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setUpgrade(params.get("upgrade"));
+  }, []);
+  return upgrade ? <div>Upgrading to {upgrade}</div> : null;
+}
+```
+
 ### Client Components with Hooks
 
 All pages using `useAuth`, `useLinks`, `useState`, `useRouter` MUST be client components:
@@ -189,8 +214,23 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 RESEND_API_KEY=
 APP_URL=https://limi.to
-STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
+
+# Lemon Squeezy (payments)
+# Either spelling is accepted for the API key; prefer LEMONSQUEEZY_API_KEY
+LEMONSQUEEZY_API_KEY=
+# LEMON_SQUEEZY_API_KEY=
+LEMONSQUEEZY_STORE_ID=
+LEMONSQUEEZY_WEBHOOK_SECRET=
+LEMONSQUEEZY_PLUS_VARIANT_ID=
+LEMONSQUEEZY_PRO_VARIANT_ID=
+
+# Optional plan limits overrides
+PLUS_PLAN_MAX_ACTIVE_LINKS=
+PLUS_PLAN_DAILY_CREATIONS=
+PLUS_PLAN_ANALYTICS_RETENTION_DAYS=
+PRO_PLAN_MAX_ACTIVE_LINKS=
+PRO_PLAN_DAILY_CREATIONS=
+PRO_PLAN_ANALYTICS_RETENTION_DAYS=
 ```
 
 ## Key Files Reference
@@ -206,6 +246,17 @@ STRIPE_WEBHOOK_SECRET=
 - `components/faq-section.tsx` - Landing FAQ accordion
 - `lib/ab.ts` - Minimal client A/B testing helper (query override + localStorage)
 - `components/theme-toggle.tsx`, `components/theme-provider.tsx` - Light/dark theme and toggle
+
+Payments & billing:
+
+- `lib/lemon.ts` - Lemon Squeezy helpers (checkout, variant swap, cancel, webhook verify)
+- `app/api/billing/checkouts/route.ts` - Create checkout URL for Plus/Pro
+- `app/api/billing/change-plan/route.ts` - Upgrade/downgrade (variant swap or cancel to Free)
+- `app/api/billing/cancel/route.ts` - Cancel active subscription
+- `app/api/billing/webhook/route.ts` - Webhook receiver to upsert subscription and sync plan
+- `app/(dashboard)/settings/billing/page.tsx` - Billing settings UI
+- `app/(dashboard)/settings/profile/page.tsx` - Profile settings (change password)
+- `app/(marketing)/pricing/page.tsx` - Standalone Pricing page (wraps PricingSection in Suspense)
 
 ## Design Philosophy
 
