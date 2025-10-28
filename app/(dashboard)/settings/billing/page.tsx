@@ -26,6 +26,14 @@ export default function BillingPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [me, setMe] = useState<MeResponse["data"] | null>(null);
+  function fmt(d?: string | null) {
+    if (!d) return null;
+    try {
+      return new Date(d).toLocaleString();
+    } catch {
+      return d;
+    }
+  }
 
   useEffect(() => {
     let mounted = true;
@@ -123,14 +131,30 @@ export default function BillingPage() {
             </div>
             {me.activeSubscription ? (
               <span className="text-xs text-muted-foreground">
-                Status: {me.activeSubscription.status ?? "unknown"}
+                Status: {me.activeSubscription.status ?? (me.activeSubscription.is_active ? "active" : "inactive")}
               </span>
+            ) : me.plan === "plus" || me.plan === "pro" ? (
+              <span className="text-xs text-muted-foreground">Status: active (syncing)</span>
             ) : (
-              <span className="text-xs text-muted-foreground">
-                No active subscription
-              </span>
+              <span className="text-xs text-muted-foreground">No active subscription</span>
             )}
           </div>
+          {(me.activeSubscription || me.plan === "plus" || me.plan === "pro") && (
+            <ul className="mt-2 space-y-1 text-sm text-muted-foreground">
+              {me.activeSubscription?.renews_at && (
+                <li>Renews on: <span className="text-foreground">{fmt(me.activeSubscription.renews_at)}</span></li>
+              )}
+              {!me.activeSubscription?.renews_at && me.activeSubscription?.current_period_end && (
+                <li>Current period ends: <span className="text-foreground">{fmt(me.activeSubscription.current_period_end)}</span></li>
+              )}
+              {me.activeSubscription?.ends_at && (
+                <li>Ends on: <span className="text-foreground">{fmt(me.activeSubscription.ends_at)}</span></li>
+              )}
+              {!me.activeSubscription && (me.plan === "plus" || me.plan === "pro") && (
+                <li>Subscription details are syncing. You can still manage your plan below.</li>
+              )}
+            </ul>
+          )}
           <div className="flex flex-wrap items-center gap-3">
             {/* Upgrade/Downgrade actions */}
             {me.plan === "plus" && (
@@ -142,17 +166,10 @@ export default function BillingPage() {
                 >
                   Upgrade to Pro
                 </button>
-                <button
-                  type="button"
-                  className={cn(buttonVariants({ variant: "outline" }))}
-                  onClick={() => changePlan("free")}
-                >
-                  Downgrade to Free
-                </button>
                 {me.activeSubscription && (
                   <button
                     type="button"
-                    className={cn(buttonVariants({ variant: "ghost" }))}
+                    className={cn(buttonVariants({ variant: "outline" }))}
                     onClick={cancelSubscription}
                   >
                     Cancel subscription
@@ -169,17 +186,10 @@ export default function BillingPage() {
                 >
                   Downgrade to Plus
                 </button>
-                <button
-                  type="button"
-                  className={cn(buttonVariants({ variant: "outline" }))}
-                  onClick={() => changePlan("free")}
-                >
-                  Downgrade to Free
-                </button>
                 {me.activeSubscription && (
                   <button
                     type="button"
-                    className={cn(buttonVariants({ variant: "ghost" }))}
+                    className={cn(buttonVariants({ variant: "outline" }))}
                     onClick={cancelSubscription}
                   >
                     Cancel subscription
