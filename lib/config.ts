@@ -18,6 +18,24 @@ export const reservedSlugs = new Set([
   "assets",
 ]);
 
+function parseMaxLinks(envKey: string, fallback: number | typeof Infinity) {
+  const raw = process.env[envKey];
+  if (!raw || raw.trim().length === 0) return fallback;
+  const normalized = raw.trim().toLowerCase();
+  if (["infinity", "inf", "unlimited"].includes(normalized)) {
+    return Number.POSITIVE_INFINITY;
+  }
+  const parsed = Number(raw);
+  return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function parseRetention(envKey: string, fallback: number) {
+  const raw = process.env[envKey];
+  if (!raw || raw.trim().length === 0) return fallback;
+  const parsed = Number(raw);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
 export const config = {
   appUrl: env.APP_URL,
   slugs: {
@@ -33,25 +51,28 @@ export const config = {
   },
   plans: {
     free: {
-      maxActiveLinks: Number(process.env["FREE_PLAN_MAX_ACTIVE_LINKS"] ?? 3),
-      dailyCreations: Number(process.env["FREE_PLAN_DAILY_CREATIONS"] ?? 10),
-      analyticsRetentionDays: Number(
-        process.env["FREE_PLAN_ANALYTICS_RETENTION_DAYS"] ?? 7
+      maxActiveLinks: parseMaxLinks("FREE_PLAN_MAX_ACTIVE_LINKS", 2),
+      analyticsRetentionDays: parseRetention(
+        "FREE_PLAN_ANALYTICS_RETENTION_DAYS",
+        7
       ),
     },
     // Defaults are conservative; override via env in production
     plus: {
-      maxActiveLinks: Number(process.env["PLUS_PLAN_MAX_ACTIVE_LINKS"] ?? 25),
-      dailyCreations: Number(process.env["PLUS_PLAN_DAILY_CREATIONS"] ?? 200),
-      analyticsRetentionDays: Number(
-        process.env["PLUS_PLAN_ANALYTICS_RETENTION_DAYS"] ?? 90
+      maxActiveLinks: parseMaxLinks("PLUS_PLAN_MAX_ACTIVE_LINKS", 50),
+      analyticsRetentionDays: parseRetention(
+        "PLUS_PLAN_ANALYTICS_RETENTION_DAYS",
+        90
       ),
     },
     pro: {
-      maxActiveLinks: Number(process.env["PRO_PLAN_MAX_ACTIVE_LINKS"] ?? 100),
-      dailyCreations: Number(process.env["PRO_PLAN_DAILY_CREATIONS"] ?? 1000),
-      analyticsRetentionDays: Number(
-        process.env["PRO_PLAN_ANALYTICS_RETENTION_DAYS"] ?? 365
+      maxActiveLinks: parseMaxLinks(
+        "PRO_PLAN_MAX_ACTIVE_LINKS",
+        Number.POSITIVE_INFINITY
+      ),
+      analyticsRetentionDays: parseRetention(
+        "PRO_PLAN_ANALYTICS_RETENTION_DAYS",
+        365
       ),
     },
   },
