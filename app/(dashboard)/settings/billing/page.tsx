@@ -58,7 +58,11 @@ export default function BillingPage() {
           ("error" in json && json.error) ||
           ("success" in json && !json.success)
         ) {
-          setError("Failed to load billing info");
+          const errorMsg =
+            "error" in json && json.error && json.message
+              ? json.message
+              : "Failed to load billing info";
+          setError(errorMsg);
         } else {
           setMe((json as MeResponse).data);
         }
@@ -166,15 +170,13 @@ export default function BillingPage() {
                 >
                   Upgrade to Pro
                 </button>
-                {me.activeSubscription && (
-                  <button
-                    type="button"
-                    className={cn(buttonVariants({ variant: "outline" }))}
-                    onClick={cancelSubscription}
-                  >
-                    Cancel subscription
-                  </button>
-                )}
+                <button
+                  type="button"
+                  className={cn(buttonVariants({ variant: "outline" }))}
+                  onClick={cancelSubscription}
+                >
+                  Cancel subscription
+                </button>
               </>
             )}
             {me.plan === "pro" && (
@@ -186,15 +188,13 @@ export default function BillingPage() {
                 >
                   Downgrade to Plus
                 </button>
-                {me.activeSubscription && (
-                  <button
-                    type="button"
-                    className={cn(buttonVariants({ variant: "outline" }))}
-                    onClick={cancelSubscription}
-                  >
-                    Cancel subscription
-                  </button>
-                )}
+                <button
+                  type="button"
+                  className={cn(buttonVariants({ variant: "outline" }))}
+                  onClick={cancelSubscription}
+                >
+                  Cancel subscription
+                </button>
               </>
             )}
             {me.plan !== "plus" && me.plan !== "pro" && (

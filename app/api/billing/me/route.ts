@@ -20,7 +20,10 @@ export async function GET(request: Request) {
     const active = subs?.find((s) => s.is_active) ?? null;
     return jsonSuccess({ plan, activeSubscription: active });
   } catch (e) {
+    if (e instanceof Error && e.message === "Unauthorized") {
+      return jsonError("Unauthorized", 401);
+    }
     const msg = e instanceof Error ? e.message : "Unknown error";
-    return jsonError(msg, 400);
+    return jsonError(msg, 500);
   }
 }
