@@ -210,6 +210,7 @@ export default function LinkCard({
             <div className="ml-0 flex w-full flex-row gap-2 sm:ml-6 sm:w-auto sm:flex-col">
               <NextLink
                 href={`/r/${link.slug}`}
+                prefetch={false}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={cn(

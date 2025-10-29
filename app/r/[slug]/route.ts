@@ -97,6 +97,19 @@ export async function GET(
   request: NextRequest,
   props: { params: Promise<{ slug: string }> }
 ) {
+  // Ignore prefetch/HEAD-like probes to prevent double counting when clients prefetch routes
+  const method = request.method.toUpperCase();
+  const isHeadLike = method === "HEAD";
+  const h = request.headers;
+  const isPrefetch =
+    h.get("purpose") === "prefetch" ||
+    (h.get("sec-purpose") || "").includes("prefetch") ||
+    h.get("x-middleware-prefetch") === "1" ||
+    h.get("next-router-prefetch") === "1";
+  if (isHeadLike || isPrefetch) {
+    return new NextResponse(null, { status: 204 });
+  }
+
   const params = await props.params;
   const sb = getServiceClient();
   // 1) Fetch the link first to avoid unnecessary rate-limit writes for unknown slugs
